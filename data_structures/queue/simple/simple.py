@@ -77,11 +77,7 @@ class SimpleQueue:
 
     def __reversed__(self) -> Generator[Any, None, None]:
         """For Itering Queue in reversed"""
-        # First of all we need to get all values to
-        # Add them into reversed list
-        reversed_list = reversed(list(self.copy()))
-
-        for node_value in reversed_list:
+        for node_value in reversed(list(self)):
             yield node_value
 
     def __contains__(self, item) -> bool:
