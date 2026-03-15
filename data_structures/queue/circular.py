@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional, Any, Generator
+from typing import Optional, Any, Generator, Iterable
 from .single_node import SingleNode
 
 
@@ -103,6 +103,14 @@ class CircularQueue:
     def __bool__(self) -> bool:
         """Returns true if Queue is not None"""
         return not self.is_empty()
+
+    def __eq__(self, other: object) -> bool:
+        """Returns Other Queue and this Queueu values equality"""
+        if not isinstance(other, Iterable):
+            return False
+        other_structure = list(other)
+        this_queue = list(self)
+        return other_structure == this_queue
 
     def __str__(self) -> str:
         """
