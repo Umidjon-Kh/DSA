@@ -85,5 +85,5 @@ def test_queue_contain_method(filled_queue, empty_queue) -> None:
 
 
 def test_queue_str_method(filled_queue) -> None:
-    assert str(filled_queue).startswith('Queue(head ->')
+    assert str(filled_queue).startswith('SimpleQueue(head ->')
     assert str(filled_queue).endswith(' <- tail)')

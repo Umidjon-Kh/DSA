@@ -4,7 +4,7 @@ from .single_node import SingleNode
 
 
 @dataclass
-class SimpleQueue:
+class CircularQueue:
     _head: Optional[SingleNode] = field(default=None, repr=False)
     _tail: Optional[SingleNode] = field(default=None, repr=False)
     _size: int = field(init=False, default=0)
@@ -15,7 +15,8 @@ class SimpleQueue:
     def enqueue(self, value) -> None:
         """Adds new node with any type of value"""
         new_node = SingleNode(value)
-        # Checking one of tha attrs(head, tail) None or not
+
+        # Checking one of the attrs(head, tail) None or not
         # cause if attr is None
         # It will be first element of queue
         if self._tail is None:
@@ -23,27 +24,27 @@ class SimpleQueue:
         else:
             self._tail.next = new_node
             self._tail = new_node
+            self._tail.next = self._head
 
         self._size += 1
 
     def dequeue(self) -> Any:
         """Removes first element in queue and returns it"""
-        if self._head is not None:
+        if self._head is not None and self._tail is not None:
             removed = self._head.value
             self._head = self._head.next
 
-            # Checking new head is none or not
-            # if none it means the queue is empty
-            # And need to define tail as None
             if self._head is None:
                 self._tail = None
+            else:
+                self._tail.next = self._head
 
             self._size -= 1
             return removed
 
         raise IndexError('Queue is empty')
 
-    def peek(self) -> Any:
+    def peel(self) -> Any:
         """Shows first element(head) of queue"""
         if self._head is not None:
             return self._head.value
@@ -54,14 +55,20 @@ class SimpleQueue:
         """Returns size of queue"""
         return self._size
 
-    def copy(self) -> 'SimpleQueue':
-        """Returns copy of Queue that not connected to this Queue"""
-        copied_queue = SimpleQueue()
+    def copy(self) -> 'CircularQueue':
+        """Returns copy of Queueu that not connected to this Queue"""
+        copied_queue = CircularQueue()
 
         current = self._head
+        count = 0
         while current:
             copied_queue.enqueue(current.value)
             current = current.next
+            count += 1
+            # Breaking if count equal to size of queue
+            # Cause our queue is circular and never ends
+            if count == self._size:
+                raise StopIteration
 
         return copied_queue
 
@@ -70,36 +77,30 @@ class SimpleQueue:
         return self._size
 
     def __iter__(self) -> Generator[Any, None, None]:
-        """For iterating Queue nodes"""
+        """For itering Queue nodes"""
         current = self._head
+        count = 0
 
         while current:
             yield current.value
             current = current.next
+            if count == self._size:
+                raise StopIteration
 
     def __reversed__(self) -> Generator[Any, None, None]:
         """For Itering Queue in reversed"""
         for node_value in reversed(list(self)):
             yield node_value
 
-    def __contains__(self, item) -> bool:
-        """Checks Queue for contains item or not"""
-        current = self._head
-        while current:
-            if current.value == item:
-                return True
-            current = current.next
-        return False
-
-    def __bool__(self):
+    def __bool__(self) -> bool:
         """Returns true if Queue is not None"""
         return not self.is_empty()
 
     def __str__(self) -> str:
         """
-        String method shows all Queue values in user friendly output
+        String method shows all Queue values in user frienly output
         """
 
         values = [value for value in list(self)]
 
-        return 'SimpleQueue(head -> ' + ' -> '.join(map(str, values)) + ' <- tail)'
+        return f'CircularQueue(front - [{values}] - rear)'

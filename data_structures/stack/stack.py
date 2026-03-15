@@ -19,10 +19,11 @@ class Stack:
         self._size += 1
 
     def pop(self) -> Any:
-        """Removes last in element from Stack and returns it"""
+        """Removes last element in Stack and returns it"""
         if self._top is not None:
             removed = self._top
             self._top = self._top.next
+
             self._size -= 1
             return removed.value
 
