@@ -1,6 +1,7 @@
-from .simple import Node, SimpleQueue
+from .single_node import SingleNode
+from .simple import SimpleQueue
 
 __all__ = [
-    'Node',
+    'SingleNode',
     'SimpleQueue',
 ]

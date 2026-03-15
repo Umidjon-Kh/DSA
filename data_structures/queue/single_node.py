@@ -3,9 +3,9 @@ from typing import Any, Optional
 
 
 @dataclass(slots=True)
-class Node:
+class SingleNode:
     _value: Any
-    _next: Optional['Node'] = field(init=False, default=None)
+    _next: Optional['SingleNode'] = field(init=False, default=None)
 
     @property
     def value(self) -> Any:
@@ -16,5 +16,5 @@ class Node:
         return self._next
 
     @next.setter
-    def next(self, value: Optional['Node']) -> None:
+    def next(self, value: Optional['SingleNode']) -> None:
         self._next = value

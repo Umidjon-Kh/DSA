@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional, Any, Generator
-from .node import Node
+from .single_node import SingleNode
 
 
 @dataclass
 class SimpleQueue:
-    _head: Optional[Node] = field(default=None, repr=False)
-    _tail: Optional[Node] = field(default=None, repr=False)
+    _head: Optional[SingleNode] = field(default=None, repr=False)
+    _tail: Optional[SingleNode] = field(default=None, repr=False)
     _size: int = field(init=False, default=0)
 
     def is_empty(self) -> bool:
@@ -14,7 +14,7 @@ class SimpleQueue:
 
     def enqueue(self, value) -> None:
         """Adds new node with any type of value"""
-        new_node = Node(value)
+        new_node = SingleNode(value)
         # Checking tail none or not cause if tail is none
         # It will be first element of simple queue
         if self._tail is None:
