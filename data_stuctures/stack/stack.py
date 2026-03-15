@@ -8,6 +8,9 @@ class Stack:
     _top: Optional[Node] = field(default=None, repr=False)
     _size: int = field(init=False, default=0)
 
+    def is_empty(self) -> bool:
+        return self._top is None
+
     def push(self, value: Any) -> None:
         """Creates new node with any type value"""
         new_node = Node(value)
@@ -17,19 +20,20 @@ class Stack:
 
     def pop(self) -> Any:
         """Removes Last in element from Stack"""
-        if self._top is None:
-            raise IndexError('Stack is empty')
+        if self._top is not None:
+            removed = self._top
+            self._top = self._top.next
+            self._size -= 1
+            return removed.value
 
-        removed = self._top
-        self._top = self._top.next
-        self._size -= 1
-        return removed.value
+        raise IndexError('Stack is empty')
 
     def peek(self) -> Any:
         """Shows last in element in stack"""
-        if self._top is None:
-            raise IndexError('Stack is empty')
-        return self._top.value
+        if self._top is not None:
+            return self._top.value
+
+        raise IndexError('Stack is empty')
 
     def copy(self) -> 'Stack':
         """Returns a copy of stack that not connected to this stack"""
