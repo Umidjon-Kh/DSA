@@ -19,8 +19,8 @@ def empty_queue() -> SimpleQueue:
 # -------- Tests ---------
 def test_queue_creation(empty_queue, filled_queue) -> None:
     # Checking dunder method of queue and queue properly creation
-    assert bool(empty_queue) is True
-    assert bool(filled_queue) is False
+    assert bool(empty_queue) is False
+    assert bool(filled_queue) is True
 
 
 def test_queue_len_method(empty_queue, filled_queue) -> None:

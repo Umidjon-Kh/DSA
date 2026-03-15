@@ -95,7 +95,7 @@ class SimpleQueue:
 
     def __bool__(self):
         """Returns true if Queue is not None"""
-        return self.is_empty()
+        return not self.is_empty()
 
     def __str__(self) -> str:
         """
