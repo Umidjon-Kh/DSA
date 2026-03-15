@@ -7,12 +7,12 @@ from ..nodes import SingleNode
 @dataclass
 class DynamicCircularQueue:
     """
-    Circular Queue — FIFO queue where tail.next always points back to head.
+    Dynamic Circular Queue — FIFO queue where tail.next always points back to head.
     Built on top of SingleNode (Singly Linked List).
 
     The circular link means the queue forms a ring:
-        head → [1] → [2] → [3] → (back to head)
-                                    ↑ tail
+        head -> [1] -> [2] -> [3] -> (back to head)
+                                    ^ tail
 
     Why circular:
         - Useful when you need to continuously cycle through elements

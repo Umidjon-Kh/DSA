@@ -14,10 +14,10 @@ class SimpleQueue:
 
     Visual representation:
         enqueue(1), enqueue(2), enqueue(3)
-        head → [1] → [2] → [3] ← tail
+        head -> [1] -> [2] -> [3] ← tail
 
-        dequeue() → returns 1
-        head → [2] → [3] ← tail
+        dequeue() -> returns 1
+        head -> [2] -> [3] ← tail
 
     Time complexity:
         enqueue: O(1)
@@ -32,7 +32,7 @@ class SimpleQueue:
 
     def is_empty(self) -> bool:
         """Returns True if queue has no elements."""
-        return self._head is None
+        return self._size == 0
 
     def enqueue(self, value: Any) -> None:
         """
