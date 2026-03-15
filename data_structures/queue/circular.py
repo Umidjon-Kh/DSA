@@ -44,7 +44,7 @@ class CircularQueue:
 
         raise IndexError('Queue is empty')
 
-    def peel(self) -> Any:
+    def peek(self) -> Any:
         """Shows first element(head) of queue"""
         if self._head is not None:
             return self._head.value
@@ -68,7 +68,7 @@ class CircularQueue:
             # Breaking if count equal to size of queue
             # Cause our queue is circular and never ends
             if count == self._size:
-                raise StopIteration
+                break
 
         return copied_queue
 
@@ -84,13 +84,21 @@ class CircularQueue:
         while current:
             yield current.value
             current = current.next
+            count += 1
             if count == self._size:
-                raise StopIteration
+                return
 
     def __reversed__(self) -> Generator[Any, None, None]:
         """For Itering Queue in reversed"""
         for node_value in reversed(list(self)):
             yield node_value
+
+    def __contains__(self, item) -> bool:
+        """Checks Queue for contains item or not"""
+        for node_value in list(self):
+            if node_value == item:
+                return True
+        return False
 
     def __bool__(self) -> bool:
         """Returns true if Queue is not None"""
@@ -103,4 +111,4 @@ class CircularQueue:
 
         values = [value for value in list(self)]
 
-        return f'CircularQueue(front - [{values}] - rear)'
+        return f'CircularQueue(front - {values} - rear)'

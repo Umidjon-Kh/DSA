@@ -84,11 +84,9 @@ class SimpleQueue:
 
     def __contains__(self, item) -> bool:
         """Checks Queue for contains item or not"""
-        current = self._head
-        while current:
-            if current.value == item:
+        for node_value in list(self):
+            if node_value == item:
                 return True
-            current = current.next
         return False
 
     def __bool__(self):
