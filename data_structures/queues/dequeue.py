@@ -13,7 +13,7 @@ class Deque:
     - add_back + remove_back -> Stack (LIFO)
     - add_back + remove_front -> Queue (FIFO)
     - add_front + remove_back -> Stack (LIFO)
-    - add_fron + remove_front -> Queue (FIFO)
+    - add_front + remove_front -> Queue (FIFO)
     - all four operations → pure Deque
 
     All operations are O(1) thanks to the prev pointer in DoubleNode.

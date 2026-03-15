@@ -92,10 +92,8 @@ class DynamicCircularQueue:
         copied = DynamicCircularQueue()
         current = self._head
         for _ in range(self._size):
-            # This Condition only for linter cause this linter
-            # Is fucking stupid, (not only in this situation)
-            # I why linter triggers but i tested with other method like:
-            # def is_empty: return self.head is not None it doesnt works
+            # Linter requires explicit None check here since it cannot
+            # infer that current is always set when _size > 0
             if current is not None:
                 copied.enqueue(current.value)
                 current = current.next
