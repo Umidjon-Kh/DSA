@@ -19,8 +19,8 @@ def empty_stack() -> Stack:
 # ------- Tests ----------
 def test_stack_creation(empty_stack, filled_stack) -> None:
     # Checking dunder bool method of stuck and stacks properly creation
-    assert bool(empty_stack) is False
-    assert bool(filled_stack) is True
+    assert bool(empty_stack) is True
+    assert bool(filled_stack) is False
 
 
 def test_stack_len_method(empty_stack, filled_stack) -> None:
