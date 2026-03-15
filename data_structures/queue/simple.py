@@ -5,8 +5,8 @@ from .single_node import SingleNode
 
 @dataclass
 class SimpleQueue:
-    _head: Optional[SingleNode] = field(default=None, repr=False)
-    _tail: Optional[SingleNode] = field(default=None, repr=False)
+    _head: Optional[SingleNode] = field(default=None, repr=False, init=False)
+    _tail: Optional[SingleNode] = field(default=None, repr=False, init=False)
     _size: int = field(init=False, default=0)
 
     def is_empty(self) -> bool:

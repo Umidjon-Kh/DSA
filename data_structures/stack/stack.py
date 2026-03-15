@@ -5,7 +5,7 @@ from .node import Node
 
 @dataclass
 class Stack:
-    _top: Optional[Node] = field(default=None, repr=False)
+    _top: Optional[Node] = field(default=None, repr=False, init=False)
     _size: int = field(init=False, default=0)
 
     def is_empty(self) -> bool:
