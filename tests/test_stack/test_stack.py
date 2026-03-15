@@ -1,5 +1,5 @@
 import pytest
-from data_stuctures.stack import Stack
+from data_structures.stack import Stack
 
 
 # ------ Fixtures ---------

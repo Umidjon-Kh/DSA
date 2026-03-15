@@ -12,14 +12,14 @@ class Stack:
         return self._top is None
 
     def push(self, value: Any) -> None:
-        """Creates new node with any type value"""
+        """Adds new node with any type of value"""
         new_node = Node(value)
         new_node.next = self._top
         self._top = new_node
         self._size += 1
 
     def pop(self) -> Any:
-        """Removes Last in element from Stack"""
+        """Removes last in element from Stack and returns it"""
         if self._top is not None:
             removed = self._top
             self._top = self._top.next
@@ -36,34 +36,39 @@ class Stack:
         raise IndexError('Stack is empty')
 
     def copy(self) -> 'Stack':
-        """Returns a copy of stack that not connected to this stack"""
+        """Returns a copy of Stack that not connected to this Stack"""
         temp = Stack()
-        new_stack = Stack()
+        copied_stack = Stack()
 
         current = self._top
 
+        # Copying all values from stack nodes
+        # But reversed cause our node dont know about previous node
         while current:
             temp.push(current.value)
             current = current.next
 
+        # Pushing all temp stack nodes to copied stack
+        # Properly to equal self stack nodes
         while temp._top is not None:
             value = temp.pop()
-            new_stack.push(value)
+            copied_stack.push(value)
 
-        return new_stack
+        return copied_stack
 
     def __len__(self) -> int:
-        """Returns size for Stack"""
+        """Returns size of Stack"""
         return self._size
 
     def __iter__(self) -> Generator[Any, None, None]:
-        """For iterating object stack"""
+        """For iterating Stack nodes"""
         current = self._top
         while current:
             yield current.value
             current = current.next
 
-    def __reversed__(self):
+    def __reversed__(self) -> Generator[Any, None, None]:
+        """For itering Stack in reversed"""
         temp = Stack()
 
         current = self._top
@@ -76,7 +81,7 @@ class Stack:
             yield temp.pop()
 
     def __contains__(self, item) -> bool:
-        """Checks stack for contains item or not"""
+        """Checks Stack for contains item or not"""
         current = self._top
         while current:
             if current.value == item:
@@ -85,11 +90,13 @@ class Stack:
         return False
 
     def __bool__(self) -> bool:
-        """Returns true if stack is not None"""
-        return self._top is not None
+        """Returns true if Stack is not None"""
+        return self.is_empty()
 
     def __str__(self) -> str:
-        """String method shows all stack values in user frinedly output"""
+        """
+        String method shows all Stack values in user frinedly output
+        """
         values = []
         current = self._top
 
