@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from typing import Optional, Any, Generator, Iterable
+from typing import Optional, Any, Generator
+from collections.abc import Iterable
 from .single_node import SingleNode
 
 

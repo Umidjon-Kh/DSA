@@ -25,7 +25,8 @@ def test_queue_creation(empty_queue, filled_queue) -> None:
 
 def test_circular_equality(filled_queue) -> None:
     # Checking Circulation of queue
-    assert filled_queue._head.value is filled_queue._tail.next.value
+    assert filled_queue._head is filled_queue._tail.next
+    assert filled_queue._head.value == filled_queue._tail.next.value
 
 
 def test_queue_len_method(empty_queue, filled_queue) -> None:
