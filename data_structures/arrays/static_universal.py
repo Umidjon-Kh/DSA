@@ -57,8 +57,8 @@ class StaticUniversalArray:
                 f"Index must be positive integer, got ({type(index).__name__})"
             )
         # Checking value of received index
-        if index <= 0:
-            raise ValueError(
+        if index < 0 or index >= self._capacity:
+            raise IndexError(
                 f"Index {index} out of range for capacity {self._capacity}"
             )
         return self._data[index]
@@ -71,8 +71,8 @@ class StaticUniversalArray:
                 f"Index must be positive integer, got ({type(index).__name__})"
             )
         # Checking value of received index
-        if index <= 0:
-            raise ValueError(
+        if index < 0 or index >= self._capacity:
+            raise IndexError(
                 f"Index {index} out of range for capacity {self._capacity}"
             )
         self._data[index] = value

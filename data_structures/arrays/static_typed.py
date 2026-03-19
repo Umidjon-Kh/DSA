@@ -2,8 +2,8 @@ import ctypes
 from typing import Any, Iterator
 
 _TYPE_MAP = {
-    int: ctypes.c_int,
-    float: ctypes.c_float,
+    int: ctypes.c_long,
+    float: ctypes.c_double,
     bool: ctypes.c_bool,
     str: ctypes.c_char,
 }
@@ -79,6 +79,7 @@ class StaticTypedArray:
             if str_length is not None:
                 raise ValueError("Str length only valid for dtype=str")
             self._data = (self._ctype * self._capacity)()
+            self._str_length = 0
 
     def __getitem__(self, index: Any) -> Any:
         """Returns value at given index."""
@@ -88,7 +89,7 @@ class StaticTypedArray:
                 f"Index must be positive integer, got ({type(index).__name__})"
             )
         # Checking value of received index
-        if index <= 0:
+        if index < 0 or index >= self._capacity:
             raise ValueError(
                 f"Index {index} out of range for capacity {self._capacity}"
             )
@@ -96,7 +97,7 @@ class StaticTypedArray:
         value = self._data[index]
         # If data type is str we need to decode it
         if self._dtype == str:  # noqa
-            return value.decode()
+            return bytes(self._data[index]).rstrip(b"\x00").decode()
         return value
 
     def __setitem__(self, index: Any, value: Any) -> None:
@@ -107,8 +108,8 @@ class StaticTypedArray:
                 f"Index must be positive integer, got ({type(index).__name__})"
             )
         # Checking value of received index
-        if index <= 0:
-            raise ValueError(
+        if index < 0 or index >= self._capacity:
+            raise IndexError(
                 f"Index {index} out of range for capacity {self._capacity}"
             )
         # Checking value is instance of data type or not
@@ -123,7 +124,7 @@ class StaticTypedArray:
                 raise ValueError(
                     f"String too long: max ({self._str_length}) chars, got ({len(encoded)})"
                 )
-            self._data[index] = encoded
+            self._data[index] = (ctypes.c_char * self._str_length)(*encoded)
         # Otherwise just set it to given index
         else:
             self._data[index] = value
