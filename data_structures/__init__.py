@@ -1,3 +1,6 @@
-from .array import Array
+from .arrays import StaticTypedArray, StaticUniversalArray
 
-__all__ = ["Array"]
+__all__ = [
+    "StaticTypedArray",
+    "StaticUniversalArray",
+]
