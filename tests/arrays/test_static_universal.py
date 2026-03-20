@@ -60,12 +60,12 @@ def test_setitem_out_of_range(array) -> None:
 
 def test_getitem_negative_index(array) -> None:
     with pytest.raises(IndexError):
-        _ = array[-1]
+        _ = array[-99]
 
 
 def test_setitem_negative_index(array) -> None:
     with pytest.raises(IndexError):
-        array[-1] = "error"
+        array[-99] = "error"
 
 
 def test_getitem_wrong_type(array) -> None:

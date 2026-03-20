@@ -88,6 +88,9 @@ class StaticTypedArray:
             raise TypeError(
                 f"Index must be positive integer, got ({type(index).__name__})"
             )
+            # Converting index if its negative integer
+        if index < 0:
+            index += self._capacity
         # Checking value of received index
         if index < 0 or index >= self._capacity:
             raise ValueError(
@@ -107,6 +110,9 @@ class StaticTypedArray:
             raise TypeError(
                 f"Index must be positive integer, got ({type(index).__name__})"
             )
+        # Converting index if its negative integer
+        if index < 0:
+            index += self._capacity
         # Checking value of received index
         if index < 0 or index >= self._capacity:
             raise IndexError(

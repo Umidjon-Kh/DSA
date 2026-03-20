@@ -82,7 +82,7 @@ def test_int_out_of_range(int_array) -> None:
 
 def test_int_negative_index(int_array) -> None:
     with pytest.raises(IndexError):
-        int_array[-1] = 1
+        int_array[-99] = 1
 
 
 def test_int_index_zero(int_array) -> None:
