@@ -50,7 +50,7 @@ def test_default_slots_are_none(array) -> None:
 
 def test_getitem_out_of_range(array) -> None:
     with pytest.raises(IndexError):
-        _ = array[99]
+        _ = array[99]  # noqa
 
 
 def test_setitem_out_of_range(array) -> None:
@@ -59,11 +59,16 @@ def test_setitem_out_of_range(array) -> None:
 
 
 def test_getitem_negative_index(array) -> None:
+    array[-1] = "last"
+    assert array[-1] == "last"
+
+
+def test_getitem_negative_out_of_range(array) -> None:
     with pytest.raises(IndexError):
-        _ = array[-99]
+        _ = array[-99]  # noqa
 
 
-def test_setitem_negative_index(array) -> None:
+def test_setitem_negative_out_of_range(array) -> None:
     with pytest.raises(IndexError):
         array[-99] = "error"
 

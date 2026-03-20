@@ -81,6 +81,11 @@ def test_int_out_of_range(int_array) -> None:
 
 
 def test_int_negative_index(int_array) -> None:
+    int_array[-1] = 7
+    assert int_array[-1] == 7
+
+
+def test_int_negative_out_of_range(int_array) -> None:
     with pytest.raises(IndexError):
         int_array[-99] = 1
 
