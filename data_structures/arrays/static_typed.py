@@ -91,7 +91,9 @@ class StaticTypedArray:
         Encodes str to bytes for dtype=str.
         """
         index = validate_index(index, self._capacity)
-        if not isinstance(value, self._dtype):
+        if not isinstance(value, self._dtype) or (
+            self._dtype == int and isinstance(value, bool)  # noqa
+        ):
             raise TypeError(
                 f"Expected {self._dtype.__name__}, got ({type(value).__name__})"
             )
