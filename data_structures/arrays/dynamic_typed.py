@@ -1,6 +1,6 @@
 from typing import Any, Iterator
 
-from ._validators import validate_index, validate_insert_index
+from ..tools import validate_index, validate_insert_index
 from .static_typed import StaticTypedArray
 
 _DTYPE_DEFAULTS = {

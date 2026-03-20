@@ -1,7 +1,7 @@
 import ctypes
 from typing import Any, Iterator
 
-from ._validators import validate_index
+from ..tools import validate_index
 
 _TYPE_MAP = {
     int: ctypes.c_long,
