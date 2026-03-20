@@ -3,6 +3,13 @@ from typing import Any, Iterator
 from ._validators import validate_index, validate_insert_index
 from .static_typed import StaticTypedArray
 
+_DTYPE_DEFAULTS = {
+    int: 0,
+    float: 0.0,
+    bool: False,
+    str: "",
+}
+
 
 class DynamicTypedArray:
     """
@@ -133,6 +140,7 @@ class DynamicTypedArray:
         for idx in range(index, self._size - 1):
             self._data[idx] = self._data[idx + 1]
         self._size -= 1
+        self._data[self._size] = _DTYPE_DEFAULTS[self._dtype]
         return removed
 
     def __getitem__(self, index: Any) -> Any:
