@@ -37,4 +37,4 @@ class SingleNode:
         """Returns True if both nodes are same object or have same attr values."""
         if not isinstance(other, SingleNode):
             return False
-        return self._value == other.value and self._next == other.next
+        return self._value == other.value

@@ -48,8 +48,4 @@ class DoubleNode:
         """Returns True if both nodes are same object or have same attr values."""
         if not isinstance(other, DoubleNode):
             return False
-        return (
-            self._value == other.value
-            and self._next == other.next
-            and self._prev == other.prev
-        )
+        return self._value == other._value

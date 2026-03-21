@@ -40,6 +40,7 @@ linked_lists/
 | `remove`       | O(n)   | O(n/2) | O(n)            | O(n/2)          |
 | `get_node`     | O(n)   | O(n/2) | O(n)            | O(n/2)          |
 | `find`         | O(n)   | O(n)   | O(n)            | O(n)            |
+| `copy`         | O(n)   | O(n)   | O(n)            | O(n)            |
 | `__len__`      | O(1)   | O(1)   | O(1)            | O(1)            |
 | `__iter__`     | O(n)   | O(n)   | O(n)            | O(n)            |
 | `__reversed__` | —      | O(n)   | —               | O(n)            |
