@@ -209,3 +209,6 @@ __marimo__/
 
 # My stuff
 digest.txt
+
+# Zed stuff
+pyrightconfig.json

@@ -18,6 +18,11 @@ class SingleNode:
         """Returns the value stored in this node"""
         return self._value
 
+    @value.setter
+    def value(self, value: Any) -> None:
+        """Sets the value of node"""
+        self._value = value
+
     @property
     def next(self) -> Optional["SingleNode"]:
         """Returns the next node in the chain"""
