@@ -68,6 +68,7 @@ class CircularDoublyLinkedList:
             self._tail.next = self._head
             self._head.prev = self._tail
         else:
+            new_node.prev = self._tail
             self._tail.next = new_node
             self._tail = new_node
             self._tail.next = self._head
@@ -250,6 +251,8 @@ class CircularDoublyLinkedList:
         """
         current = self._head
         index = 0
+        # Why not True: Cause if i write True instead of is not None
+        # And if head is None it raises AttributeError
         while current is not None:
             if current.value == value:
                 return index
@@ -266,6 +269,8 @@ class CircularDoublyLinkedList:
     def __iter__(self) -> Iterator[Any]:
         """Iterates over values of all nodes from head to tail."""
         current = self._head
+        # Why not True: Cause if i write True instead of is not None
+        # And if head is None it raises AttributeError
         while current is not None:
             yield current.value
             if current is self._tail:
@@ -275,6 +280,8 @@ class CircularDoublyLinkedList:
     def __reversed__(self) -> Iterator[Any]:
         """Iterates over values of all nodes from tail to head."""
         current = self._tail
+        # Why not True: Cause if i write True instead of is not None
+        # And if tail is None it raises AttributeError
         while current is not None:
             yield current.value
             if current is self._head:
