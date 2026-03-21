@@ -1,7 +1,7 @@
 from typing import Any, Iterator, Optional
 
+from ..nodes import DoubleNode
 from ..tools import validate_index, validate_insert_index
-from ._nodes import DoubleNode
 
 
 class CircularDoublyLinkedList:

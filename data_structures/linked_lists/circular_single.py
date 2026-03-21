@@ -1,7 +1,7 @@
 from typing import Any, Iterator, Optional
 
+from ..nodes import SingleNode
 from ..tools import validate_index, validate_insert_index
-from ._nodes import SingleNode
 
 
 class CircularSinglyLinkedList:

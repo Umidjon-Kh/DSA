@@ -7,10 +7,12 @@ from .arrays import (
 from .linked_lists import (
     CircularDoublyLinkedList,
     CircularSinglyLinkedList,
-    DoubleNode,
     DoublyLinkedList,
-    SingleNode,
     SinglyLinkedList,
+)
+from .nodes import (
+    DoubleNode,
+    SingleNode,
 )
 
 __all__ = [
