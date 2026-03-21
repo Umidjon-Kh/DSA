@@ -227,6 +227,8 @@ class CircularSinglyLinkedList:
         """
         current = self._head
         index = 0
+        # Why not True: Cause if i write True instead of is not None
+        # And if head is None it raises AttributeError
         while current is not None:
             if current.value == value:
                 return index
@@ -243,6 +245,8 @@ class CircularSinglyLinkedList:
     def __iter__(self) -> Iterator[Any]:
         """Iterates over values of all nodes from head to tail."""
         current = self._head
+        # Why not True: Cause if i write True instead of is not None
+        # And if head is None it raises AttributeError
         while current is not None:
             yield current.value
             if current is self._tail:
@@ -260,6 +264,8 @@ class CircularSinglyLinkedList:
         """
         nodes = []
         current = self._head
+        # Why not True: Cause if i write True instead of is not None
+        # And if head is None it raises AttributeError
         while current is not None:
             nodes.append(repr(current.value))
             if current is self._tail:
