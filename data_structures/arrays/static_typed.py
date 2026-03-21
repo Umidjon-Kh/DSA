@@ -107,6 +107,24 @@ class StaticTypedArray:
         else:
             self._data[index] = value
 
+    def copy(self) -> "StaticTypedArray":
+        """
+        Creates a shallow copy of the array.
+        Time complexity: O(n)
+        """
+        copied = StaticTypedArray(self._capacity, self._dtype, self._str_length)
+        for index in range(self._capacity):
+            copied[index] = self[index]
+        return copied
+
+    def __eq__(self, other: object) -> bool:
+        """Checks for equality of all data in both objects"""
+        if not isinstance(other, StaticTypedArray):
+            return False
+        if self._dtype != other._dtype or self._capacity != other._capacity:
+            return False
+        return all(self[i] == other[i] for i in range(self._capacity))
+
     def __len__(self) -> int:
         """Returns capacity of array."""
         return self._capacity

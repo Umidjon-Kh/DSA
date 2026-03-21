@@ -53,6 +53,23 @@ class StaticUniversalArray:
         index = validate_index(index, self._capacity)
         self._data[index] = value
 
+    def copy(self) -> "StaticUniversalArray":
+        """
+        Creates a shallow copy of the array.
+        Time complexity: O(n)
+        """
+        copied = StaticUniversalArray(self._capacity)
+        for index in range(self._capacity):
+            copied._data[index] = self._data[index]
+        return copied
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, StaticUniversalArray):
+            return False
+        if self._capacity != other._capacity:
+            return False
+        return all(self._data[i] == other._data[i] for i in range(self._capacity))
+
     def __len__(self) -> int:
         """Returns capacity of array."""
         return self._capacity

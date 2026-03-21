@@ -141,6 +141,21 @@ class DynamicUniversalArray:
         index = validate_index(index, self._size)
         self._data[index] = value
 
+    def copy(self) -> "DynamicUniversalArray":
+        """
+        Creates a shallow copy of the array.
+        Time complexity: O(n)
+        """
+        copied = DynamicUniversalArray(*[self._data[i] for i in range(self._size)])
+        return copied
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, DynamicUniversalArray):
+            return False
+        if self._size != other._size:
+            return False
+        return all(self._data[i] == other._data[i] for i in range(self._size))
+
     def __len__(self) -> int:
         """Returns number of elements (not capacity)."""
         return self._size

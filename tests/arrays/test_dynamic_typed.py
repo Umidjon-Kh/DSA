@@ -30,8 +30,18 @@ def empty_bool_arr() -> DynamicTypedArray:
 
 
 @pytest.fixture
+def filled_bool_arr() -> DynamicTypedArray:
+    return DynamicTypedArray(bool, *[True, False, True])
+
+
+@pytest.fixture
 def empty_str_arr() -> DynamicTypedArray:
     return DynamicTypedArray(str, str_length=20)
+
+
+@pytest.fixture
+def filled_str_arr() -> DynamicTypedArray:
+    return DynamicTypedArray(str, *["hello", "print", "hi"], str_length=20)
 
 
 # -------------- Creation Tests ----------------
@@ -137,6 +147,10 @@ def test_int_repr(filled_int_arr) -> None:
     assert repr(filled_int_arr).startswith("DynamicTypedArray")
 
 
+def test_int_copy(filled_int_arr) -> None:
+    assert filled_int_arr.copy() == filled_int_arr
+
+
 # -------------- Float Array Tests ----------------
 def test_float_append(empty_float_arr) -> None:
     empty_float_arr.append(3.14)
@@ -153,6 +167,10 @@ def test_float_iter(filled_float_arr) -> None:
     assert values == [1.1, 2.2, 3.3]
 
 
+def test_float_copy(filled_float_arr) -> None:
+    assert filled_float_arr.copy() == filled_float_arr
+
+
 # -------------- Bool Array Tests ----------------
 def test_bool_append(empty_bool_arr) -> None:
     empty_bool_arr.append(True)
@@ -164,6 +182,10 @@ def test_bool_append(empty_bool_arr) -> None:
 def test_bool_wrong_type(empty_bool_arr) -> None:
     with pytest.raises(TypeError):
         empty_bool_arr.append("hello")
+
+
+def test_bool_copy(filled_bool_arr) -> None:
+    assert filled_bool_arr.copy() == filled_bool_arr
 
 
 # -------------- Str Array Tests ----------------
@@ -186,3 +208,7 @@ def test_str_default_length() -> None:
     arr = DynamicTypedArray(str)
     arr.append("hello")
     assert arr[0] == "hello"
+
+
+def test_str_copy(filled_str_arr) -> None:
+    assert filled_str_arr.copy() == filled_str_arr

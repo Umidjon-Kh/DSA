@@ -38,6 +38,7 @@ arrays/
 | `insert`      | —      | O(n)           |
 | `remove`      | —      | O(n)           |
 | `_resize`     | —      | O(n)           |
+| `copy`        | O(n)   | O(n)           |
 
 ---
 

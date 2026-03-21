@@ -116,3 +116,7 @@ def test_accepts_any_type(array) -> None:
 
 def test_repr(array) -> None:
     assert repr(array).startswith("StaticUniversalArray(capacity=10")
+
+
+def test_copy(filled_array) -> None:
+    assert filled_array.copy() == filled_array

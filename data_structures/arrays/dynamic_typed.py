@@ -156,6 +156,26 @@ class DynamicTypedArray:
         index = validate_index(index, self._size)
         self._data[index] = value
 
+    def copy(self) -> "DynamicTypedArray":
+        """
+        Creates a shallow copy of the array.
+        Time complexity: O(n)
+        """
+        copied = DynamicTypedArray(
+            self._dtype,
+            *[self._data[i] for i in range(self._size)],
+            str_length=self._str_length,
+        )
+        return copied
+
+    def __eq__(self, other: Any) -> bool:
+        """Checks for equality of all data in both objects"""
+        if not isinstance(other, DynamicTypedArray):
+            return False
+        if self._dtype != other._dtype or self._size != other._size:
+            return False
+        return all(self._data[i] == other._data[i] for i in range(self._size))
+
     def __len__(self) -> int:
         """Returns number of elements (not capacity)."""
         return self._size

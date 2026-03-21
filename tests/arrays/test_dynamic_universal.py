@@ -165,3 +165,7 @@ def test_iter(filled_arr) -> None:
 
 def test_repr(filled_arr) -> None:
     assert repr(filled_arr).startswith("DynamicUniversalArray")
+
+
+def test_copy(filled_arr) -> None:
+    assert filled_arr.copy() == filled_arr
