@@ -112,7 +112,11 @@ class StaticTypedArray:
         Creates a shallow copy of the array.
         Time complexity: O(n)
         """
-        copied = StaticTypedArray(self._capacity, self._dtype, self._str_length)
+        copied = StaticTypedArray(
+            self._capacity,
+            self._dtype,
+            self._str_length if self._str_length != 0 else None,
+        )
         for index in range(self._capacity):
             copied[index] = self[index]
         return copied
