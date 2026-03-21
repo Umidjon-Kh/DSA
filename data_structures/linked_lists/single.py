@@ -1,4 +1,4 @@
-from typing import Any, Iterator, Optional
+from typing import Any, Generator, Optional
 
 from ..nodes import SingleNode
 from ..tools import validate_index, validate_insert_index
@@ -217,11 +217,31 @@ class SinglyLinkedList:
             index += 1
         return -1
 
+    def copy(self) -> "SinglyLinkedList":
+        """
+        Creates a shallow copy of Linked List.
+        Time complexity: O(n).
+        """
+        copied = SinglyLinkedList(*self)
+        return copied
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, SinglyLinkedList):
+            return False
+        # Checking length for quick result if not equal
+        if len(self) != len(other):
+            return False
+        # If both empty return True
+        if self._size == 0:
+            return True
+        # Traversing all nodes to check values for equality
+        return list(self) == list(other)
+
     def __len__(self) -> int:
         """Returns the number of nodes in the list."""
         return self._size
 
-    def __iter__(self) -> Iterator[Any]:
+    def __iter__(self) -> Generator[Any, None, None]:
         """Iterates over values of all nodes from head to tail."""
         current = self._head
         while current is not None:
