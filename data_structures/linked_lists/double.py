@@ -122,7 +122,7 @@ class DoublyLinkedList:
             self.append(value)
             return
         node = self.get_node(index)
-        node._value = value  # type: ignore[attr-defined]
+        node.value = value  # type: ignore[attr-defined]
 
     def insert(self, index: Any, value: Any) -> None:
         """
