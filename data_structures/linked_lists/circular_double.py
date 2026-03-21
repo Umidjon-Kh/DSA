@@ -90,6 +90,7 @@ class CircularDoublyLinkedList:
         else:
             new_node.next = self._head
             new_node.prev = self._tail
+            self._head.prev = new_node
             self._head = new_node
             self._tail.next = self._head  # type: ignore[union-attr]
         self._size += 1
@@ -165,8 +166,7 @@ class CircularDoublyLinkedList:
         new_node.next = next_node
         new_node.prev = prev
         prev.next = new_node
-        if next_node is not None:
-            next_node.prev = new_node
+        next_node.prev = new_node  # type: ignore[union-attr]
         self._size += 1
 
     def remove_head(self) -> Any:
