@@ -101,7 +101,7 @@ def test_insert_out_of_range(filled_dll) -> None:
         filled_dll.insert(99, 0)
 
 
-def test_insert_wront_type(filled_dll) -> None:
+def test_insert_wrong_type(filled_dll) -> None:
     with pytest.raises(TypeError):
         filled_dll.insert("a", 0)
 
@@ -118,7 +118,7 @@ def test_set_node_at_size(filled_dll) -> None:
     assert len(filled_dll) == 9
 
 
-def test_set_node_negaitive(filled_dll) -> None:
+def test_set_node_negative(filled_dll) -> None:
     filled_dll.set_node(-1, 99)
     assert filled_dll._tail.value == 99
 
@@ -132,7 +132,7 @@ def test_remove_head(filled_dll) -> None:
     assert len(filled_dll) == 7
 
 
-def test_remove_head_singe_element(empty_dll) -> None:
+def test_remove_head_single_element(empty_dll) -> None:
     empty_dll.append(1)
     value = empty_dll.remove_head()
     assert value == 1
@@ -154,7 +154,7 @@ def test_remove_tail(filled_dll) -> None:
     assert len(filled_dll) == 7
 
 
-def test_remove_tail_singe_element(empty_dll) -> None:
+def test_remove_tail_single_element(empty_dll) -> None:
     empty_dll.append(1)
     value = empty_dll.remove_tail()
     assert value == 1

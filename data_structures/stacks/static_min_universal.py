@@ -5,7 +5,7 @@ from ..arrays import StaticUniversalArray
 
 class StaticUniversalMinStack:
     """
-    Creates a two fixed-size stacks that accepts any Python object.
+    Creates two fixed-size stacks that accepts any Python object.
     Build on top of StaticUniversalArray.
     Follows LIFO (Last In, First Out) principle.
 
@@ -189,7 +189,7 @@ class StaticUniversalMinStack:
         return list(other._main_data) == list(self._main_data)
 
     def __len__(self) -> int:
-        """Returns number of elements in the stack."""
+        """Returns capacity of the stack."""
         return len(self._main_data)
 
     def __iter__(self) -> Generator[Any, None, None]:

@@ -6,11 +6,11 @@ from ..arrays import DynamicTypedArray
 class DynamicTypedMinStack:
     """
     Creates two dynamic stacks that grows automatically when capacity is exceeded.
-    Build on top of DynamicTypedArray - enforces a single type for all elemenets.
+    Build on top of DynamicTypedArray - enforces a single type for all elements.
     Follows LIFO (Last In, First Out) principle.
 
     Compared to StaticTypedMinStack and DynamicUniversalMinStack:
-        1) Never raises OverflowsError.
+        1) Never raises OverflowError.
         2) Stores all objects in raw C values.
 
     Raises IndexError on pop/peek/get_min when empty.

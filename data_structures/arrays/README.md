@@ -11,8 +11,7 @@ arrays/
 ├── static_universal.py   # Fixed-size array, any type (ctypes.py_object)
 ├── static_typed.py       # Fixed-size array, single dtype (ctypes C types)
 ├── dynamic_universal.py  # Auto-resizing array, any type
-├── dynamic_typed.py      # Auto-resizing array, single dtype
-└── _validators.py        # Shared index validation logic
+└── dynamic_typed.py      # Auto-resizing array, single dtype
 ```
 
 ---
