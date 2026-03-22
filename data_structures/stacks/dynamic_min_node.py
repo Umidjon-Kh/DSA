@@ -6,12 +6,12 @@ from ..nodes import SingleNode
 class DynamicNodeMinStack:
     """
     Creates two dynamic stacks that grows automatically when capacity is exceeded.
-    Build on top of the SingeNode (like SinglyLinkedList).
+    Build on top of the SingleNode (like SinglyLinkedList).
     Follows LIFO (Last In, First Out) principle.
 
     Compared to other MinStacks:
         1) main_head and min_head instead of big data structures it only have
-           poinetr to head node that next attr points to next node in the chain.
+           pointer to head node that next attr points to next node in the chain.
         2) Each push creates a new node pointing to the previous head.
         3) Each pop removes the head and returns its value.
         4) Unlike array-based stacks — no contiguous memory,
@@ -66,9 +66,9 @@ class DynamicNodeMinStack:
     def push(self, value: Any) -> None:
         """
         Creates a new node and places it on top of the stack.
-        New node's next point to the previoues head.
+        New node's next point to the previous head.
         If received object computed value is less than computed min head,
-        Point that object next attr to previoues min_head.
+        Point that object next attr to previous min_head.
         """
         new_node = SingleNode(value)
         new_node.next = self._main_head
@@ -118,7 +118,7 @@ class DynamicNodeMinStack:
         """
         if self.is_empty():
             raise IndexError("Stack is empty")
-        return self._head.value  # type: ignore[union-attr]
+        return self._main_head.value  # type: ignore[union-attr]
 
     def copy(self) -> "DynamicNodeMinStack":
         """
@@ -139,6 +139,19 @@ class DynamicNodeMinStack:
             copied.push(current.value)
             current = current.next
         return copied
+
+    def get_min(self) -> Any:
+        """
+        Returns the actual minimal object in the stack.(min_data top)
+
+        Returns:
+            Actual min object in stack.
+        Raises:
+            IndexError: if stack is empty.
+        """
+        if self.is_empty():
+            raise IndexError("Stack is empty")
+        return self._min_head.value  # type: ignore[union-attr]
 
     def __eq__(self, other: object) -> bool:
         """
@@ -161,3 +174,12 @@ class DynamicNodeMinStack:
         while current is not None:
             yield current.value
             current = current.next
+
+    def __repr__(self) -> str:
+        """
+        Returns string representation of the stack.
+        Example: DynamicNodeMinStack(top=[3, 2, 1], min=1)
+        """
+        items = list(self)
+        current_min = self._min_head.value if self._min_head is not None else None
+        return f"DynamicNodeMinStack(top={items}, min={current_min})"

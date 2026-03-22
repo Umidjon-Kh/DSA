@@ -16,7 +16,7 @@ class DynamicUniversalMinStack:
     Raises TypeError if key function provided but not callable.
 
     Time complexity:
-        push:     O(1) amortized, O(n) no resize
+        push:     O(1) amortized, O(n) on resize
         pop:      O(1)
         peek:     O(1)
         get_min:  O(1)
@@ -43,7 +43,7 @@ class DynamicUniversalMinStack:
         Raises:
             TypeError: if key is provided but not callable.
         """
-        # Validating ky function before initializing
+        # Validating key function before initializing
         if key is not None:
             if not callable(key):
                 raise TypeError(f"Key must be callable, got ({type(key).__name__})")
@@ -121,7 +121,7 @@ class DynamicUniversalMinStack:
 
     def copy(self) -> "DynamicUniversalMinStack":
         """
-        Creates a shalloew copy of the stack.
+        Creates a shallow copy of the stack.
         Returned stack has same attrs and data structures.
         """
         copied = DynamicUniversalMinStack(key=self._key)
