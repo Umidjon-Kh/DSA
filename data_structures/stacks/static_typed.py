@@ -21,6 +21,7 @@ class StaticTypedStack:
     Raises OverflowError on push when full.
     Raises IndexError on pop/peek when empty.
     Raises TypeError if not provided at least one argument or capacity value.
+    Raises TypeError if pushed value is not initialized data type.
 
 
     Time complexity:
@@ -54,7 +55,7 @@ class StaticTypedStack:
             ValueError:   if capacity is less than or equal to 0.
             OverflowError: if len(args) exceeds capacity.
             TypeError: if not provided at least one argument or capacity value.
-
+            Raises TypeError if pushed value is not initialized data type.
         """
         if capacity is not None:
             if not isinstance(capacity, int):

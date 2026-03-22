@@ -16,7 +16,7 @@ class StaticUniversalMinStack:
         Min data:
             stores only the minimal object computed by a key function
             and allows retrieving the current minimum object from stack in O(1)
-    Raises OverflowErroron pushed when full.
+    Raises OverflowError on pushed when full.
     Raises IndexError on pop/peek when empty.
     Raises TypeError if not provided at least one argument or capacity value.
     Raises TypeError if key function provided but not callable.
