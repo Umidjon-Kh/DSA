@@ -186,9 +186,7 @@ class StaticUniversalMinStack:
         """
         if not isinstance(other, StaticUniversalMinStack):
             return False
-        return list(other._main_data) == list(self._main_data) and list(
-            other._min_data
-        ) == list(self._min_data)
+        return list(other._main_data) == list(self._main_data)
 
     def __len__(self) -> int:
         """Returns number of elements in the stack."""
