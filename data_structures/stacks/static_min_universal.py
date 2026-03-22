@@ -46,7 +46,7 @@ class StaticUniversalMinStack:
         self, *args, capacity: Any = None, key: Optional[Callable] = None
     ) -> None:
         """
-        Creates a two fixed-size stacks with given capacity.
+        Creates two fixed-size stacks with given capacity.
         If capacity is None - uses len(args) as capacity.
 
         Args:
@@ -182,6 +182,10 @@ class StaticUniversalMinStack:
         return list(other._main_data) == list(self._main_data) and list(
             other._min_data
         ) == list(self._min_data)
+
+    def __len__(self) -> int:
+        """Returns number of elements in the stack."""
+        return len(self._main_data)
 
     def __iter__(self) -> Generator[Any, None, None]:
         """

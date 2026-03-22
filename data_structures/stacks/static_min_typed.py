@@ -12,7 +12,7 @@ _DTYPE_DEFAULTS = {
 
 class StaticTypedMinStack:
     """
-    Creates a fixed-size stack that accepts only single type for all elements.
+    Creates two fixed-size stacks that accepts only single type for all elements.
     Build on top of StaticTypedArray.
     Follows LIFO (Last In, First Out) principle.
 
@@ -26,6 +26,8 @@ class StaticTypedMinStack:
     Raises TypeError if not provided at least one argument or capacity value.
     Raises TypeError if key function provided but not callable.
     Raises TypeError if pushed value is not initialized data type.
+    Raises ValueError if str_length less than or equal to 0.
+    Raises TypeError if str_length is provided but not positive integer.
 
     Time complexity:
         push:     O(1)
@@ -47,7 +49,6 @@ class StaticTypedMinStack:
         "_capacity",
         "_key",
         "_dtype",
-        "_str_length",
     )
 
     def __init__(
@@ -59,7 +60,7 @@ class StaticTypedMinStack:
         key: Optional[Callable] = None,
     ) -> None:
         """
-        Creates a two fixed-size typed stacks with given capacity.
+        Creates two fixed-size typed stacks with given capacity.
         If capacity is None — uses len(args) as capacity.
 
         Args:
@@ -74,7 +75,9 @@ class StaticTypedMinStack:
             OverflowError: if len(args) exceeds capacity.
             TypeError: if not provided at least one argument or capacity value.
             TypeError: if key function is provided but not callable.
-            Raises TypeError if pushed value is not initialized data type.
+            TypeError: if pushed value is not initialized data type.
+            TypeError: if str_length is provided but not positive integer.
+            ValueError: if str_length less than or equal to 0
         """
         # Validating capacity before initializing
         if capacity is not None:
@@ -96,9 +99,8 @@ class StaticTypedMinStack:
         else:
             self._key = lambda x: x
 
-        # Initializing data type and str length
+        # Initializing data type
         self._dtype = dtype
-        self._str_length = str_length
         # Creating both data structures
         self._main_data = StaticTypedArray(
             self._capacity, dtype=dtype, str_length=str_length
@@ -193,7 +195,6 @@ class StaticTypedMinStack:
             capacity=self._capacity,
             key=self._key,
             dtype=self._dtype,
-            str_length=self._str_length,
         )
         copied._main_data = self._main_data.copy()
         copied._top = self._top
@@ -213,6 +214,10 @@ class StaticTypedMinStack:
         return list(other._main_data) == list(self._main_data) and list(
             other._min_data
         ) == list(self._min_data)
+
+    def __len__(self) -> int:
+        """Returns number of elements in the stack."""
+        return len(self._main_data)
 
     def __iter__(self) -> Generator[Any, None, None]:
         """

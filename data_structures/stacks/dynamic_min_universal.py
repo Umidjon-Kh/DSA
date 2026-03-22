@@ -21,7 +21,6 @@ class DynamicUniversalMinStack:
         peek:     O(1)
         get_min:  O(1)
         is_empty: O(1)
-        is_full:  O(1)
         __len__:  O(1)
         __iter__: O(n) — from top to bottom
         copy:     O(n)
