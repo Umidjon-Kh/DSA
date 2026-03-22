@@ -22,7 +22,7 @@ class StaticTypedMinStack:
         And needs a fixed and less memory usage.
 
     Raises OverflowError on push when full.
-    Raises IndexError on pop/peek when empty.
+    Raises IndexError on pop/peek/get_min when empty.
     Raises TypeError if not provided at least one argument or capacity value.
     Raises TypeError if key function provided but not callable.
     Raises TypeError if pushed value is not initialized data type.
@@ -181,7 +181,14 @@ class StaticTypedMinStack:
     def get_min(self) -> Any:
         """
         Returns the actual minimal object in the stack.(min_data top)
+
+        Returns:
+            Actual min object in stack.
+        Raises:
+            IndexError: if stack is empty.
         """
+        if self.is_empty():
+            raise IndexError("Stack is empty")
         return self._min_data[self._min_top]
 
     def copy(self) -> "StaticTypedMinStack":

@@ -13,7 +13,7 @@ class DynamicTypedMinStack:
         1) Never raises OverflowsError.
         2) Stores all objects in raw C values.
 
-    Raises IndexError on pop/peek when empty.
+    Raises IndexError on pop/peek/get_min when empty.
     Raises TypeError if key function is provided but not callable.
     Raises TypeError if pushed object is not initialized data type.
     Raises TypeError if str_length is provided but not positive integer.
@@ -125,7 +125,14 @@ class DynamicTypedMinStack:
     def get_min(self) -> Any:
         """
         Returns the actual minimal object in the stack.(min_data top)
+
+        Returns:
+            Actual min object in stack.
+        Raises:
+            IndexError: if stack is empty.
         """
+        if self.is_empty():
+            raise IndexError("Stack is empty")
         return self._min_data[-1]
 
     def copy(self) -> "DynamicTypedMinStack":

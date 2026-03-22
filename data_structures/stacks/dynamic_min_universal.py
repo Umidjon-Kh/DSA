@@ -12,7 +12,7 @@ class DynamicUniversalMinStack:
     Unlike StaticUniversalMinStack - never raises OverflowError.
     Growth is handled automatically by DynamicUniversalArray.
 
-    Raises IndexError on pop/peek when empty.
+    Raises IndexError on pop/peek/get_min when empty.
     Raises TypeError if key function provided but not callable.
 
     Time complexity:
@@ -109,7 +109,14 @@ class DynamicUniversalMinStack:
     def get_min(self) -> Any:
         """
         Returns the actual minimal object in the stack.(min_data top)
+
+        Returns:
+            Actual min object in stack.
+        Raises:
+            IndexError: if stack is empty.
         """
+        if self.is_empty():
+            raise IndexError("Stack is empty")
         return self._min_data[-1]
 
     def copy(self) -> "DynamicUniversalMinStack":

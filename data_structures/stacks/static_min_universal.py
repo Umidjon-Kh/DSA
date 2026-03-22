@@ -17,7 +17,7 @@ class StaticUniversalMinStack:
             stores only the minimal object computed by a key function
             and allows retrieving the current minimum object from stack in O(1)
     Raises OverflowError on push when full.
-    Raises IndexError on pop/peek when empty.
+    Raises IndexError on pop/peek/get_min when empty.
     Raises TypeError if not provided at least one argument or capacity value.
     Raises TypeError if key function provided but not callable.
 
@@ -155,7 +155,14 @@ class StaticUniversalMinStack:
     def get_min(self) -> Any:
         """
         Returns the actual minimal object in the stack.(min_data top)
+
+        Returns:
+            Actual min object in stack.
+        Raises:
+            IndexError: if stack is empty.
         """
+        if self.is_empty():
+            raise IndexError("Stack is empty")
         return self._min_data[self._min_top]
 
     def copy(self) -> "StaticUniversalMinStack":
