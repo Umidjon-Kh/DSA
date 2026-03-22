@@ -27,6 +27,7 @@ class CircularSinglyLinkedList:
         find:           O(n)
         get_node:       O(n)
         set_node:       O(n)
+        copy:           O(n)
         __len__:        O(1)
         __iter__:       O(n)
         __contains__:   O(n)

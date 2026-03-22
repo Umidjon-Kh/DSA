@@ -29,6 +29,7 @@ class CircularDoublyLinkedList:
         find:           O(n)
         get_node:       O(n) — O(n/2) due to bidirectional traversal
         set_node:       O(n/2)
+        copy:           O(n)
         __len__:        O(1)
         __iter__:       O(n)
         __contains__:   O(n)

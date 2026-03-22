@@ -11,6 +11,8 @@ class StaticUniversalStack:
 
     Raises OverflowError on push when full.
     Raises IndexError on pop/peek when empty.
+    Raises TypeError if not provided at least one argument or capacity value.
+
 
     Time complexity:
         push:     O(1)
@@ -38,11 +40,19 @@ class StaticUniversalStack:
             TypeError:   if capacity is not int.
             ValueError:  if capacity is less than or equal to 0.
             OverflowError: if len(args) exceeds capacity.
+            TypeError: if not provided at least one argument or capacity value.
         """
-        if capacity is None:
+        if capacity is not None:
+            if not isinstance(capacity, int):
+                raise TypeError(
+                    f"Capacity value must be positive integer, got ({type(capacity).__name__})"
+                )
+            self._capacity = capacity
+        elif args:
             self._capacity = len(args)
         else:
-            self._capacity = capacity
+            raise TypeError("Expected at least one argument or capacity value.")
+
         self._data = StaticUniversalArray(self._capacity)
         self._top = -1
         for item in args:

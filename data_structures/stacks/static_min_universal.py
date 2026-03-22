@@ -1,0 +1,198 @@
+from typing import Any, Callable, Generator, Optional
+
+from ..arrays import StaticUniversalArray
+
+
+class StaticUniversalMinStack:
+    """
+    Creates a fixed-size stack that accepts any Python object.
+    Build on top of StaticUniversalArray.
+    Follows LIFO (Last In, First Out) principle.
+
+    Compared to other Stakcs:
+        It have two data structures main_data and min_data.
+        Main Data:
+            stores all pushed objects like simple stack.
+        Min data:
+            stores only the minimal object computed by a key function
+            and allows retrieving the current minimum object from stack in O(1)
+    Raises OverflowErroron pushed when full.
+    Raises IndexError on pop/peek when empty.
+    Raises TypeError if not provided at least one argument or capacity value.
+    Raises TypeError if key function provided but not callable.
+
+    Time complexity:
+        push:     O(1)
+        pop:      O(1)
+        peek:     O(1)
+        get_min:  O(1)
+        is_empty: O(1)
+        is_full:  O(1)
+        __len__:  O(1)
+        __iter__: O(n) — from top to bottom
+        copy:     O(n)
+    """
+
+    __slots__ = (
+        "_top",
+        "_min_top",
+        "_main_data",
+        "_min_data",
+        "_capacity",
+        "_key",
+    )
+
+    def __init__(
+        self, *args, capacity: Any = None, key: Optional[Callable] = None
+    ) -> None:
+        """
+        Creates a two fixed-size stacks with given capacity.
+        If capacity is None - uses len(args) as capacity.
+
+        Args:
+            *args: Optional initial values pushed bottom to top.
+            capacity: Maximum number of elements the stack can hold.
+            key: Function that computes minimal of two objects.
+
+        Raises:
+            TypeError:   if capacity is not int.
+            ValueError:  if capacity is less than or equal to 0.
+            OverflowError: if len(args) exceeds capacity.
+            TypeError: if not provided at least one argument or capacity value.
+            TypeError: if key function is provided but not callable.
+        """
+        # Validating capacity before initializing
+        if capacity is not None:
+            if not isinstance(capacity, int):
+                raise TypeError(
+                    f"Capacity value must be positive integer, got ({type(capacity).__name__})"
+                )
+            self._capacity = capacity
+        elif args:
+            self._capacity = len(args)
+        else:
+            raise TypeError("Expected at least one argument or capacity value.")
+
+        # Validating key function
+        if key is not None:
+            if not callable(key):
+                raise TypeError(f"Key must be callable, got ({type(key).__name__})")
+            self._key = key
+        else:
+            self._key = lambda x: x
+        # Creating both data structures
+        self._main_data = StaticUniversalArray(self._capacity)
+        self._min_data = StaticUniversalArray(self._capacity)
+        # Initialzing both tops of stacks
+        self._top = -1
+        self._min_top = -1
+        # Pushing args to both datas
+        for item in args:
+            self.push(item)
+
+    def push(self, value: Any) -> None:
+        """
+        Adds object to main stack and computes minimal
+        using key function to get minimum object and adds it to
+        min data.
+
+        Raises:
+            OverflowError: if stack is full.
+        """
+        if self.is_full():
+            raise OverflowError("Stack is full")
+        self._top += 1
+        self._main_data[self._top] = value
+        if self._min_top == -1 or self._key(value) <= self._key(
+            self._min_data[self._min_top]
+        ):
+            self._min_top += 1
+            self._min_data[self._min_top] = value
+
+    def is_empty(self) -> bool:
+        """Returns True if stack has no elements."""
+        return self._top == -1
+
+    def is_full(self) -> bool:
+        """Returns True if stack has reached its capacity."""
+        return self._top == self._capacity - 1
+
+    def pop(self) -> Any:
+        """
+        Removes and returns object from the top of the main data.
+        If main data top object and min data top object
+        computed minimal value is equal clears top slot of min data too.
+
+        Returns:
+            Value at the top.
+        Raises:
+            IndexError: if stack is empty.
+        """
+        if self.is_empty():
+            raise IndexError("Stack is empty")
+        removed = self._main_data[self._top]
+        self._main_data[self._top] = None
+        self._top -= 1
+        if self._key(removed) == self._key(self._min_data[self._min_top]):
+            self._min_data[self._min_top] = None
+            self._min_top -= 1
+        return removed
+
+    def peek(self) -> Any:
+        """
+        Returns value at the top without removing it.
+
+        Returns:
+            Value at the top.
+
+        Raises:
+            IndexError: if stack is empty.
+        """
+        if self.is_empty():
+            raise IndexError("Stack is empty")
+        return self._main_data[self._top]
+
+    def copy(self) -> "StaticUniversalMinStack":
+        """
+        Creates a shallow copy of the stack.
+        Returned stack has same capacity, size and (main_data, min_data).
+
+        Time complexity: O(n)
+        """
+        copied = StaticUniversalMinStack(capacity=self._capacity, key=self._key)
+        copied._main_data = self._main_data.copy()
+        copied._top = self._top
+        copied._min_data = self._min_data.copy()
+        copied._min_top = self._min_top
+        return copied
+
+    def __eq__(self, other: object) -> bool:
+        """
+        Returns True if both stacks have same elements in same order.
+        Capacity and key is not compared — only contents (main_data and min_data).
+        """
+        if not isinstance(other, StaticUniversalMinStack):
+            return False
+        return list(other._main_data) == list(self._main_data) and list(
+            other._min_data
+        ) == list(self._min_data)
+
+    def __iter__(self) -> Generator[Any, None, None]:
+        """
+        Iterates over values from top to bottom.
+        Does not modify the stack.
+        """
+        current = self._top
+        while current >= 0:
+            yield self._main_data[current]
+            current -= 1
+
+
+def __repr__(self) -> str:
+    """
+    Returns string representation of the stack.
+    Example: StaticUniversalMinStack(capacity=5, top=[3, 2, 1], min=1)
+    """
+    items = list(self)
+    current_min = self._min_data[self._min_top] if self._min_top != -1 else None
+    return f"StaticUniversalMinStack(capacity={self._capacity}, top={items}, min={current_min})"

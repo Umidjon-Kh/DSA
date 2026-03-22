@@ -20,6 +20,8 @@ class StaticTypedStack:
 
     Raises OverflowError on push when full.
     Raises IndexError on pop/peek when empty.
+    Raises TypeError if not provided at least one argument or capacity value.
+
 
     Time complexity:
         push:     O(1)
@@ -51,11 +53,20 @@ class StaticTypedStack:
             TypeError:    if capacity is not int or value does not match dtype.
             ValueError:   if capacity is less than or equal to 0.
             OverflowError: if len(args) exceeds capacity.
+            TypeError: if not provided at least one argument or capacity value.
+
         """
-        if capacity is None:
+        if capacity is not None:
+            if not isinstance(capacity, int):
+                raise TypeError(
+                    f"Capacity value must be positive integer, got ({type(capacity).__name__})"
+                )
+            self._capacity = capacity
+        elif args:
             self._capacity = len(args)
         else:
-            self._capacity = capacity
+            raise TypeError("Expected at least one argument or capacity value.")
+
         self._dtype = dtype
         self._str_length = str_length
         self._data = StaticTypedArray(

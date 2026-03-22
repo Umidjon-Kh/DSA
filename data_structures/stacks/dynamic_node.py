@@ -24,7 +24,7 @@ class DynamicNodeStack:
         is_empty: O(1)
         __len__:  O(1)
         __iter__: O(n) — from top to bottom
-        copy:     O(n)
+        copy:     O(n*2)
     """
 
     __slots__ = ("_head", "_size")
@@ -99,7 +99,7 @@ class DynamicNodeStack:
         Elements firstly saves in temp stack with reversed property,
         after thet pushes to main copy stack in right property.
 
-        Time complexity: O(n)
+        Time complexity: O(n*2)
         """
         temp = DynamicNodeStack()
         current = self._head
