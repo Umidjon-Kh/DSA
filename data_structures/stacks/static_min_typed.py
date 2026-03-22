@@ -17,7 +17,7 @@ class StaticTypedMinStack:
     Follows LIFO (Last In, First Out) principle.
 
     Compared to StaticUniversalMinStack:
-        It only stores single type elemenets in raw C values.
+        It only stores single type elements in raw C values.
         It needs for users that need to store only one type object
         And needs a fixed and less memory usage.
 

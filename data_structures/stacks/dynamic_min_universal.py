@@ -5,7 +5,7 @@ from ..arrays import DynamicUniversalArray
 
 class DynamicUniversalMinStack:
     """
-    Createsa two dynamic stacks that grows automatically when capacity is exceeded.
+    Creates two dynamic stacks that grows automatically when capacity is exceeded.
     Build on top of the DynamicUniversalArray - accepts any Python object.
     Follows LIFO (Last In, First Out) principle.
 

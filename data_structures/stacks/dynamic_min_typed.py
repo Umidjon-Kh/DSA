@@ -6,8 +6,8 @@ from ..arrays import DynamicTypedArray
 class DynamicTypedMinStack:
     """
     Creates two dynamic stacks that grows automatically when capacity is exceeded.
-    Build on top of DynamictypedArray - enforces a single type for all elemenets.
-    Follows LIFO (Last In, First Out) by DynamicTypedArray.
+    Build on top of DynamicTypedArray - enforces a single type for all elemenets.
+    Follows LIFO (Last In, First Out) by DynamicTypedArray principle.
 
     Compared to StaticTypedMinStack and DynamicUniversalMinStack:
         1) Never raises OverflowsError.
@@ -44,9 +44,9 @@ class DynamicTypedMinStack:
         Creates two dynamic typed stack with optional initial values.
 
         Args:
-            *args:      Optional initial values pushed bootom to top. Must match dtype.
-            dtype:      Elemenet type. Suppoerted: int, float, bool, str.
-            str_length: Maxt string length for dtype=str (default 20).
+            *args:      Optional initial values pushed bottom to top. Must match dtype.
+            dtype:      Element type. Supported: int, float, bool, str.
+            str_length: Max string length for dtype=str (default 20).
 
         Raises:
             TypeError: if key function is provided but not callable.
@@ -130,7 +130,7 @@ class DynamicTypedMinStack:
 
     def copy(self) -> "DynamicTypedMinStack":
         """
-        Creates a shalloew copy of the stack.
+        Creates a shallow copy of the stack.
         Returned stack has same attrs and data structures.
         """
         copied = DynamicTypedMinStack(key=self._key, dtype=self._dtype)

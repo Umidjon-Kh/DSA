@@ -9,14 +9,14 @@ class StaticUniversalMinStack:
     Build on top of StaticUniversalArray.
     Follows LIFO (Last In, First Out) principle.
 
-    Compared to other Stakcs:
+    Compared to other Stacks:
         It have two data structures main_data and min_data.
         Main Data:
             stores all pushed objects like simple stack.
         Min data:
             stores only the minimal object computed by a key function
             and allows retrieving the current minimum object from stack in O(1)
-    Raises OverflowError on pushed when full.
+    Raises OverflowError on push when full.
     Raises IndexError on pop/peek when empty.
     Raises TypeError if not provided at least one argument or capacity value.
     Raises TypeError if key function provided but not callable.

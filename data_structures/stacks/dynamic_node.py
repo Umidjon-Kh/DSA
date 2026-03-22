@@ -97,7 +97,7 @@ class DynamicNodeStack:
         """
         Creates a shallow copy of the stack.
         Elements firstly saves in temp stack with reversed property,
-        after thet pushes to main copy stack in right property.
+        after that pushes to main copy stack in right order.
 
         Time complexity: O(n*2)
         """
