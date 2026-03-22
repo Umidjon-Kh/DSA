@@ -1,6 +1,6 @@
 from typing import Any, Callable, Generator, Optional
 
-from ..arrays import StaticUniversalArray
+from ....arrays import StaticUniversalArray
 
 
 class StaticUniversalMinStack:

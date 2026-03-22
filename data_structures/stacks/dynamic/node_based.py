@@ -1,6 +1,6 @@
 from typing import Any, Generator, Optional
 
-from ..nodes import SingleNode
+from ...nodes import SingleNode
 
 
 class DynamicNodeStack:

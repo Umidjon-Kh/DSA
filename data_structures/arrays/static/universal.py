@@ -1,7 +1,7 @@
 import ctypes
 from typing import Any, Iterator
 
-from ..tools import validate_index
+from ...tools import validate_index
 
 
 class StaticUniversalArray:

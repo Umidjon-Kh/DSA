@@ -1,25 +1,17 @@
 from typing import Any, Iterator
 
-from ..tools import validate_index, validate_insert_index
-from .static_typed import StaticTypedArray
-
-_DTYPE_DEFAULTS = {
-    int: 0,
-    float: 0.0,
-    bool: False,
-    str: "",
-}
+from ...tools import validate_index, validate_insert_index
+from ..static import StaticUniversalArray
 
 
-class DynamicTypedArray:
+class DynamicUniversalArray:
     """
     A dynamic array that grows automatically when capacity is exceeded.
-    Built on top of StaticTypedArray — enforces a single type for all elements.
+    Built on top of StaticUniversalArray — accepts any Python object.
 
-    Same resizing logic as DynamicUniversalArray but stores raw C values
-    instead of PyObject pointers — less memory overhead per element.
-
-    Supported dtypes: int, float, bool, str
+    When capacity is full, creates a new StaticUniversalArray using
+    CPython's growth formula and copies all elements. Old array is
+    discarded and collected by GC.
 
     Growth formula (same as CPython list):
         new_capacity = capacity + (capacity >> 3) + (3 if capacity < 9 else 6)
@@ -37,50 +29,43 @@ class DynamicTypedArray:
         _resize:     O(n)
     """
 
-    __slots__ = ("_data", "_capacity", "_size", "_dtype", "_str_length")
+    __slots__ = ("_data", "_capacity", "_size")
 
-    def __init__(self, dtype: type, *args, str_length: Any = None) -> None:
+    def __init__(self, *args) -> None:
         """
-        Creates a typed dynamic array with optional initial elements.
+        Creates a dynamic array with optional initial elements.
+        Initial capacity is max(4, len(args)) to avoid
+        immediate resize when elements are provided.
 
         Args:
-            dtype:      Element type. Supported: int, float, bool, str.
-            *args:      Optional initial elements. Must match dtype.
-            str_length: Max string length for dtype=str (default 20).
+            *args: Optional initial elements of any type.
 
         Examples:
-            arr = DynamicTypedArray(int)            # empty int array
-            arr = DynamicTypedArray(int, 1, 2, 3)   # int array with elements
-            arr = DynamicTypedArray(str, str_length=50)  # str array, max 50 chars
+            arr = DynamicUniversalArray()           # empty, capacity=4
+            arr = DynamicUniversalArray(1, 2, 3)    # capacity=4, size=3
+            arr = DynamicUniversalArray(*range(10)) # capacity=10, size=10
         """
-        self._dtype = dtype
-        self._str_length = str_length
         self._capacity = max(4, len(args))
         self._size = 0
-        self._data = StaticTypedArray(
-            self._capacity,
-            dtype=dtype,
-            str_length=str_length,
-        )
+        self._data = StaticUniversalArray(self._capacity)
         for item in args:
             self.append(item)
 
     def _resize(self) -> None:
         """
         Grows capacity using CPython's list growth formula and copies
-        all existing elements into the new StaticTypedArray.
+        all existing elements into the new StaticUniversalArray.
         Old array is discarded and collected by GC.
+
+        Called automatically by append and insert when size == capacity.
+        Never call this manually.
 
         Time complexity: O(n)
         """
         new_capacity = (
             self._capacity + (self._capacity >> 3) + (3 if self._capacity < 9 else 6)
         )
-        new_data = StaticTypedArray(
-            new_capacity,
-            dtype=self._dtype,
-            str_length=self._str_length,
-        )
+        new_data = StaticUniversalArray(new_capacity)
         for index in range(self._size):
             new_data[index] = self._data[index]
         self._data = new_data
@@ -89,7 +74,6 @@ class DynamicTypedArray:
     def append(self, value: Any) -> None:
         """
         Adds value to the end of the array.
-        Value must match dtype.
         If capacity is exceeded — triggers _resize() first.
 
         Time complexity: O(1) amortized, O(n) on resize.
@@ -103,14 +87,13 @@ class DynamicTypedArray:
         """
         Inserts value at given index by shifting all elements
         to the right of index one position forward.
-        Value must match dtype.
         If capacity is exceeded — triggers _resize() first.
         Allows index == size (insert at end).
 
-        Time complexity: O(n)
+        Time complexity: O(n) — shifts up to n elements.
 
         Raises:
-            TypeError:  if index is not int or value does not match dtype.
+            TypeError:  if index is not int.
             IndexError: if index is out of range.
         """
         index = validate_insert_index(index, self._size)
@@ -123,10 +106,11 @@ class DynamicTypedArray:
 
     def remove(self, index: Any) -> Any:
         """
-        Removes and returns element at given index.
+        Removes and returns element at given index by shifting all
+        elements to the right of index one position backward.
         Does not resize down — capacity stays the same.
 
-        Time complexity: O(n)
+        Time complexity: O(n) — shifts up to n elements.
 
         Returns:
             Removed value.
@@ -139,8 +123,8 @@ class DynamicTypedArray:
         removed = self._data[index]
         for idx in range(index, self._size - 1):
             self._data[idx] = self._data[idx + 1]
+        self._data[self._size - 1] = None
         self._size -= 1
-        self._data[self._size] = _DTYPE_DEFAULTS[self._dtype]
         return removed
 
     def __getitem__(self, index: Any) -> Any:
@@ -151,28 +135,24 @@ class DynamicTypedArray:
     def __setitem__(self, index: Any, value: Any) -> None:
         """
         Replaces value at given index.
-        Value must match dtype. O(1).
+        Only works for existing indices (0 to size-1).
+        Use append or insert to add new elements. O(1).
         """
         index = validate_index(index, self._size)
         self._data[index] = value
 
-    def copy(self) -> "DynamicTypedArray":
+    def copy(self) -> "DynamicUniversalArray":
         """
         Creates a shallow copy of the array.
         Time complexity: O(n)
         """
-        copied = DynamicTypedArray(
-            self._dtype,
-            *[self._data[i] for i in range(self._size)],
-            str_length=self._str_length,
-        )
+        copied = DynamicUniversalArray(*[self._data[i] for i in range(self._size)])
         return copied
 
-    def __eq__(self, other: Any) -> bool:
-        """Checks for equality of all data in both objects"""
-        if not isinstance(other, DynamicTypedArray):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, DynamicUniversalArray):
             return False
-        if self._dtype != other._dtype or self._size != other._size:
+        if self._size != other._size:
             return False
         return all(self._data[i] == other._data[i] for i in range(self._size))
 
@@ -187,4 +167,4 @@ class DynamicTypedArray:
 
     def __repr__(self) -> str:
         items = [self._data[i] for i in range(self._size)]
-        return f"DynamicTypedArray(dtype={self._dtype.__name__}, size={self._size}, capacity={self._capacity}, items={items})"
+        return f"DynamicUniversalArray(size={self._size}, capacity={self._capacity}, items={items})"

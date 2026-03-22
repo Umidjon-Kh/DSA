@@ -1,7 +1,11 @@
-from .dynamic_typed import DynamicTypedArray
-from .dynamic_universal import DynamicUniversalArray
-from .static_typed import StaticTypedArray
-from .static_universal import StaticUniversalArray
+from .dynamic import (
+    DynamicTypedArray,
+    DynamicUniversalArray,
+)
+from .static import (
+    StaticTypedArray,
+    StaticUniversalArray,
+)
 
 __all__ = [
     "StaticTypedArray",

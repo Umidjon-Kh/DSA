@@ -1,16 +1,18 @@
 from typing import Any, Generator
 
-from ..arrays import DynamicUniversalArray
+from ...arrays import DynamicTypedArray
 
 
-class DynamicUniversalStack:
+class DynamicTypedStack:
     """
     A dynamic stack that grows automatically when capacity is exceeded.
-    Built on top of DynamicUniversalArray — accepts any Python object.
+    Built on top of DynamicTypedArray — enforces a single type for all elements.
     Follows LIFO (Last In, First Out) principle.
 
-    Unlike StaticUniversalStack — never raises OverflowError.
-    Growth is handled automatically by DynamicUniversalArray.
+    Unlike StaticTypedStack — never raises OverflowError.
+    Growth is handled automatically by DynamicTypedArray.
+
+    Supported dtypes: int, float, bool, str.
 
     Raises IndexError on pop/peek when empty.
 
@@ -24,27 +26,34 @@ class DynamicUniversalStack:
         copy:     O(n)
     """
 
-    __slots__ = ("_data",)
+    __slots__ = ("_data", "_dtype")
 
-    def __init__(self, *args) -> None:
+    def __init__(self, *args, dtype: type, str_length: Any = None) -> None:
         """
-        Creates a dynamic stack with optional initial values.
+        Creates a dynamic typed stack with optional initial values.
 
         Args:
-            *args: Optional initial values pushed bottom to top.
+            *args:      Optional initial values pushed bottom to top. Must match dtype.
+            dtype:      Element type. Supported: int, float, bool, str.
+            str_length: Max string length for dtype=str (default 20).
 
         Examples:
-            stack = DynamicUniversalStack()        # empty
-            stack = DynamicUniversalStack(1, 2, 3) # top is 3
+            stack = DynamicTypedStack(dtype=int)           # empty int stack
+            stack = DynamicTypedStack(1, 2, 3, dtype=int)  # top is 3
         """
-        self._data = DynamicUniversalArray(*args)
+        self._dtype = dtype
+        self._data = DynamicTypedArray(dtype, *args, str_length=str_length)
 
     def push(self, value: Any) -> None:
         """
         Adds value to the top of the stack.
+        Value must match dtype.
         Grows automatically if needed.
 
         Time complexity: O(1) amortized, O(n) on resize.
+
+        Raises:
+            TypeError: if value does not match dtype.
         """
         self._data.append(value)
 
@@ -80,22 +89,25 @@ class DynamicUniversalStack:
         """Returns True if stack has no elements."""
         return len(self._data) == 0
 
-    def copy(self) -> "DynamicUniversalStack":
+    def copy(self) -> "DynamicTypedStack":
         """
         Creates a shallow copy of the stack.
-        Returned stack has same elements in same order.
+        Returned stack has same dtype, str_length and elements.
 
         Time complexity: O(n)
         """
-        copied = DynamicUniversalStack()
+        copied = DynamicTypedStack(dtype=self._dtype)
         copied._data = self._data.copy()
         return copied
 
     def __eq__(self, other: object) -> bool:
         """
-        Returns True if both stacks have same elements in same order.
+        Returns True if both stacks have same dtype and
+        same elements in same order.
         """
-        if not isinstance(other, DynamicUniversalStack):
+        if not isinstance(other, DynamicTypedStack):
+            return False
+        if self._dtype != other._dtype:
             return False
         return list(self) == list(other)
 
@@ -116,7 +128,7 @@ class DynamicUniversalStack:
     def __repr__(self) -> str:
         """
         Returns string representation of the stack.
-        Example: DynamicUniversalStack(top=[3, 2, 1])
+        Example: DynamicTypedStack(dtype=int, top=[3, 2, 1])
         """
         items = list(self)
-        return f"DynamicUniversalStack(top={items})"
+        return f"DynamicTypedStack(dtype={self._dtype.__name__}, top={items})"

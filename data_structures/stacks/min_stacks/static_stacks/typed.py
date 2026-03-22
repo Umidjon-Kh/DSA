@@ -1,6 +1,6 @@
 from typing import Any, Callable, Generator, Optional
 
-from ..arrays import StaticTypedArray
+from ....arrays import StaticTypedArray
 
 _DTYPE_DEFAULTS = {
     int: 0,

@@ -1,6 +1,6 @@
 from typing import Any, Callable, Generator, Optional
 
-from ..nodes import SingleNode
+from ....nodes import SingleNode
 
 
 class DynamicNodeMinStack:

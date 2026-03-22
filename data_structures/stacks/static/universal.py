@@ -1,6 +1,6 @@
 from typing import Any, Generator
 
-from ..arrays import StaticUniversalArray
+from ...arrays import StaticUniversalArray
 
 
 class StaticUniversalStack:

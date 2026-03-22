@@ -1,6 +1,6 @@
 from typing import Any, Callable, Generator, Optional
 
-from ..arrays import DynamicUniversalArray
+from ....arrays import DynamicUniversalArray
 
 
 class DynamicUniversalMinStack:
