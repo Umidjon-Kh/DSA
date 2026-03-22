@@ -176,6 +176,12 @@ class StaticTypedMinStack:
             raise IndexError("Stack is empty")
         return self._main_data[self._top]
 
+    def get_min(self) -> Any:
+        """
+        Returns the actual minimal object in the stack.(min_data top)
+        """
+        return self._min_data[self._min_top]
+
     def copy(self) -> "StaticTypedMinStack":
         """
         Creates a shallow copy of the stack.
@@ -218,12 +224,11 @@ class StaticTypedMinStack:
             yield self._main_data[current]
             current -= 1
 
-
-def __repr__(self) -> str:
-    """
-    Returns string representation of the stack.
-    Example: StaticTypedMinStack(dtype=int, capacity=5, top=[3, 2, 1], min=1)
-    """
-    items = list(self)
-    current_min = self._min_data[self._min_top] if self._min_top != -1 else None
-    return f"StaticTypedMinStack(dtype={self._dtype.__name__}, capacity={self._capacity}, top={items}, min={current_min})"
+    def __repr__(self) -> str:
+        """
+        Returns string representation of the stack.
+        Example: StaticTypedMinStack(dtype=int, capacity=5, top=[3, 2, 1], min=1)
+        """
+        items = list(self)
+        current_min = self._min_data[self._min_top] if self._min_top != -1 else None
+        return f"StaticTypedMinStack(dtype={self._dtype.__name__}, capacity={self._capacity}, top={items}, min={current_min})"
