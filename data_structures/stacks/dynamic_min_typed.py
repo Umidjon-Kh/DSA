@@ -7,7 +7,7 @@ class DynamicTypedMinStack:
     """
     Creates two dynamic stacks that grows automatically when capacity is exceeded.
     Build on top of DynamicTypedArray - enforces a single type for all elemenets.
-    Follows LIFO (Last In, First Out) by DynamicTypedArray principle.
+    Follows LIFO (Last In, First Out) principle.
 
     Compared to StaticTypedMinStack and DynamicUniversalMinStack:
         1) Never raises OverflowsError.

@@ -221,7 +221,7 @@ class StaticTypedMinStack:
         return list(other._main_data) == list(self._main_data)
 
     def __len__(self) -> int:
-        """Returns number of elements in the stack."""
+        """Returns capacity of the stack."""
         return len(self._main_data)
 
     def __iter__(self) -> Generator[Any, None, None]:

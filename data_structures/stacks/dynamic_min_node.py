@@ -43,7 +43,7 @@ class DynamicNodeMinStack:
         Creates two node-based stacks with optional initial values.
 
         Args:
-            *args: Optional inital values pushed bottom to top(head -> next).
+            *args: Optional initial values pushed bottom to top(head -> next).
             key: Function that computes minimal of two objects.
 
         Raises:
@@ -87,7 +87,7 @@ class DynamicNodeMinStack:
 
     def pop(self) -> Any:
         """
-        Removes and returns noe value from the main_head and
+        Removes and returns node value from the main_head and
         Sets main_head's next node to main_head(new_head).
         Moves min_head to next node if min_head computed value is
         equal to main_head computed value.
@@ -128,13 +128,18 @@ class DynamicNodeMinStack:
 
         Time complexity: O(n*2)
         """
-        temp = DynamicNodeMinStack()
+        # Creating reversed nodes chain
+        temp_node = None
         current = self._main_head
         while current is not None:
-            temp.push(current.value)
+            new_node = SingleNode(current.value)
+            new_node.next = temp_node
+            temp_node = new_node
             current = current.next
-        copied = DynamicNodeMinStack()
-        current = temp._main_head
+
+        # Pushing all them in right order to copied
+        copied = DynamicNodeMinStack(key=self._key)
+        current = temp_node
         while current is not None:
             copied.push(current.value)
             current = current.next
