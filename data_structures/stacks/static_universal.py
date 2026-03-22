@@ -28,13 +28,16 @@ class StaticUniversalStack:
     def __init__(self, *args, capacity: Any = None) -> None:
         """
         Creates a fixed-size stack with given capacity.
+        If capacity is None — uses len(args) as capacity.
 
         Args:
+            *args:    Optional initial values pushed bottom to top.
             capacity: Maximum number of elements the stack can hold.
 
         Raises:
-            TypeError:  if capacity is not int.
-            ValueError: if capacity is less than or equal to 0.
+            TypeError:   if capacity is not int.
+            ValueError:  if capacity is less than or equal to 0.
+            OverflowError: if len(args) exceeds capacity.
         """
         if capacity is None:
             self._capacity = len(args)
@@ -42,7 +45,6 @@ class StaticUniversalStack:
             self._capacity = capacity
         self._data = StaticUniversalArray(self._capacity)
         self._top = -1
-        # Received objects as *args pushing all them to data
         for item in args:
             self.push(item)
 
@@ -72,6 +74,7 @@ class StaticUniversalStack:
         if self.is_empty():
             raise IndexError("Stack is empty")
         removed = self._data[self._top]
+        self._data[self._top] = None
         self._top -= 1
         return removed
 
@@ -105,24 +108,21 @@ class StaticUniversalStack:
         Time complexity: O(n)
         """
         copied = StaticUniversalStack(capacity=self._capacity)
-        counter = 0
-        while counter <= self._top:
-            copied._data[counter] = self._data[counter]
-            counter += 1
+        copied._data = self._data.copy()
         copied._top = self._top
         return copied
 
     def __eq__(self, other: object) -> bool:
         """
-        Returns True if both stacks have same capacity,
-        same size and same elements in same order.
+        Returns True if both stacks have same elements in same order.
+        Capacity is not compared — only contents.
         """
         if not isinstance(other, StaticUniversalStack):
             return False
         return list(self) == list(other)
 
     def __len__(self) -> int:
-        """Returns number of elements currently in the stack (not capacity)."""
+        """Returns capacity of the stack."""
         return self._capacity
 
     def __iter__(self) -> Generator[Any, None, None]:
@@ -140,5 +140,5 @@ class StaticUniversalStack:
         Returns string representation of the stack.
         Example: StaticUniversalStack(capacity=5, top=[3, 2, 1])
         """
-        items = [*self]
-        return f"StaticUniversalStack(capacity={self._capacity}, top=[{items}])"
+        items = list(self)
+        return f"StaticUniversalStack(capacity={self._capacity}, top={items})"
