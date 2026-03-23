@@ -52,7 +52,7 @@ class TestStaticUniversalArrayInit:
             StaticUniversalArray(-3)
 
     def test_raises_value_error_when_too_many_args(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(OverflowError):
             StaticUniversalArray(2, 1, 2, 3)
 
     def test_capacity_one_is_valid(self):

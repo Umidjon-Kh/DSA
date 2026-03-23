@@ -57,7 +57,7 @@ class TestStaticTypedArrayInit:
             StaticTypedArray(int, -1)
 
     def test_raises_value_error_when_too_many_args(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(OverflowError):
             StaticTypedArray(int, 2, 1, 2, 3)
 
     def test_raises_type_error_for_wrong_element_type(self):
