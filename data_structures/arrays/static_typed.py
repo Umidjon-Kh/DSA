@@ -90,7 +90,7 @@ class StaticTypedArray:
 
         # Fill with type defaults
         default = _DTYPE_DEFAULTS[dtype]
-        for i in range(capacity):
+        for i in range(self._capacity):
             self._raw_set(i, default)
 
         # Set initial elements

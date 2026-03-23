@@ -61,7 +61,7 @@ def validate_capacity(capacity: Optional[Any], args_length: int) -> int:
         if capacity <= 0:
             raise ValueError(f"capacity must be >= 1, got {capacity}")
         if capacity < args_length:
-            raise ValueError(
+            raise OverflowError(
                 f"Too many initial elements: {args_length} > capacity {capacity}"
             )
         return capacity
