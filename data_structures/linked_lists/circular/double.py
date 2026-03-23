@@ -10,7 +10,7 @@ class CircularDoublyLinkedList:
     tail.next always points to head, and head.prev always points to tail.
 
     _get_node uses O(n/2) traversal — starts from tail if index is closer to it.
-    Supports O(1) prepend/append and O(n/2) insert/remove/find.
+    Supports O(1) prepend/append and O(n/2) insert/remove.
 
     Time complexity:
         append:       O(1)

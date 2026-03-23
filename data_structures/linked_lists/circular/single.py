@@ -22,7 +22,7 @@ class CircularSinglyLinkedList:
         __setitem__:  O(n)
         __len__:      O(1)
         __iter__:     O(n)
-        __reversed__: O(n*2) — builds a temp reversed chain, then traverses it
+        __reversed__: O(n) — builds a temp reversed chain, then traverses it
         __contains__: O(n)
         __repr__:     O(n)
     """
@@ -251,7 +251,7 @@ class CircularSinglyLinkedList:
         Yields values from tail to head.
         Builds a temporary reversed SingleNode chain, then traverses it.
 
-        Time complexity: O(n*2)
+        Time complexity: O(n)
         """
         temp_head: Optional[SingleNode] = None
         current = self._head
