@@ -3,7 +3,7 @@ from typing import Any, Optional
 
 def validate_index(index: Any, size: int) -> int:
     """
-    Validates nd normalizes index for methods that need index in right format.
+    Validates and normalizes index for methods that need index in right format.
     Supports negative indexing. Valid range: 0 to size-1.
 
     Returns: normalized index.
@@ -32,7 +32,7 @@ def validate_insert_index(index: Any, size: int) -> int:
         TypeError: if index is not int.
         IndexError: if index is out of range.
     """
-    if not isinstance(index, int):
+    if not isinstance(index, int) or isinstance(index, bool):
         raise TypeError(f"Index must be integer, got ({type(index).__name__})")
     if index < 0:
         index += size
@@ -41,17 +41,17 @@ def validate_insert_index(index: Any, size: int) -> int:
     return index
 
 
-def validate_capacity(capacity: Optional[Any], *args) -> int:
+def validate_capacity(capacity: Optional[Any], args_length: int) -> int:
     """
     Validates and returns computed capacity value for data structures with fixed-size.
-    Allows Optional capacity or *args,
+    Allows Optional capacity or args_length,
     But if does not received at least one argument or capacity value raises TypeError.
 
     Returns: computed capacity value.
 
     Raises:
-        TypeError: if capcity is provided but not integer.
-        ValueError: if both arguments is provided but len(args) is more than capacity.
+        TypeError: if capacity is provided but not integer.
+        ValueError: if both arguments is provided but args_length is more than capacity.
         ValueError: if capcity is provided but less or equal to 0.
         TypeError: if not provided at least one argument or capacity value.
     """
@@ -60,10 +60,10 @@ def validate_capacity(capacity: Optional[Any], *args) -> int:
             raise TypeError(f"capacity must be int, got {type(capacity).__name__!r}")
         if capacity <= 0:
             raise ValueError(f"capacity must be >= 1, got {capacity}")
-        if capacity < len(args):
+        if capacity < args_length:
             raise ValueError(
-                f"Too many initial elemenets: {len(args)} > capacity {capacity}"
+                f"Too many initial elements: {args_length} > capacity {capacity}"
             )
         return capacity
     else:
-        return len(args)
+        return args_length

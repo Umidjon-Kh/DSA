@@ -74,7 +74,7 @@ class StaticTypedArray:
                 f"Supported: {[t.__name__ for t in _SUPPORTED_DTYPES]}"
             )
         self._dtype: type = dtype
-        self._capacity: int = validate_capacity(capacity)
+        self._capacity: int = validate_capacity(capacity, len(args))
         self._str_length: int = str_length
 
         if dtype is str:
@@ -173,7 +173,7 @@ class StaticTypedArray:
     def __contains__(self, value: Any) -> bool:
         """
         Returns True if value exists in the array. O(n)
-        Returns False instantly if received value type is not matchs data type.
+        Returns False instantly if received value type is not match data type.
         """
         if (
             not isinstance(value, self._dtype)

@@ -231,7 +231,7 @@ class DynamicTypedArray:
     def __contains__(self, value: Any) -> bool:
         """
         Returns True if value exists in the array. O(n)
-        Returns False instantly if received value type is not matchs data type.
+        Returns False instantly if received value type is not match data type.
         """
         if (
             not isinstance(value, self._dtype)
@@ -239,7 +239,7 @@ class DynamicTypedArray:
             and isinstance(value, bool)
         ):
             return False
-        for i in range(self._capacity):
+        for i in range(self._size):
             if self._data._raw_get(i) == value:
                 return True
         return False

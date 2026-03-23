@@ -175,7 +175,7 @@ class DynamicUniversalArray:
 
     def __reversed__(self) -> Iterator[Any]:
         """Yields elements from right to left(back -> start). O(n)"""
-        for i in range(self._capacity - 1, -1, -1):
+        for i in range(self._size - 1, -1, -1):
             yield self._data[i]
 
     def __contains__(self, value: Any) -> bool:

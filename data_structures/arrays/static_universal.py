@@ -43,7 +43,7 @@ class StaticUniversalArray:
             arr = StaticUniversalArray(5)              # [None, None, None, None, None]
             arr = StaticUniversalArray(5, 1, "hi", 3)  # [1, 'hi', 3, None, None]
         """
-        self._capacity: int = validate_capacity(capacity)
+        self._capacity: int = validate_capacity(capacity, len(args))
         self._data = (ctypes.py_object * self._capacity)()
 
         # Fill with None by default
