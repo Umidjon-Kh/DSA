@@ -70,7 +70,7 @@ class StaticTypedArray:
         """
         if dtype not in _SUPPORTED_DTYPES:
             raise TypeError(
-                f"Unsupported dtype: {dtype.__name__!r}. "
+                f"Unsupported dtype: {dtype!r}. "
                 f"Supported: {[t.__name__ for t in _SUPPORTED_DTYPES]}"
             )
         self._dtype: type = dtype
