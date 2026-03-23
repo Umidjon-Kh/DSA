@@ -21,11 +21,16 @@ class DynamicUniversalArray:
         append:       O(1) amortized — O(n) on resize
         insert:       O(n) — shifts elements to the right
         remove:       O(n) — shifts elements to the left
+        clear:        O(1)
+        copy:         O(n)
         __getitem__:  O(1)
         __setitem__:  O(1) — only for existing indices (0 to size-1)
         __len__:      O(1)
+        __bool__:     O(1)
         __iter__:     O(n)
+        __reversed__: O(n)
         __contains__: O(n)
+        __eq__:       O(n)
         __repr__:     O(n)
         _resize:      O(n)
     """
@@ -45,7 +50,7 @@ class DynamicUniversalArray:
         """
         self._size: int = 0
         self._capacity: int = max(4, len(args))
-        self._data: StaticUniversalArray = StaticUniversalArray(self._capacity)
+        self._data: StaticUniversalArray = StaticUniversalArray(capacity=self._capacity)
 
         for item in args:
             self.append(item)
@@ -66,7 +71,7 @@ class DynamicUniversalArray:
         new_capacity = (
             self._capacity + (self._capacity >> 3) + (3 if self._capacity < 9 else 6)
         )
-        new_data = StaticUniversalArray(new_capacity)
+        new_data = StaticUniversalArray(capacity=new_capacity)
         for i in range(self._size):
             new_data[i] = self._data[i]
         self._data = new_data
@@ -133,6 +138,26 @@ class DynamicUniversalArray:
         self._size -= 1
         return value
 
+    def clear(self) -> None:
+        """
+        Removes all elements. Resets size to 0 without reallocating the buffer.
+
+        Time complexity: O(1)
+        """
+        self._size = 0
+
+    def copy(self) -> "DynamicUniversalArray":
+        """
+        Returns a shallow copy with the same elements.
+        The copy has capacity equal to max(4, size).
+
+        Time complexity: O(n)
+        """
+        new_arr = DynamicUniversalArray()
+        for i in range(self._size):
+            new_arr.append(self._data[i])
+        return new_arr
+
     # -------------------------------------------------------------------------
     # Dunder methods
 
@@ -168,6 +193,10 @@ class DynamicUniversalArray:
         """Returns number of elements currently in the array. O(1)"""
         return self._size
 
+    def __bool__(self) -> bool:
+        """Returns True if the array contains at least one element. O(1)"""
+        return self._size > 0
+
     def __iter__(self) -> Iterator:
         """Yields elements from index 0 to size-1. O(n)"""
         for i in range(self._size):
@@ -184,6 +213,20 @@ class DynamicUniversalArray:
             if self._data[i] == value:
                 return True
         return False
+
+    def __eq__(self, other: object) -> bool:
+        """
+        Returns True if other is a DynamicUniversalArray with the same size
+        and elements in the same order. O(n)
+        """
+        if not isinstance(other, DynamicUniversalArray):
+            return NotImplemented
+        if self._size != other._size:
+            return False
+        for i in range(self._size):
+            if self._data[i] != other._data[i]:
+                return False
+        return True
 
     def __repr__(self) -> str:
         """

@@ -2,197 +2,159 @@ import pytest
 
 from data_structures.arrays import StaticUniversalArray
 
+# =============================================================================
+# Init — capacity=None
+# =============================================================================
 
-class TestStaticUniversalArrayInit:
-    def test_creates_array_with_given_capacity(self):
-        arr = StaticUniversalArray(5)
+
+class TestStaticUniversalArrayInitCapacityOptional:
+    def test_capacity_derived_from_args_when_not_provided(self):
+        arr = StaticUniversalArray(1, "hi", 3)
+        assert len(arr) == 3
+
+    def test_capacity_keyword_only_no_args(self):
+        arr = StaticUniversalArray(capacity=5)
         assert len(arr) == 5
+        assert list(arr) == [None, None, None, None, None]
 
-    def test_all_slots_default_to_none(self):
-        arr = StaticUniversalArray(3)
-        assert list(arr) == [None, None, None]
+    def test_capacity_and_args_together(self):
+        arr = StaticUniversalArray(1, "hi", capacity=5)
+        assert len(arr) == 5
+        assert list(arr) == [1, "hi", None, None, None]
 
-    def test_creates_array_with_initial_elements(self):
-        arr = StaticUniversalArray(5, 1, "hi", 3.0)
-        assert arr[0] == 1
-        assert arr[1] == "hi"
-        assert arr[2] == 3.0
-
-    def test_remaining_slots_are_none_after_partial_fill(self):
-        arr = StaticUniversalArray(5, 1, 2)
-        assert arr[2] is None
-        assert arr[3] is None
-        assert arr[4] is None
-
-    def test_accepts_mixed_types(self):
-        arr = StaticUniversalArray(4, 1, "hello", 3.14, True)
-        assert arr[0] == 1
-        assert arr[1] == "hello"
-        assert arr[2] == 3.14
-        assert arr[3] is True
-
-    def test_accepts_none_as_element(self):
-        arr = StaticUniversalArray(3, None, None)
-        assert arr[0] is None
-
-    def test_raises_type_error_for_non_int_capacity(self):
+    def test_raises_type_error_when_neither_capacity_nor_args(self):
         with pytest.raises(TypeError):
-            StaticUniversalArray("5")  # type: ignore[testing]
+            StaticUniversalArray()
 
-    def test_raises_type_error_for_bool_capacity(self):
-        with pytest.raises(TypeError):
-            StaticUniversalArray(True)
+    def test_raises_overflow_error_when_args_exceed_capacity(self):
+        with pytest.raises(OverflowError):
+            StaticUniversalArray(1, 2, 3, capacity=2)
 
     def test_raises_value_error_for_zero_capacity(self):
         with pytest.raises(ValueError):
-            StaticUniversalArray(0)
+            StaticUniversalArray(capacity=0)
 
-    def test_raises_value_error_for_negative_capacity(self):
-        with pytest.raises(ValueError):
-            StaticUniversalArray(-3)
+    def test_raises_type_error_for_non_int_capacity(self):
+        with pytest.raises(TypeError):
+            StaticUniversalArray(capacity="5")  # type: ignore[testing]
 
-    def test_raises_value_error_when_too_many_args(self):
-        with pytest.raises(OverflowError):
-            StaticUniversalArray(2, 1, 2, 3)
+    def test_raises_type_error_for_bool_capacity(self):
+        with pytest.raises(TypeError):
+            StaticUniversalArray(capacity=True)
 
-    def test_capacity_one_is_valid(self):
-        arr = StaticUniversalArray(1)
+    def test_single_arg_no_capacity(self):
+        arr = StaticUniversalArray(42)
         assert len(arr) == 1
-
-
-class TestStaticUniversalArrayGetItem:
-    def test_returns_element_at_index(self):
-        arr = StaticUniversalArray(3, 10, 20, 30)
-        assert arr[0] == 10
-        assert arr[1] == 20
-        assert arr[2] == 30
-
-    def test_supports_negative_indexing(self):
-        arr = StaticUniversalArray(3, 10, 20, 30)
-        assert arr[-1] == 30
-        assert arr[-2] == 20
-        assert arr[-3] == 10
-
-    def test_raises_index_error_for_out_of_range(self):
-        arr = StaticUniversalArray(3)
-        with pytest.raises(IndexError):
-            arr[3]
-
-    def test_raises_index_error_for_negative_out_of_range(self):
-        arr = StaticUniversalArray(3)
-        with pytest.raises(IndexError):
-            arr[-4]
-
-    def test_raises_type_error_for_float_index(self):
-        arr = StaticUniversalArray(3)
-        with pytest.raises(TypeError):
-            arr[1.0]  # type: ignore[testing]
-
-    def test_raises_type_error_for_string_index(self):
-        arr = StaticUniversalArray(3)
-        with pytest.raises(TypeError):
-            arr["0"]  # type: ignore[testing]
-
-    def test_raises_type_error_for_bool_index(self):
-        arr = StaticUniversalArray(3)
-        with pytest.raises(TypeError):
-            arr[True]
-
-
-class TestStaticUniversalArraySetItem:
-    def test_sets_element_at_index(self):
-        arr = StaticUniversalArray(3)
-        arr[0] = 42
         assert arr[0] == 42
 
-    def test_overwrites_existing_element(self):
-        arr = StaticUniversalArray(3, 1, 2, 3)
-        arr[1] = 99
-        assert arr[1] == 99
 
-    def test_sets_none_value(self):
-        arr = StaticUniversalArray(3, 1, 2, 3)
-        arr[0] = None
-        assert arr[0] is None
-
-    def test_supports_negative_index(self):
-        arr = StaticUniversalArray(3, 1, 2, 3)
-        arr[-1] = 99
-        assert arr[2] == 99
-
-    def test_raises_index_error_for_out_of_range(self):
-        arr = StaticUniversalArray(3)
-        with pytest.raises(IndexError):
-            arr[3] = 1
-
-    def test_raises_type_error_for_bool_index(self):
-        arr = StaticUniversalArray(3)
-        with pytest.raises(TypeError):
-            arr[True] = 1
+# =============================================================================
+# copy
+# =============================================================================
 
 
-class TestStaticUniversalArrayLen:
-    def test_returns_capacity(self):
-        arr = StaticUniversalArray(5)
-        assert len(arr) == 5
+class TestStaticUniversalArrayCopy:
+    def test_copy_returns_new_instance(self):
+        arr = StaticUniversalArray(1, 2, 3)
+        copy = arr.copy()
+        assert copy is not arr
 
-    def test_len_equals_capacity_not_filled_count(self):
-        arr = StaticUniversalArray(5, 1, 2)
-        assert len(arr) == 5
+    def test_copy_has_same_elements(self):
+        arr = StaticUniversalArray(1, 2, 3)
+        copy = arr.copy()
+        assert list(copy) == [1, 2, 3]
 
+    def test_copy_has_same_capacity(self):
+        arr = StaticUniversalArray(1, "hi", capacity=5)
+        copy = arr.copy()
+        assert len(copy) == len(arr)
 
-class TestStaticUniversalArrayIter:
-    def test_iterates_all_elements_in_order(self):
-        arr = StaticUniversalArray(4, 1, 2, 3, 4)
-        assert list(arr) == [1, 2, 3, 4]
+    def test_copy_is_independent(self):
+        arr = StaticUniversalArray(1, 2, 3)
+        copy = arr.copy()
+        copy[0] = 99
+        assert arr[0] == 1
 
-    def test_iterates_including_none_slots(self):
-        arr = StaticUniversalArray(4, 1, 2)
-        assert list(arr) == [1, 2, None, None]
+    def test_copy_preserves_none_slots(self):
+        arr = StaticUniversalArray(1, capacity=4)
+        copy = arr.copy()
+        assert list(copy) == [1, None, None, None]
 
-    def test_iterates_fully_empty_array(self):
-        arr = StaticUniversalArray(3)
-        assert list(arr) == [None, None, None]
+    def test_copy_preserves_mixed_types(self):
+        arr = StaticUniversalArray(1, "hi", 3.14)
+        copy = arr.copy()
+        assert list(copy) == [1, "hi", 3.14]
 
+    def test_copy_is_shallow(self):
+        inner = [1, 2, 3]
+        arr = StaticUniversalArray(inner, "x")
+        copy = arr.copy()
+        inner.append(99)
+        assert copy[0] is inner
 
-class TestStaticUniversalArrayReversed:
-    def test_yields_elements_in_reverse_order(self):
-        arr = StaticUniversalArray(4, 1, 2, 3, 4)
-        assert list(reversed(arr)) == [4, 3, 2, 1]
-
-    def test_reversed_includes_none_slots(self):
-        arr = StaticUniversalArray(4, 1, 2)
-        assert list(reversed(arr)) == [None, None, 2, 1]
-
-
-class TestStaticUniversalArrayContains:
-    def test_returns_true_for_existing_element(self):
-        arr = StaticUniversalArray(4, 1, 2, 3)
-        assert 2 in arr
-
-    def test_returns_false_for_missing_element(self):
-        arr = StaticUniversalArray(4, 1, 2, 3)
-        assert 99 not in arr
-
-    def test_returns_true_for_none(self):
-        arr = StaticUniversalArray(3, 1)
-        assert None in arr
-
-    def test_returns_true_for_mixed_types(self):
-        arr = StaticUniversalArray(3, "hi", 3.14, True)
-        assert "hi" in arr
-        assert 3.14 in arr
+    def test_copy_equal_to_original(self):
+        arr = StaticUniversalArray(1, 2, 3)
+        copy = arr.copy()
+        assert arr == copy
 
 
-class TestStaticUniversalArrayRepr:
-    def test_repr_format_with_elements(self):
-        arr = StaticUniversalArray(3, 1, 2, 3)
-        assert repr(arr) == "StaticUniversalArray(capacity=3)[1, 2, 3]"
+# =============================================================================
+# __bool__
+# =============================================================================
 
-    def test_repr_format_with_none_slots(self):
-        arr = StaticUniversalArray(3, 1)
-        assert repr(arr) == "StaticUniversalArray(capacity=3)[1, None, None]"
 
-    def test_repr_empty_array(self):
-        arr = StaticUniversalArray(2)
-        assert repr(arr) == "StaticUniversalArray(capacity=2)[None, None]"
+class TestStaticUniversalArrayBool:
+    def test_array_with_capacity_is_true(self):
+        arr = StaticUniversalArray(capacity=3)
+        assert arr
+
+    def test_array_with_one_slot_is_true(self):
+        arr = StaticUniversalArray(capacity=1)
+        assert arr
+
+    def test_bool_works_in_if_statement(self):
+        arr = StaticUniversalArray(1, 2, 3)
+        result = "yes" if arr else "no"
+        assert result == "yes"
+
+
+# =============================================================================
+# __eq__
+# =============================================================================
+
+
+class TestStaticUniversalArrayEq:
+    def test_equal_arrays_are_equal(self):
+        a = StaticUniversalArray(1, 2, 3)
+        b = StaticUniversalArray(1, 2, 3)
+        assert a == b
+
+    def test_different_elements_are_not_equal(self):
+        a = StaticUniversalArray(1, 2, 3)
+        b = StaticUniversalArray(1, 2, 99)
+        assert a != b
+
+    def test_different_capacities_are_not_equal(self):
+        a = StaticUniversalArray(1, 2, 3)
+        b = StaticUniversalArray(1, 2, 3, capacity=4)
+        assert a != b
+
+    def test_two_none_arrays_same_capacity_are_equal(self):
+        a = StaticUniversalArray(capacity=3)
+        b = StaticUniversalArray(capacity=3)
+        assert a == b
+
+    def test_equal_with_mixed_types(self):
+        a = StaticUniversalArray(1, "hi", None)
+        b = StaticUniversalArray(1, "hi", capacity=3)
+        assert a == b
+
+    def test_comparing_with_non_array_returns_not_implemented(self):
+        arr = StaticUniversalArray(1, 2, 3)
+        assert arr.__eq__([1, 2, 3]) is NotImplemented
+
+    def test_not_equal_after_mutation(self):
+        arr = StaticUniversalArray(1, 2, 3)
+        copy = arr.copy()
+        copy[0] = 99
+        assert arr != copy

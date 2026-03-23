@@ -25,6 +25,7 @@ class DynamicTypedStack:
         __len__:      O(1)
         __bool__:     O(1)
         __iter__:     O(n) — top to bottom
+        __reversed__: O(n)
         __contains__: O(n)
         __repr__:     O(n)
     """

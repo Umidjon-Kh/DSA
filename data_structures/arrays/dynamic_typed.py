@@ -1,4 +1,4 @@
-from typing import Any, Iterator
+from typing import Any, Iterator, Optional
 
 from ..tools import validate_index, validate_insert_index
 from .static_typed import StaticTypedArray
@@ -30,41 +30,47 @@ class DynamicTypedArray:
         append:       O(1) amortized — O(n) on resize
         insert:       O(n) — shifts elements to the right
         remove:       O(n) — shifts elements to the left
+        clear:        O(n) — resets all filled slots to dtype default
+        copy:         O(n)
         __getitem__:  O(1)
         __setitem__:  O(1) — only for existing indices (0 to size-1)
         __len__:      O(1)
+        __bool__:     O(1)
         __iter__:     O(n)
+        __reversed__: O(n)
         __contains__: O(n)
+        __eq__:       O(n)
         __repr__:     O(n)
         _resize:      O(n)
     """
 
-    __slots__ = ("_data", "_capacity", "_size", "_dtype", "_str_length")
+    __slots__ = ("_data", "_capacity", "_size", "_dtype")
 
-    def __init__(self, dtype: type, *args, str_length: int = 1) -> None:
+    def __init__(self, dtype: type, *args, str_length: Optional[int] = None) -> None:
         """
         Creates a typed dynamic array with optional initial elements.
 
         Args:
             dtype:      Element type. Supported: int, float, bool, str.
             *args:      Optional initial elements. Must all be of type dtype.
-            str_length: Max characters per str element (default: 1). Ignored for other dtypes.
+            str_length: Max characters per str element (default: 20).
+                        Ignored for non-str dtypes.
 
         Raises:
             TypeError: If dtype is not a supported type.
             TypeError: If any element in args is not dtype.
 
         Examples:
-            arr = DynamicTypedArray(int)           # empty, capacity=4
-            arr = DynamicTypedArray(int, 1, 2, 3)  # [1, 2, 3], capacity=4
-            arr = DynamicTypedArray(int, *range(10))  # capacity grows automatically
+            arr = DynamicTypedArray(int)              # empty, capacity=4
+            arr = DynamicTypedArray(int, 1, 2, 3)     # [1, 2, 3], capacity=4
+            arr = DynamicTypedArray(str, "hi", "bye") # str_length=20 by default
+            arr = DynamicTypedArray(str, str_length=50)  # custom str_length
         """
         self._dtype: type = dtype
-        self._str_length: int = str_length
         self._size: int = 0
         self._capacity: int = max(4, len(args))
         self._data: StaticTypedArray = StaticTypedArray(
-            dtype, self._capacity, str_length=str_length
+            dtype, str_length=str_length, capacity=self._capacity
         )
 
         for item in args:
@@ -87,7 +93,7 @@ class DynamicTypedArray:
             self._capacity + (self._capacity >> 3) + (3 if self._capacity < 9 else 6)
         )
         new_data = StaticTypedArray(
-            self._dtype, new_capacity, str_length=self._str_length
+            self._dtype, str_length=self._data._str_length, capacity=new_capacity
         )
         for i in range(self._size):
             new_data._raw_set(i, self._data._raw_get(i))
@@ -175,6 +181,32 @@ class DynamicTypedArray:
         self._size -= 1
         return value
 
+    def clear(self) -> None:
+        """
+        Removes all elements and resets every filled slot to the dtype default value.
+        Does not reallocate the buffer.
+
+        Defaults: int -> 0, float -> 0.0, bool -> False, str -> ''
+
+        Time complexity: O(n)
+        """
+        default = _DTYPE_DEFAULTS[self._dtype]
+        for i in range(self._size):
+            self._data._raw_set(i, default)
+        self._size = 0
+
+    def copy(self) -> "DynamicTypedArray":
+        """
+        Returns a shallow copy with the same dtype, str_length, and elements.
+        The copy has capacity equal to max(4, size).
+
+        Time complexity: O(n)
+        """
+        new_arr = DynamicTypedArray(self._dtype, str_length=self._data._str_length)
+        for i in range(self._size):
+            new_arr.append(self._data._raw_get(i))
+        return new_arr
+
     # -------------------------------------------------------------------------
     # Dunder methods
 
@@ -218,6 +250,10 @@ class DynamicTypedArray:
         """Returns number of elements currently in the array. O(1)"""
         return self._size
 
+    def __bool__(self) -> bool:
+        """Returns True if the array contains at least one element. O(1)"""
+        return self._size > 0
+
     def __iter__(self) -> Iterator[Any]:
         """Yields elements from index 0 to size-1. O(n)"""
         for i in range(self._size):
@@ -243,6 +279,20 @@ class DynamicTypedArray:
             if self._data._raw_get(i) == value:
                 return True
         return False
+
+    def __eq__(self, other: object) -> bool:
+        """
+        Returns True if other is a DynamicTypedArray with the same dtype,
+        size, and elements in the same order. O(n)
+        """
+        if not isinstance(other, DynamicTypedArray):
+            return NotImplemented
+        if self._dtype is not other._dtype or self._size != other._size:
+            return False
+        for i in range(self._size):
+            if self._data._raw_get(i) != other._data._raw_get(i):
+                return False
+        return True
 
     def __repr__(self) -> str:
         """

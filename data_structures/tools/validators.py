@@ -41,7 +41,7 @@ def validate_insert_index(index: Any, size: int) -> int:
     return index
 
 
-def validate_capacity(capacity: Optional[Any], args_length: int) -> int:
+def validate_capacity(capacity: Optional[int], args_length: int, st_name: str) -> int:
     """
     Validates and returns computed capacity value for data structures with fixed-size.
     Allows Optional capacity or args_length,
@@ -57,13 +57,17 @@ def validate_capacity(capacity: Optional[Any], args_length: int) -> int:
     """
     if capacity is not None:
         if not isinstance(capacity, int) or isinstance(capacity, bool):
-            raise TypeError(f"capacity must be int, got {type(capacity).__name__!r}")
+            raise TypeError(f"Capacity must be int, got {type(capacity).__name__!r}")
         if capacity <= 0:
-            raise ValueError(f"capacity must be >= 1, got {capacity}")
+            raise ValueError(f"Capacity must be >= 1, got {capacity}")
         if capacity < args_length:
             raise OverflowError(
                 f"Too many initial elements: {args_length} > capacity {capacity}"
             )
         return capacity
-    else:
+    elif args_length != 0:
         return args_length
+    else:
+        raise TypeError(
+            f"{st_name} requires at least one of: capacity or initial elements"
+        )

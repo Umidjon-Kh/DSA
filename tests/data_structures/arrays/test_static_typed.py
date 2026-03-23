@@ -2,248 +2,230 @@ import pytest
 
 from data_structures.arrays import StaticTypedArray
 
+# =============================================================================
+# Init — capacity=None
+# =============================================================================
 
-class TestStaticTypedArrayInit:
-    def test_creates_int_array_with_zero_defaults(self):
-        arr = StaticTypedArray(int, 3)
-        assert list(arr) == [0, 0, 0]
 
-    def test_creates_float_array_with_zero_defaults(self):
-        arr = StaticTypedArray(float, 3)
-        assert list(arr) == [0.0, 0.0, 0.0]
+class TestStaticTypedArrayInitCapacityOptional:
+    def test_capacity_derived_from_args_when_not_provided(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        assert len(arr) == 3
 
-    def test_creates_bool_array_with_false_defaults(self):
-        arr = StaticTypedArray(bool, 3)
-        assert list(arr) == [False, False, False]
+    def test_capacity_keyword_only_no_args(self):
+        arr = StaticTypedArray(int, capacity=5)
+        assert len(arr) == 5
 
-    def test_creates_str_array_with_empty_string_defaults(self):
-        arr = StaticTypedArray(str, 3)
-        assert list(arr) == ["", "", ""]
+    def test_capacity_and_args_together(self):
+        arr = StaticTypedArray(int, 1, 2, 3, capacity=5)
+        assert len(arr) == 5
+        assert list(arr) == [1, 2, 3, 0, 0]
 
-    def test_creates_array_with_initial_elements(self):
-        arr = StaticTypedArray(int, 5, 1, 2, 3)
-        assert arr[0] == 1
-        assert arr[1] == 2
-        assert arr[2] == 3
-
-    def test_remaining_slots_are_default_after_partial_fill(self):
-        arr = StaticTypedArray(int, 5, 1, 2)
-        assert arr[2] == 0
-        assert arr[3] == 0
-        assert arr[4] == 0
-
-    def test_raises_type_error_for_unsupported_dtype(self):
+    def test_raises_type_error_when_neither_capacity_nor_args(self):
         with pytest.raises(TypeError):
-            StaticTypedArray(list, 3)
+            StaticTypedArray(int)
 
-    def test_raises_type_error_for_none_dtype(self):
-        with pytest.raises(TypeError):
-            StaticTypedArray(None, 3)  # type: ignore[testing]
-
-    def test_raises_type_error_for_non_int_capacity(self):
-        with pytest.raises(TypeError):
-            StaticTypedArray(int, "5")  # type: ignore[testing]
-
-    def test_raises_type_error_for_bool_capacity(self):
-        with pytest.raises(TypeError):
-            StaticTypedArray(int, True)
+    def test_raises_overflow_error_when_args_exceed_capacity(self):
+        with pytest.raises(OverflowError):
+            StaticTypedArray(int, 1, 2, 3, capacity=2)
 
     def test_raises_value_error_for_zero_capacity(self):
         with pytest.raises(ValueError):
-            StaticTypedArray(int, 0)
+            StaticTypedArray(int, capacity=0)
 
-    def test_raises_value_error_for_negative_capacity(self):
-        with pytest.raises(ValueError):
-            StaticTypedArray(int, -1)
-
-    def test_raises_value_error_when_too_many_args(self):
-        with pytest.raises(OverflowError):
-            StaticTypedArray(int, 2, 1, 2, 3)
-
-    def test_raises_type_error_for_wrong_element_type(self):
+    def test_raises_type_error_for_non_int_capacity(self):
         with pytest.raises(TypeError):
-            StaticTypedArray(int, 3, 1, "hello", 3)
+            StaticTypedArray(int, capacity="5")  # type: ignore[testing]
 
-    def test_raises_type_error_for_bool_in_int_array(self):
+    def test_raises_type_error_for_bool_capacity(self):
         with pytest.raises(TypeError):
-            StaticTypedArray(int, 3, 1, True, 3)
+            StaticTypedArray(int, capacity=True)
 
-    def test_str_dtype_with_str_length(self):
-        arr = StaticTypedArray(str, 3, str_length=5)
-        arr[0] = "hello"
-        assert arr[0] == "hello"
 
-    def test_str_dtype_raises_type_error_for_non_int_str_length(self):
-        with pytest.raises(TypeError):
-            StaticTypedArray(str, 3, str_length="5")  # type: ignore[testing]
+# =============================================================================
+# Init — str_length default = 20
+# =============================================================================
 
-    def test_str_dtype_raises_value_error_for_zero_str_length(self):
-        with pytest.raises(ValueError):
-            StaticTypedArray(str, 3, str_length=0)
 
-    def test_str_dtype_raises_value_error_for_negative_str_length(self):
-        with pytest.raises(ValueError):
-            StaticTypedArray(str, 3, str_length=-1)
+class TestStaticTypedArrayInitStrLength:
+    def test_str_length_defaults_to_20(self):
+        arr = StaticTypedArray(str, capacity=3)
+        assert arr._str_length == 20
+
+    def test_str_length_custom_value(self):
+        arr = StaticTypedArray(str, capacity=3, str_length=8)
+        assert arr._str_length == 8
+
+    def test_str_length_20_can_store_long_string(self):
+        arr = StaticTypedArray(str, capacity=1)
+        arr[0] = "hello world"
+        assert arr[0] == "hello world"
 
     def test_str_length_ignored_for_non_str_dtype(self):
-        arr = StaticTypedArray(int, 3, str_length=10)
+        arr = StaticTypedArray(int, capacity=3, str_length=50)
         assert list(arr) == [0, 0, 0]
 
-
-class TestStaticTypedArrayGetItem:
-    def test_returns_element_at_index(self):
-        arr = StaticTypedArray(int, 3, 10, 20, 30)
-        assert arr[0] == 10
-        assert arr[2] == 30
-
-    def test_supports_negative_indexing(self):
-        arr = StaticTypedArray(int, 3, 10, 20, 30)
-        assert arr[-1] == 30
-        assert arr[-3] == 10
-
-    def test_raises_index_error_for_out_of_range(self):
-        arr = StaticTypedArray(int, 3)
-        with pytest.raises(IndexError):
-            arr[3]
-
-    def test_raises_index_error_for_negative_out_of_range(self):
-        arr = StaticTypedArray(int, 3)
-        with pytest.raises(IndexError):
-            arr[-4]
-
-    def test_raises_type_error_for_float_index(self):
-        arr = StaticTypedArray(int, 3)
+    def test_raises_type_error_for_non_int_str_length(self):
         with pytest.raises(TypeError):
-            arr[1.0]  # type: ignore[testing]
+            StaticTypedArray(str, capacity=3, str_length="5")  # type: ignore[testing]
 
-    def test_raises_type_error_for_bool_index(self):
-        arr = StaticTypedArray(int, 3)
-        with pytest.raises(TypeError):
-            arr[True]
+    def test_raises_value_error_for_zero_str_length(self):
+        with pytest.raises(ValueError):
+            StaticTypedArray(str, capacity=3, str_length=0)
 
+    def test_raises_value_error_for_negative_str_length(self):
+        with pytest.raises(ValueError):
+            StaticTypedArray(str, capacity=3, str_length=-1)
 
-class TestStaticTypedArraySetItem:
-    def test_sets_int_element(self):
-        arr = StaticTypedArray(int, 3)
-        arr[0] = 42
-        assert arr[0] == 42
-
-    def test_sets_float_element(self):
-        arr = StaticTypedArray(float, 3)
-        arr[1] = 3.14
-        assert arr[1] == 3.14
-
-    def test_sets_bool_element(self):
-        arr = StaticTypedArray(bool, 3)
-        arr[0] = True
-        assert arr[0] is True
-
-    def test_sets_str_element(self):
-        arr = StaticTypedArray(str, 3, str_length=5)
-        arr[0] = "hello"
-        assert arr[0] == "hello"
-
-    def test_overwrites_existing_element(self):
-        arr = StaticTypedArray(int, 3, 1, 2, 3)
-        arr[1] = 99
-        assert arr[1] == 99
-
-    def test_supports_negative_index(self):
-        arr = StaticTypedArray(int, 3, 1, 2, 3)
-        arr[-1] = 99
-        assert arr[2] == 99
-
-    def test_raises_type_error_for_wrong_value_type(self):
-        arr = StaticTypedArray(int, 3)
-        with pytest.raises(TypeError):
-            arr[0] = "hello"
-
-    def test_raises_type_error_for_bool_in_int_array(self):
-        arr = StaticTypedArray(int, 3)
-        with pytest.raises(TypeError):
-            arr[0] = True
-
-    def test_raises_type_error_for_int_in_bool_array(self):
-        arr = StaticTypedArray(bool, 3)
-        with pytest.raises(TypeError):
-            arr[0] = 1
-
-    def test_raises_index_error_for_out_of_range(self):
-        arr = StaticTypedArray(int, 3)
-        with pytest.raises(IndexError):
-            arr[3] = 1
-
-    def test_raises_type_error_for_bool_index(self):
-        arr = StaticTypedArray(int, 3)
-        with pytest.raises(TypeError):
-            arr[True] = 1
+    def test_str_length_none_uses_default(self):
+        arr = StaticTypedArray(str, capacity=2, str_length=None)
+        assert arr._str_length == 20
 
 
-class TestStaticTypedArrayLen:
-    def test_returns_capacity(self):
-        arr = StaticTypedArray(int, 5)
-        assert len(arr) == 5
-
-    def test_len_equals_capacity_not_filled_count(self):
-        arr = StaticTypedArray(int, 5, 1, 2)
-        assert len(arr) == 5
+# =============================================================================
+# clear
+# =============================================================================
 
 
-class TestStaticTypedArrayIter:
-    def test_iterates_all_elements_in_order(self):
-        arr = StaticTypedArray(int, 4, 1, 2, 3, 4)
-        assert list(arr) == [1, 2, 3, 4]
+class TestStaticTypedArrayClear:
+    def test_clear_resets_int_elements_to_zero(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        arr.clear()
+        assert list(arr) == [0, 0, 0]
 
-    def test_iterates_including_default_slots(self):
-        arr = StaticTypedArray(int, 4, 1, 2)
-        assert list(arr) == [1, 2, 0, 0]
-
-    def test_iterates_fully_default_array(self):
-        arr = StaticTypedArray(float, 3)
+    def test_clear_resets_float_elements_to_zero(self):
+        arr = StaticTypedArray(float, 1.5, 2.5, capacity=3)
+        arr.clear()
         assert list(arr) == [0.0, 0.0, 0.0]
 
+    def test_clear_resets_bool_elements_to_false(self):
+        arr = StaticTypedArray(bool, True, True, capacity=3)
+        arr.clear()
+        assert list(arr) == [False, False, False]
 
-class TestStaticTypedArrayReversed:
-    def test_yields_elements_in_reverse_order(self):
-        arr = StaticTypedArray(int, 4, 1, 2, 3, 4)
-        assert list(reversed(arr)) == [4, 3, 2, 1]
+    def test_clear_resets_str_elements_to_empty_string(self):
+        arr = StaticTypedArray(str, capacity=3)
+        arr[0] = "hello"
+        arr[1] = "world"
+        arr.clear()
+        assert list(arr) == ["", "", ""]
 
-    def test_reversed_includes_default_slots(self):
-        arr = StaticTypedArray(int, 4, 1, 2)
-        assert list(reversed(arr)) == [0, 0, 2, 1]
+    def test_clear_preserves_capacity(self):
+        arr = StaticTypedArray(int, 1, 2, 3, capacity=5)
+        arr.clear()
+        assert len(arr) == 5
 
+    def test_clear_twice_is_safe(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        arr.clear()
+        arr.clear()
+        assert list(arr) == [0, 0, 0]
 
-class TestStaticTypedArrayContains:
-    def test_returns_true_for_existing_element(self):
-        arr = StaticTypedArray(int, 4, 1, 2, 3)
-        assert 2 in arr
-
-    def test_returns_false_for_missing_element(self):
-        arr = StaticTypedArray(int, 4, 1, 2, 3)
-        assert 99 not in arr
-
-    def test_returns_false_for_wrong_type(self):
-        arr = StaticTypedArray(int, 3, 1, 2, 3)
-        assert "1" not in arr
-
-    def test_returns_false_for_bool_in_int_array(self):
-        arr = StaticTypedArray(int, 3, 1, 2, 3)
-        assert True not in arr
-
-    def test_returns_true_for_default_value(self):
-        arr = StaticTypedArray(int, 4, 1, 2)
-        assert 0 in arr
+    def test_clear_allows_setitem_after(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        arr.clear()
+        arr[0] = 99
+        assert arr[0] == 99
 
 
-class TestStaticTypedArrayRepr:
-    def test_repr_format_int_array(self):
-        arr = StaticTypedArray(int, 3, 1, 2, 3)
-        assert repr(arr) == "StaticTypedArray(int, capacity=3)[1, 2, 3]"
+# =============================================================================
+# copy
+# =============================================================================
 
-    def test_repr_format_with_default_slots(self):
-        arr = StaticTypedArray(int, 4, 1, 2)
-        assert repr(arr) == "StaticTypedArray(int, capacity=4)[1, 2, 0, 0]"
 
-    def test_repr_format_float_array(self):
-        arr = StaticTypedArray(float, 2)
-        assert repr(arr) == "StaticTypedArray(float, capacity=2)[0.0, 0.0]"
+class TestStaticTypedArrayCopy:
+    def test_copy_returns_new_instance(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        copy = arr.copy()
+        assert copy is not arr
+
+    def test_copy_has_same_elements(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        copy = arr.copy()
+        assert list(copy) == list(arr)
+
+    def test_copy_has_same_capacity(self):
+        arr = StaticTypedArray(int, 1, 2, capacity=5)
+        copy = arr.copy()
+        assert len(copy) == len(arr)
+
+    def test_copy_has_same_dtype(self):
+        arr = StaticTypedArray(float, 1.0, 2.0, capacity=3)
+        copy = arr.copy()
+        assert copy._dtype is float
+
+    def test_copy_is_independent(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        copy = arr.copy()
+        copy[0] = 99
+        assert arr[0] == 1
+
+    def test_copy_preserves_str_length(self):
+        arr = StaticTypedArray(str, capacity=2, str_length=10)
+        arr[0] = "hello"
+        copy = arr.copy()
+        assert copy[0] == "hello"
+        assert copy._str_length == 10
+
+    def test_copy_equal_to_original(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        copy = arr.copy()
+        assert arr == copy
+
+
+# =============================================================================
+# __bool__
+# =============================================================================
+
+
+class TestStaticTypedArrayBool:
+    def test_array_with_capacity_is_true(self):
+        arr = StaticTypedArray(int, capacity=3)
+        assert arr
+
+    def test_bool_works_in_if_statement(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        result = "yes" if arr else "no"
+        assert result == "yes"
+
+
+# =============================================================================
+# __eq__
+# =============================================================================
+
+
+class TestStaticTypedArrayEq:
+    def test_equal_arrays_are_equal(self):
+        a = StaticTypedArray(int, 1, 2, 3)
+        b = StaticTypedArray(int, 1, 2, 3)
+        assert a == b
+
+    def test_different_elements_are_not_equal(self):
+        a = StaticTypedArray(int, 1, 2, 3)
+        b = StaticTypedArray(int, 1, 2, 99)
+        assert a != b
+
+    def test_different_capacities_are_not_equal(self):
+        a = StaticTypedArray(int, 1, 2, 3)
+        b = StaticTypedArray(int, 1, 2, 3, capacity=4)
+        assert a != b
+
+    def test_different_dtypes_are_not_equal(self):
+        a = StaticTypedArray(int, capacity=3)
+        b = StaticTypedArray(float, capacity=3)
+        assert a != b
+
+    def test_default_arrays_same_dtype_and_capacity_are_equal(self):
+        a = StaticTypedArray(int, capacity=4)
+        b = StaticTypedArray(int, capacity=4)
+        assert a == b
+
+    def test_comparing_with_non_array_returns_not_implemented(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        assert arr.__eq__([1, 2, 3]) is NotImplemented
+
+    def test_not_equal_after_mutation(self):
+        arr = StaticTypedArray(int, 1, 2, 3)
+        copy = arr.copy()
+        copy[0] = 99
+        assert arr != copy

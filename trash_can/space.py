@@ -1,21 +1,31 @@
 from typing import Any, Iterator
 
-from ...arrays import StaticTypedArray
-from ...tools import validate_capacity
+from ....arrays import StaticTypedArray
+from ....tools import validate_capacity
 
 
-class StaticTypedStack:
+class MinStaticTypedStack:
     """
-    A fixed-capacity stack backed by StaticTypedArray.
+    A fixed-capacity min stack backed by StaticTypedArray.
+    Tracks the current minimum in O(1) using an auxiliary array.
     Enforces a single element type for all items.
     Follows LIFO (Last In, First Out) principle.
 
     Supported dtypes: int, float, bool, str
 
+    How get_min works:
+        A parallel auxiliary array (_min_data) mirrors the main array.
+        On push(x): _min_data[top] = min(x, current_min)
+        On pop():   just decrement _top — both arrays shrink together.
+        get_min():  return _min_data[_top - 1]  →  always O(1)
+
+    Elements must support comparison operators (<, >) for min tracking.
+
     Time complexity:
         push:         O(1)
         pop:          O(1)
         peek:         O(1)
+        get_min:      O(1)
         clear:        O(1)
         copy:         O(n)
         is_empty:     O(1)
@@ -23,16 +33,15 @@ class StaticTypedStack:
         __len__:      O(1)
         __bool__:     O(1)
         __iter__:     O(n) — top to bottom
-        __reversed__: O(n)
         __contains__: O(n)
         __repr__:     O(n)
     """
 
-    __slots__ = ("_data", "_top", "_dtype", "_str_length")
+    __slots__ = ("_data", "_min_data", "_top", "_dtype", "_str_length")
 
     def __init__(self, dtype: type, capacity: int, *args, str_length: int = 1) -> None:
         """
-        Creates a fixed-capacity typed stack with optional initial elements.
+        Creates a fixed-capacity typed min stack with optional initial elements.
 
         Args:
             dtype:      Element type. Supported: int, float, bool, str.
@@ -48,14 +57,17 @@ class StaticTypedStack:
             OverflowError: If len(args) > capacity.
 
         Examples:
-            s = StaticTypedStack(int, 5)           # empty, capacity=5
-            s = StaticTypedStack(int, 5, 1, 2, 3)  # top=3, capacity=5
+            s = MinStaticTypedStack(int, 5)           # empty
+            s = MinStaticTypedStack(int, 5, 3, 1, 2)  # top=2, min=1
         """
         self._dtype: type = dtype
         self._str_length: int = str_length
         self._top: int = 0
         cap = validate_capacity(capacity, len(args))
         self._data: StaticTypedArray = StaticTypedArray(
+            dtype, cap, str_length=str_length
+        )
+        self._min_data: StaticTypedArray = StaticTypedArray(
             dtype, cap, str_length=str_length
         )
 
@@ -68,6 +80,7 @@ class StaticTypedStack:
     def push(self, value: Any) -> None:
         """
         Pushes value onto the top of the stack.
+        Updates the auxiliary min array to track the new minimum.
 
         Time complexity: O(1)
 
@@ -86,11 +99,17 @@ class StaticTypedStack:
                 f"Expected {self._dtype.__name__}, got {type(value).__name__!r}"
             )
         self._data._raw_set(self._top, value)
+        if self._top == 0:
+            self._min_data._raw_set(0, value)
+        else:
+            current_min = self._min_data._raw_get(self._top - 1)
+            self._min_data._raw_set(self._top, min(value, current_min))
         self._top += 1
 
     def pop(self) -> Any:
         """
         Removes and returns the top element.
+        Min automatically reflects the new top.
 
         Time complexity: O(1)
 
@@ -115,25 +134,40 @@ class StaticTypedStack:
             raise IndexError("Peek from an empty stack")
         return self._data._raw_get(self._top - 1)
 
+    def get_min(self) -> Any:
+        """
+        Returns the minimum element currently in the stack.
+        Does not modify the stack.
+
+        Time complexity: O(1)
+
+        Raises:
+            IndexError: If stack is empty.
+        """
+        if self.is_empty():
+            raise IndexError("get_min from an empty stack")
+        return self._min_data._raw_get(self._top - 1)
+
     def clear(self) -> None:
         """
-        Removes all elements. Does not reallocate the buffer.
+        Removes all elements. Does not reallocate the buffers.
 
         Time complexity: O(1)
         """
         self._top = 0
 
-    def copy(self) -> "StaticTypedStack":
+    def copy(self) -> "MinStaticTypedStack":
         """
         Returns a shallow copy with same dtype and capacity.
 
         Time complexity: O(n)
         """
-        new_stack = StaticTypedStack(
+        new_stack = MinStaticTypedStack(
             self._dtype, len(self._data), str_length=self._str_length
         )
         for i in range(self._top):
             new_stack._data._raw_set(i, self._data._raw_get(i))
+            new_stack._min_data._raw_set(i, self._min_data._raw_get(i))
         new_stack._top = self._top
         return new_stack
 
@@ -168,15 +202,6 @@ class StaticTypedStack:
         for i in range(self._top - 1, -1, -1):
             yield self._data._raw_get(i)
 
-    def __reversed__(self) -> Iterator[Any]:
-        """
-        Yields elements from bottom to top without modifying the stack.
-
-        Time complexity: O(n)
-        """
-        for i in range(self._top):
-            yield self._data._raw_get(i)
-
     def __contains__(self, value: Any) -> bool:
         """
         Returns True if value exists in the stack. O(n)
@@ -196,16 +221,16 @@ class StaticTypedStack:
     def __repr__(self) -> str:
         """
         Returns string representation of the stack.
-        Format: StaticTypedStack(int, size=3, capacity=5)[3, 2, 1]
-                                                          top      bottom
+        Format: MinStaticTypedStack(int, size=3, capacity=5, min=1)[3, 2, 1]
 
         Time complexity: O(n)
         """
         elements = ", ".join(
             repr(self._data._raw_get(i)) for i in range(self._top - 1, -1, -1)
         )
+        min_val = repr(self._min_data._raw_get(self._top - 1)) if self._top > 0 else "—"
         return (
-            f"StaticTypedStack({self._dtype.__name__}, "
-            f"size={self._top}, capacity={len(self._data)})"
+            f"MinStaticTypedStack({self._dtype.__name__}, "
+            f"size={self._top}, capacity={len(self._data)}, min={min_val})"
             f"[{elements}]"
         )
