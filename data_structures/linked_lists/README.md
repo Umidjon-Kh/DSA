@@ -73,10 +73,13 @@ All four classes expose the same public interface:
 | `prepend`      | O(1)   | O(1)   | O(1)         | O(1)         |
 | `insert`       | O(n)   | O(n/2) | O(n)         | O(n/2)       |
 | `remove`       | O(n)   | O(n/2) | O(n)         | O(n/2)       |
-| `find`         | O(n)   | O(n)   | O(n)         | O(n)         |
+| `index`        | O(n)   | O(n)   | O(n)         | O(n)         |
+| `clear`        | O(1)   | O(1)   | O(1)         | O(1)         |
+| `copy`         | O(n)   | O(n)   | O(n)         | O(n)         |
 | `__getitem__`  | O(n)   | O(n/2) | O(n)         | O(n/2)       |
 | `__setitem__`  | O(n)   | O(n/2) | O(n)         | O(n/2)       |
 | `__len__`      | O(1)   | O(1)   | O(1)         | O(1)         |
+| `__bool__`     | O(1)   | O(1)   | O(1)         | O(1)         |
 | `__iter__`     | O(n)   | O(n)   | O(n)         | O(n)         |
 | `__reversed__` | O(n)   | O(n)   | O(n)         | O(n)         |
 | `__contains__` | O(n)   | O(n)   | O(n)         | O(n)         |
@@ -104,18 +107,47 @@ valid `prev` and `next` references.
 
 ---
 
-## `find(value) -> int`
+## `index(value) -> int`
 
 Returns the index of the first node whose value equals `value`.
-Returns `-1` if no such node exists.
+Raises `ValueError` if no such node exists — same as Python's built-in `list.index()`.
 
 ```python
 lst = SinglyLinkedList(10, 20, 30)
-lst.find(20)   # → 1
-lst.find(99)   # → -1
+lst.index(20)   # → 1
+lst.index(99)   # → raises ValueError: 99 is not in list
 ```
 
-`__contains__` delegates to `find` internally.
+`__contains__` delegates to `index()` internally via try/except.
+
+---
+
+## `clear()`
+
+Removes all nodes by dropping head and tail references.
+O(1) — no traversal needed.
+
+```python
+lst = DoublyLinkedList(1, 2, 3)
+lst.clear()
+len(lst)   # → 0
+bool(lst)  # → False
+```
+
+---
+
+## `copy() -> SameType`
+
+Returns a shallow copy of the list preserving order.
+The copy is a fully independent new instance — modifying it does not affect the original.
+For circular variants, the circular invariant is maintained in the copy.
+
+```python
+lst = CircularSinglyLinkedList(1, 2, 3)
+c = lst.copy()
+c.append(4)
+len(lst)  # → 3  (original unchanged)
+```
 
 ---
 
@@ -126,8 +158,8 @@ and `validate_insert_index` from `data_structures.tools`.
 
 ```python
 lst = DoublyLinkedList(1, 2, 3)
-lst[-1]          # → 3
-lst.remove(-1)   # removes 3
+lst[-1]             # → 3
+lst.remove(-1)      # removes 3
 lst.insert(-1, 99)  # inserts before the last element
 ```
 

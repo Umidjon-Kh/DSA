@@ -10,17 +10,20 @@ class DoublyLinkedList:
     Each node holds a value and references to both next and previous nodes.
 
     _get_node uses O(n/2) traversal — starts from tail if index is closer to it.
-    Supports O(1) prepend/append and O(n) insert/remove/find.
+    Supports O(1) prepend/append and O(n/2) insert/remove.
 
     Time complexity:
         append:       O(1)
         prepend:      O(1)
-        insert:       O(n)
-        remove:       O(n)
-        find:         O(n)
-        __getitem__:  O(n) — O(n/2) via _get_node
-        __setitem__:  O(n) — O(n/2) via _get_node
+        insert:       O(n/2)
+        remove:       O(n/2)
+        index:        O(n)
+        clear:        O(1)
+        copy:         O(n)
+        __getitem__:  O(n/2)
+        __setitem__:  O(n/2)
         __len__:      O(1)
+        __bool__:     O(1)
         __iter__:     O(n)
         __reversed__: O(n) — traverses from tail using prev pointers
         __contains__: O(n)
@@ -88,7 +91,6 @@ class DoublyLinkedList:
     def _append_to_empty(self, node: DoubleNode) -> None:
         """
         Initializes head and tail when the list is empty.
-        Used by append, prepend, and insert to avoid duplicating this logic.
 
         Time complexity: O(1)
         """
@@ -98,7 +100,6 @@ class DoublyLinkedList:
     def _link_nodes(self, a: DoubleNode, b: DoubleNode) -> None:
         """
         Links two adjacent nodes: sets a.next = b and b.prev = a.
-        Used whenever two nodes need to be connected.
 
         Time complexity: O(1)
         """
@@ -170,7 +171,7 @@ class DoublyLinkedList:
         next_node = self._get_node(index)
         prev_node = next_node.prev
         self._link_nodes(prev_node, node)  # type: ignore[union-attr]
-        self._link_nodes(node, next_node)  # type: ignore[union-attr]
+        self._link_nodes(node, next_node)
         self._size += 1
 
     def remove(self, index: int) -> Any:
@@ -204,19 +205,39 @@ class DoublyLinkedList:
         self._size -= 1
         return value
 
-    def find(self, value: Any) -> int:
+    def index(self, value: Any) -> int:
         """
         Returns the index of the first node whose value equals given value.
-        Returns -1 if no such node exists.
 
         Time complexity: O(n)
+
+        Raises:
+            ValueError: If value is not found in the list.
         """
         current = self._head
         for i in range(self._size):
             if current.value == value:  # type: ignore[union-attr]
                 return i
             current = current.next  # type: ignore[union-attr]
-        return -1
+        raise ValueError(f"{value!r} is not in list")
+
+    def clear(self) -> None:
+        """
+        Removes all nodes by dropping head and tail references.
+
+        Time complexity: O(1)
+        """
+        self._head = None
+        self._tail = None
+        self._size = 0
+
+    def copy(self) -> "DoublyLinkedList":
+        """
+        Returns a shallow copy of the list preserving order.
+
+        Time complexity: O(n)
+        """
+        return DoublyLinkedList(*self)
 
     # -------------------------------------------------------------------------
     # Dunder methods
@@ -249,6 +270,10 @@ class DoublyLinkedList:
         """Returns number of nodes in the list. O(1)"""
         return self._size
 
+    def __bool__(self) -> bool:
+        """Returns True if the list is not empty. O(1)"""
+        return self._size > 0
+
     def __iter__(self) -> Iterator[Any]:
         """Yields values from head to tail. O(n)"""
         current = self._head
@@ -269,7 +294,11 @@ class DoublyLinkedList:
 
     def __contains__(self, value: Any) -> bool:
         """Returns True if any node holds given value. O(n)"""
-        return self.find(value) != -1
+        try:
+            self.index(value)
+            return True
+        except ValueError:
+            return False
 
     def __repr__(self) -> str:
         """
