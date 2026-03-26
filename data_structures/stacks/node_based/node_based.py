@@ -111,9 +111,8 @@ class NodeStack(BaseStack):
 
         Time complexity: O(n)
         """
-        values = list(reversed(list(self)))
         new_stack = NodeStack()
-        for v in values:
+        for v in reversed(self):
             new_stack.push(v)
         return new_stack
 
@@ -169,9 +168,18 @@ class NodeStack(BaseStack):
         """Returns True if both stacks data and other needed attrs are equal."""
         if not isinstance(other, NodeStack):
             return NotImplemented
+        if self._size == 0 and other._size == 0:
+            return True
         if self._size != other._size or self._head.value != other._head.value:  # type: ignore[union-attr]
             return False
-        return list(self) == list(other)
+        cur_a = self._head
+        cur_b = other._head
+        while cur_a is not None:
+            if cur_a.value != cur_b.value:  # type: ignore[union-attr]
+                return False
+            cur_a = cur_a.next
+            cur_b = cur_b.next  # type: ignore[union-attr]
+        return True
 
     def __contains__(self, value: Any) -> bool:
         """Returns True if value exists in the stack. O(n)"""

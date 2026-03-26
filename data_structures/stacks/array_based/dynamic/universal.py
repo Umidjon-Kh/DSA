@@ -92,7 +92,7 @@ class DynamicUniversalStack(BaseStack):
 
         Time complexity: O(1)
         """
-        self._data._size = 0
+        self._data.clear()
 
     def copy(self) -> "DynamicUniversalStack":
         """
