@@ -29,6 +29,7 @@ class DoublyLinkedList(BaseLinkedList):
         __reversed__: O(n) — traverses from tail using prev pointers
         __contains__: O(n)
         __repr__:     O(n)
+        __eq__:       O(n)
     """
 
     __slots__ = ("_head", "_tail", "_size")

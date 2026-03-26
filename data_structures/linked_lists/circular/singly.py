@@ -31,6 +31,7 @@ class CircularSinglyLinkedList(BaseLinkedList):
         __reversed__: O(n) — builds a temp reversed chain, then traverses it
         __contains__: O(n)
         __repr__:     O(n)
+        __eq__:       O(n)
     """
 
     __slots__ = ("_head", "_tail", "_size")

@@ -11,6 +11,12 @@ from .linked_lists import (
     SinglyLinkedList,
 )
 from .nodes import BiLinearNode, LinearNode, TreeNode
+from .stacks import (
+    DynamicTypedStack,
+    DynamicUniversalStack,
+    StaticTypedStack,
+    StaticUniversalStack,
+)
 
 __all__ = [
     # Nodes
@@ -27,4 +33,9 @@ __all__ = [
     "CircularSinglyLinkedList",
     "DoublyLinkedList",
     "SinglyLinkedList",
+    # Stacks
+    "DynamicTypedStack",
+    "DynamicUniversalStack",
+    "StaticTypedStack",
+    "StaticUniversalStack",
 ]

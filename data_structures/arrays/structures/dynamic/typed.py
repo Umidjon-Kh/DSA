@@ -45,7 +45,7 @@ class DynamicTypedArray(BaseDynamicArray):
         _resize:      O(n)
     """
 
-    __slots__ = ("_data", "_capacity", "_size", "_dtype")
+    __slots__ = ("_data", "_capacity", "_size", "_dtype", "_str_length")
 
     def __init__(self, dtype: type, *args, str_length: Optional[int] = None) -> None:
         """
@@ -73,6 +73,7 @@ class DynamicTypedArray(BaseDynamicArray):
         self._data: StaticTypedArray = StaticTypedArray(
             dtype, str_length=str_length, capacity=self._capacity
         )
+        self._str_length: int = self._data._str_length
 
         for item in args:
             self.append(item)
@@ -94,7 +95,7 @@ class DynamicTypedArray(BaseDynamicArray):
             self._capacity + (self._capacity >> 3) + (3 if self._capacity < 9 else 6)
         )
         new_data = StaticTypedArray(
-            self._dtype, str_length=self._data._str_length, capacity=new_capacity
+            self._dtype, str_length=self._str_length, capacity=new_capacity
         )
         for index in range(self._size):
             new_data._raw_set(index, self._data._raw_get(index))
@@ -203,7 +204,7 @@ class DynamicTypedArray(BaseDynamicArray):
 
         Time complexity: O(n)
         """
-        new_arr = DynamicTypedArray(self._dtype, str_length=self._data._str_length)
+        new_arr = DynamicTypedArray(self._dtype, str_length=self._str_length)
         for index in range(self._size):
             new_arr.append(self._data._raw_get(index))
         return new_arr
