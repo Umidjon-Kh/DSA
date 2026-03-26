@@ -25,7 +25,7 @@ class TreeNode(BaseNode):
             node = TreeNode(10)
             node = TreeNode("root")
         """
-        super().__init__(value)
+        self.value: Any = value
         self.left: Optional["TreeNode"] = None
         self.right: Optional["TreeNode"] = None
         self.parent: Optional["TreeNode"] = None
