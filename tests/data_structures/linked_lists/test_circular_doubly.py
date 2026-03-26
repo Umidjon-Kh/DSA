@@ -14,11 +14,11 @@ class TestCircularDoublyLinkedListInit:
         lst = CircularDoublyLinkedList(42)
         assert lst._head is lst._tail
         assert (
-            lst._head.next is lst._head
-        )  # points to itself # type: ignore[union-attr]
+            lst._head.next is lst._head  # type: ignore[union-attr]
+        )  # points to itself
         assert (
-            lst._head.prev is lst._head
-        )  # points to itself # type: ignore[union-attr]
+            lst._head.prev is lst._head  # type: ignore[union-attr]
+        )  # points to itself
 
     def test_multiple_elements(self):
         lst = CircularDoublyLinkedList(1, 2, 3)
