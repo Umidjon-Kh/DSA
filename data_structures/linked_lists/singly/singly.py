@@ -281,6 +281,8 @@ class SinglyLinkedList(BaseLinkedList):
         """Returns True if both sturctures data and other attrs are equal."""
         if not isinstance(other, SinglyLinkedList):
             return NotImplemented
+        if self._size == 0 and other._size == 0:
+            return True
         if (
             self._size != other._size
             or self._head.value != other._head.value  # type: ignore[union-attr]
