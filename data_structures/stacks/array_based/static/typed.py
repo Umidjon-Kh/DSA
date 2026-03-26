@@ -36,7 +36,7 @@ class StaticTypedStack(BaseStack):
         self,
         dtype: type,
         *args,
-        str_length: Optional[int] = 1,
+        str_length: Optional[int] = None,
         capacity: Optional[int] = None,
     ) -> None:
         """
@@ -161,7 +161,7 @@ class StaticTypedStack(BaseStack):
 
     def __len__(self) -> int:
         """Returns number of elements currently in the stack. O(1)"""
-        return len(self._data)
+        return self._top
 
     def __bool__(self) -> bool:
         """Returns True if the stack is not empty. O(1)"""
@@ -193,7 +193,7 @@ class StaticTypedStack(BaseStack):
             return False
         # Removed other conditions
         # Cause in data: StaticTypedArray it checks auto.
-        # DRY (Dont repeat your self)
+        # DRY (Don't repeat your self)
         return self._data == other._data
 
     def __contains__(self, value: Any) -> bool:

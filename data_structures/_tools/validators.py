@@ -13,7 +13,7 @@ def validate_index(index: Any, size: int) -> int:
         ValueError: if index is out of range.
     """
     if not isinstance(index, int) or isinstance(index, bool):
-        raise TypeError(f"INdex must be integer, got ({type(index).__name__})")
+        raise TypeError(f"Index must be integer, got ({type(index).__name__})")
     if index < 0:
         index += size
     if index < 0 or index >= size:

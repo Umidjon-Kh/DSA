@@ -25,7 +25,7 @@ class LinearNode(BaseNode):
             node = LinearNode(42)
             node = LinearNode("hello")
         """
-        self.value: Any = value
+        super().__init__(value)
         self.next: Optional["LinearNode"] = None
 
     def __repr__(self) -> str:

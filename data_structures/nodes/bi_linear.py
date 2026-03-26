@@ -7,7 +7,7 @@ class BiLinearNode(BaseNode):
     """
     A BiLinearNode for use in doubly linked data structures.
 
-    Stores a vlue and references to next and previous nodes.
+    Stores a value and references to next and previous nodes.
     Used by:
         DoublyLinkedList, CircularDoublyLinkedList,
         NodeDeque and other structures that need to know about both references.
@@ -25,7 +25,7 @@ class BiLinearNode(BaseNode):
             node = BiLinearNode(23)
             node = BiLinearNode("hi")
         """
-        self.value: Any = value
+        super().__init__(value)
         self.next: Optional["BiLinearNode"] = None
         self.prev: Optional["BiLinearNode"] = None
 

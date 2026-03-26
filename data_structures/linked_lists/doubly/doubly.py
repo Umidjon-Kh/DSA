@@ -300,11 +300,18 @@ class DoublyLinkedList(BaseLinkedList):
             return NotImplemented
         if (
             self._size != other._size
-            or self._head.value == other._head.value  # type: ignore[union-attr]
-            or self._tail.value == other._tail.value  # type: ignore[union-attr]
+            or self._head.value != other._head.value  # type: ignore[union-attr]
+            or self._tail.value != other._tail.value  # type: ignore[union-attr]
         ):
             return False
-        return list(other) == list(self)
+        cur_a = self._head
+        cur_b = other._head
+        while cur_a is not None:
+            if cur_a.value != cur_b.value:  # type: ignore[union-attr]
+                return False
+            cur_a = cur_a.next
+            cur_b = cur_b.next  # type: ignore[union-attr]
+        return True
 
     def __contains__(self, value: Any) -> bool:
         """Returns True if any node holds given value. O(n)"""

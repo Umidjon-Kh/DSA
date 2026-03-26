@@ -5,5 +5,5 @@ __all__ = [
     "DynamicTypedStack",
     "DynamicUniversalStack",
     "StaticTypedStack",
-    "StaticUniversalArray",
+    "StaticUniversalStack",
 ]

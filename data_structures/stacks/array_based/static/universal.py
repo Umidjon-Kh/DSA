@@ -159,7 +159,7 @@ class StaticUniversalStack(BaseStack):
             return False
         # Removed other conditions
         # Cause in data: StaticUniversalArrray it checks auto
-        # Its DRY (do not repeat your self)
+        # Its DRY (Don't repeat yourself)
         return self._data == other._data
 
     def __reversed__(self) -> Iterator[Any]:
