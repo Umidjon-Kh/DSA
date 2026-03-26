@@ -174,10 +174,10 @@ class NodeStack(BaseStack):
             return False
         cur_a = self._head
         cur_b = other._head
-        while cur_a is not None:
+        for _ in range(self._size):
             if cur_a.value != cur_b.value:  # type: ignore[union-attr]
                 return False
-            cur_a = cur_a.next
+            cur_a = cur_a.next  # type: ignore[union-attr]
             cur_b = cur_b.next  # type: ignore[union-attr]
         return True
 

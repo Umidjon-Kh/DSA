@@ -300,6 +300,8 @@ class CircularSinglyLinkedList(BaseLinkedList):
         """Returns True if both sturctures data and other attrs are equal."""
         if not isinstance(other, CircularSinglyLinkedList):
             return NotImplemented
+        if self._size == 0 and other._size == 0:
+            return True
         if (
             self._size != other._size
             or self._head.value != other._head.value  # type: ignore[union-attr]
@@ -308,13 +310,11 @@ class CircularSinglyLinkedList(BaseLinkedList):
             return False
         cur_a = self._head
         cur_b = other._head
-        while cur_a is not None:
-            if cur_a.value != cur_b.value:  # type: ignore[union-attr]
+        for _ in range(self._size):
+            if cur_a.value != cur_b.value: # type: ignore[union-attr]
                 return False
-            if cur_a is self._tail:
-                return False
-            cur_a = cur_a.next
-            cur_b = cur_b.next  # type: ignore[union-attr]
+            cur_a = cur_a.next # type: ignore[union-attr]
+            cur_b = cur_b.next # type: ignore[union-attr]
         return True
 
     def __contains__(self, value: Any) -> bool:
