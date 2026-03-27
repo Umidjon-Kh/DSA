@@ -9,9 +9,9 @@ class DynamicUniversalMinStack(BaseStack):
     A dynamic min stack backed by DynamicUniversalArray.
     Grows automatically when capacity is exceeded.
     Accepts any Python type - no dtype restriction.
-    Folllows FIFO (Last In, First Out) principle.
+    Folllows LIFO (Last In, First Out) principle.
 
-    Growth formule (delegated to DynamicUniversalArrray - same as CPython list):
+    Growth formula (delegated to DynamicUniversalArray - same as CPython list):
         new_capacity = capacity + (capacity >> 3) + (3 if capacity < 9 else 6)
 
     A key function maps each stored value to a comparable key.
@@ -216,5 +216,5 @@ class DynamicUniversalMinStack(BaseStack):
         min_repr = (
             repr(self._min_data[len(self._min_data) - 1]) if self._min_data else None
         )
-        elements = ", ".join(repr(v) for v in self._data)
+        elements = ", ".join(v for v in self)
         return f"DynamicUniversalMinStack(size={len(self._data)}, min={min_repr})[{elements}]"

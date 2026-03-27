@@ -14,7 +14,7 @@ _DTYPE_DEFAULTS = {
 
 class StaticTypedMinStack(BaseBoundedStack):
     """
-    A fixed-capacity min stack backed by StatictypedArray.
+    A fixed-capacity min stack backed by StaticTypedArray.
     Enforces a single element type for all items and
     tracks current minimum object in O(1).
     Follows LIFO (Last In, First Out) principle.
@@ -148,7 +148,7 @@ class StaticTypedMinStack(BaseBoundedStack):
         self._top += 1
 
         if self._min_top == 0 or self._key(value) <= self._key(
-            self._min_data._raw_get(self._min_top)
+            self._min_data._raw_get(self._min_top - 1)
         ):
             self._min_data._raw_set(self._min_top, value)
             self._min_top += 1
@@ -191,7 +191,7 @@ class StaticTypedMinStack(BaseBoundedStack):
 
     def min(self) -> Any:
         """
-        Returns the current minimum value (by key) wihtout removing it.
+        Returns the current minimum value (by key) without removing it.
 
         Time complexity: O(1)
 
@@ -206,7 +206,7 @@ class StaticTypedMinStack(BaseBoundedStack):
         """
         Removes all elements. Does not reallocate the buffer.
 
-        Time complexityL O(n)
+        Time complexity: O(n)
         """
         self._top = 0
         self._min_top = 0
@@ -310,5 +310,5 @@ class StaticTypedMinStack(BaseBoundedStack):
         Time complexity: O(n)
         """
         min_repr = repr(self._min_data[self._min_top]) if self._min_top != 0 else "None"
-        elements = ", ".join(repr(v) for v in self._data)
+        elements = ", ".join(v for v in self)
         return f"StaticTypedMinStack({self._dtype.__name__}, capacity={len(self._data)}, min={min_repr})[{elements}]"

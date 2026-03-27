@@ -61,7 +61,7 @@ class StaticUniversalMinStack(BaseBoundedStack):
 
         Args:
             *args: Optional initial elements, pushed left to right (last = top).
-            capacity: Maximum numbers of elemenets the stack can hold.
+            capacity: Maximum number of elements the stack can hold.
             key:   Callable applied to each value before comparison.
                    Defaults to identity (lambda x: x) if None.
         Raises:
@@ -114,7 +114,7 @@ class StaticUniversalMinStack(BaseBoundedStack):
         self._top += 1
 
         if self._min_top == 0 or self._key(value) <= self._key(
-            self._min_data[self._min_top]
+            self._min_data[self._min_top - 1]
         ):
             self._min_data[self._min_top] = value
             self._min_top += 1
@@ -145,7 +145,7 @@ class StaticUniversalMinStack(BaseBoundedStack):
 
     def peek(self) -> Any:
         """
-        Returns the top of element's value without reomving it.
+        Returns the top of element's value without removing it.
 
         Time complexity: O(1)
 
@@ -262,5 +262,5 @@ class StaticUniversalMinStack(BaseBoundedStack):
         Time complexity: O(n)
         """
         min_repr = repr(self._min_data[self._min_top]) if self._min_top != 0 else "None"
-        elements = ", ".join(repr(v) for v in self._data)
+        elements = ", ".join(self._data[i] for i in range(self._top - 1, -1, -1))
         return f"StaticUniversalMinStack(capacity={len(self._data)}, min={min_repr})[{elements}]"

@@ -72,7 +72,7 @@ class DynamicTypedMinStack(BaseStack):
         Raises:
             TypeError: if dtype is not supported type.
             TypeError: if any element in args is not dtype.
-            TypeError: if key is prvided but not callable.
+            TypeError: if key is provided but not callable.
 
         Examples:
             s = DynamicTypedMinStack(int)                 # empty
@@ -136,7 +136,7 @@ class DynamicTypedMinStack(BaseStack):
 
         value = self._data.remove(len(self._data) - 1)
 
-        if self._key(value) == self._key(self._min_data[len(self._min_data) - 1])
+        if self._key(value) == self._key(self._min_data[len(self._min_data) - 1]):
             self._min_data.remove(len(self._min_data) - 1)
 
         return value
@@ -251,5 +251,5 @@ class DynamicTypedMinStack(BaseStack):
         min_repr = (
             repr(self._min_data[len(self._min_data) - 1]) if self._min_data else None
         )
-        elements = ", ".join(repr(v) for v in self._data)
+        elements = ", ".join(v for v in self)
         return f"DynamicTypedMinStack({self._dtype.__name__}, size={len(self._data)}, min={min_repr})[{elements}]"
