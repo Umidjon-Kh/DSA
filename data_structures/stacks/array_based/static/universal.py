@@ -40,12 +40,13 @@ class StaticUniversalStack(BaseBoundedStack):
 
         Raises:
             TypeError:     If capacity is not an int.
+            TypeError:     if not provided at least one argument or capacity value.
             ValueError:    If capacity < 1.
             OverflowError: If len(args) > capacity.
 
         Examples:
-            s = StaticUniversalStack(5)              # empty, capacity=5
-            s = StaticUniversalStack(5, 1, "hi", 3)  # top=3, capacity=5
+            s = StaticUniversalStack(capacity=5)              # empty, capacity=5
+            s = StaticUniversalStack(1, "hi", 3, capacity=5)  # top=3, capacity=5
         """
         self._top: int = 0
         cap = validate_capacity(capacity, len(args), "StaticUniversalStack")

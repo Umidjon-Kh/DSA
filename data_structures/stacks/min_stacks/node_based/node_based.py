@@ -24,7 +24,7 @@ class NodeMinStack(BaseStack):
         push:         O(1)
         pop:          O(1)
         peek:         O(1)
-        min:      O(1)
+        min:          O(1)
         clear:        O(1)
         copy:         O(n)
         is_empty:     O(1)
@@ -48,6 +48,9 @@ class NodeMinStack(BaseStack):
             key:   Callable applied to each value before comparison.
                    Defaults to identity (lambda x: x) if None.
 
+        Raises:
+            TypeError: if key function is provided but not callable.
+
         Examples:
             s = NodeMinStack()                     # empty, key=identity
             s = NodeMinStack(3, 1, 2)              # top=2, min=1
@@ -58,7 +61,14 @@ class NodeMinStack(BaseStack):
         self._min_head: Optional[LinearNode] = None
         self._size: int = 0
         self._min_size: int = 0
-        self._key: Callable[[Any], Any] = key if key is not None else lambda x: x
+
+        # Validating key args before initializing
+        if key is not None:
+            if not callable(key):
+                raise TypeError(f"Key must be callable, got ({type(key).__name__})")
+            self._key: Callable = key
+        else:
+            self._key: Callable = lambda x: x
 
         for item in args:
             self.push(item)
@@ -135,7 +145,7 @@ class NodeMinStack(BaseStack):
             IndexError: If stack is empty.
         """
         if self._min_head is None:
-            raise IndexError("get_min from an empty stack")
+            raise IndexError("Min from an empty stack")
         return self._min_head.value
 
     def clear(self) -> None:
