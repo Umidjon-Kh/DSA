@@ -170,7 +170,7 @@ class NodeStack(BaseStack):
             return NotImplemented
         if self._size == 0 and other._size == 0:
             return True
-        if self._size != other._size or self._head.value != other._head.value:  # type: ignore[union-attr]
+        if self._size != other._size:
             return False
         cur_a = self._head
         cur_b = other._head
