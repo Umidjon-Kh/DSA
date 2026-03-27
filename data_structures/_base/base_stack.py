@@ -19,6 +19,8 @@ class BaseStack(BaseCollection):
         push, pop, peek, is_empty
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def push(self, value: Any) -> None:
         """
@@ -67,11 +69,7 @@ class BaseBoundedStack(BaseStack):
         is_full, capacity (property)
     """
 
-    @property
-    @abstractmethod
-    def capacity(self) -> int:
-        """Returns the fixed maximum number of elements the stack can hold."""
-        ...
+    __slots__ = ()
 
     @abstractmethod
     def is_full(self) -> bool:

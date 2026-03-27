@@ -2,7 +2,7 @@ from .base_array import BaseArray, BaseDynamicArray
 from .base_collection import BaseCollection
 from .base_linked_list import BaseLinkedList
 from .base_node import BaseNode
-from .base_stack import BaseStack
+from .base_stack import BaseBoundedStack, BaseStack
 
 __all__ = [
     # Nodes
@@ -14,6 +14,7 @@ __all__ = [
     "BaseDynamicArray",
     # Linked List
     "BaseLinkedList",
-    # Stack
+    # Stacks
     "BaseStack",
+    "BaseBoundedStack",
 ]

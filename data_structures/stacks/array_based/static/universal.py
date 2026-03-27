@@ -1,11 +1,11 @@
 from typing import Any, Iterator, Optional
 
-from ...._base import BaseStack
+from ...._base import BaseBoundedStack
 from ...._tools import validate_capacity
 from ....arrays import StaticUniversalArray
 
 
-class StaticUniversalStack(BaseStack):
+class StaticUniversalStack(BaseBoundedStack):
     """
     A fixed-capacity stack backed by StaticUniversalArray.
     Accepts any Python type — no dtype restriction.

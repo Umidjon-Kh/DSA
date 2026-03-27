@@ -1,11 +1,11 @@
 from typing import Any, Iterator, Optional
 
-from ...._base import BaseStack
+from ...._base import BaseBoundedStack
 from ...._tools import validate_capacity
 from ....arrays import StaticTypedArray
 
 
-class StaticTypedStack(BaseStack):
+class StaticTypedStack(BaseBoundedStack):
     """
     A fixed-capacity stack backed by StaticTypedArray.
     Enforces a single element type for all items.
