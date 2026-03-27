@@ -10,7 +10,7 @@ def validate_index(index: Any, size: int) -> int:
 
     Raises:
         TypeError: if index is not integer.
-        ValueError: if index is out of range.
+        IndexError: if index is out of range.
     """
     if not isinstance(index, int) or isinstance(index, bool):
         raise TypeError(f"Index must be integer, got ({type(index).__name__})")
@@ -51,7 +51,7 @@ def validate_capacity(capacity: Optional[int], args_length: int, structure: str)
 
     Raises:
         TypeError: if capacity is provided but not integer.
-        ValueError: if both argument is provided but args_length is more than capacity.
+        OverflowError: if both argument is provided but args_length is more than capacity.
         ValueError: if capacity is provided but less than or equal to 0.
         TypeError: if not provided at least one argument or capacity value.
     """

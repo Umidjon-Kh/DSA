@@ -157,10 +157,12 @@ class StaticUniversalStack(BaseBoundedStack):
             return NotImplemented
         if self._top != other._top:
             return False
-        # Removed other conditions
-        # Cause in data: StaticUniversalArrray it checks auto
-        # Its DRY (Don't repeat yourself)
-        return self._data == other._data
+        # Checking to top cause if i use StaticArray eq method
+        # It check for capacity equality too.
+        for i in range(self._top):
+            if self._data[i] != other._data[i]:
+                return False
+        return True
 
     def __reversed__(self) -> Iterator[Any]:
         """

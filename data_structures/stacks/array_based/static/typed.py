@@ -130,6 +130,7 @@ class StaticTypedStack(BaseBoundedStack):
         Time complexity: O(1)
         """
         self._top = 0
+        self._data.clear()
 
     def copy(self) -> "StaticTypedStack":
         """
@@ -189,12 +190,14 @@ class StaticTypedStack(BaseBoundedStack):
         """Returns True if both structures data and dtype, top attrs equal."""
         if not isinstance(other, StaticTypedStack):
             return NotImplemented
-        if self._top != other._top:
+        if self._top != other._top or self._dtype != other._dtype:
             return False
-        # Removed other conditions
-        # Cause in data: StaticTypedArray it checks auto.
-        # DRY (Don't repeat your self)
-        return self._data == other._data
+        # Checking to top cause if i use StaticArray eq method
+        # It check for capacity equality too.
+        for i in range(self._top):
+            if self._data._raw_get(i) != other._data._raw_get(i):
+                return False
+        return True
 
     def __contains__(self, value: Any) -> bool:
         """
