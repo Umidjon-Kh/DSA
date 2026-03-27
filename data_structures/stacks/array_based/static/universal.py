@@ -15,7 +15,7 @@ class StaticUniversalStack(BaseBoundedStack):
         push:         O(1)
         pop:          O(1)
         peek:         O(1)
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
         is_full:      O(1)
@@ -105,9 +105,10 @@ class StaticUniversalStack(BaseBoundedStack):
         """
         Removes all elements. Does not reallocate the buffer.
 
-        Time complexity: O(1)
+        Time complexity: O(n)
         """
         self._top = 0
+        self._data.clear()
 
     def copy(self) -> "StaticUniversalStack":
         """

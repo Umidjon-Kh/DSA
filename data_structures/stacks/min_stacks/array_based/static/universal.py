@@ -29,7 +29,7 @@ class StaticUniversalMinStack(BaseBoundedStack):
         pop:          O(1)
         peek:         O(1)
         min:          O(1)
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
         is_full:      O(1)
@@ -65,11 +65,11 @@ class StaticUniversalMinStack(BaseBoundedStack):
             key:   Callable applied to each value before comparison.
                    Defaults to identity (lambda x: x) if None.
         Raises:
-            TypeError: if key function is provided but not callable.
-            TypeError: if capacity is not an int.
-            ValueError: if capacity < 1.
+            TypeError:     if key function is provided but not callable.
+            TypeError:     if capacity is not an int.
+            ValueError:    if capacity < 1.
             OverflowError: if len(args) > capacity.
-            TypeError: if not provided at least one argument or capacity value.
+            TypeError:     if not provided at least one argument or capacity value.
 
         Examples:
             s = StaticUniversalMinStack(capacity=5)             # empty, capacity=5
@@ -137,7 +137,7 @@ class StaticUniversalMinStack(BaseBoundedStack):
         self._data[self._top] = None
 
         # if stack is not empty, min_data never be None
-        if self._key(value) == self._key(self._min_data[self._min_top]):
+        if self._key(value) == self._key(self._min_data[self._min_top - 1]):
             self._min_top -= 1
             self._min_data[self._min_top] = None
 
@@ -173,9 +173,12 @@ class StaticUniversalMinStack(BaseBoundedStack):
         """
         Removes all elements. Does not reallocate the buffer.
 
-        Time complexity: O(1)
+        Time complexity: O(n)
         """
         self._top = 0
+        self._min_top = 0
+        self._data.clear()
+        self._min_data.clear()
 
     def copy(self) -> "StaticUniversalMinStack":
         """
@@ -260,4 +263,4 @@ class StaticUniversalMinStack(BaseBoundedStack):
         """
         min_repr = repr(self._min_data[self._min_top]) if self._min_top != 0 else "None"
         elements = ", ".join(repr(v) for v in self._data)
-        return f"StaticUniversalMinStack(size={len(self._data)}, min={min_repr})[{elements}]"
+        return f"StaticUniversalMinStack(capacity={len(self._data)}, min={min_repr})[{elements}]"

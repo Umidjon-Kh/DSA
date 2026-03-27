@@ -4,6 +4,13 @@ from ...._base import BaseBoundedStack
 from ...._tools import validate_capacity
 from ....arrays import StaticTypedArray
 
+_DTYPE_DEFAULTS = {
+    int: 0,
+    float: 0.0,
+    bool: False,
+    str: "",
+}
+
 
 class StaticTypedStack(BaseBoundedStack):
     """
@@ -17,7 +24,7 @@ class StaticTypedStack(BaseBoundedStack):
         push:         O(1)
         pop:          O(1)
         peek:         O(1)
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
         is_full:      O(1)
@@ -54,10 +61,11 @@ class StaticTypedStack(BaseBoundedStack):
             ValueError:    If capacity < 1.
             TypeError:     If any element in args is not dtype.
             OverflowError: If len(args) > capacity.
+            TypeError:     if not provided at least one argument or capacity value.
 
         Examples:
-            s = StaticTypedStack(int, 5)           # empty, capacity=5
-            s = StaticTypedStack(int, 5, 1, 2, 3)  # top=3, capacity=5
+            s = StaticTypedStack(int, capacity=5)           # empty, capacity=5
+            s = StaticTypedStack(int, 1, 2, 3, capacity=5)  # top=3, capacity=5
         """
         self._dtype: type = dtype
         self._top: int = 0
@@ -108,7 +116,9 @@ class StaticTypedStack(BaseBoundedStack):
         if self.is_empty():
             raise IndexError("Pop from an empty stack")
         self._top -= 1
-        return self._data._raw_get(self._top)
+        value = self._data._raw_get(self._top)
+        self._data._raw_set(self._top, _DTYPE_DEFAULTS[self._dtype])
+        return value
 
     def peek(self) -> Any:
         """
@@ -127,7 +137,7 @@ class StaticTypedStack(BaseBoundedStack):
         """
         Removes all elements. Does not reallocate the buffer.
 
-        Time complexity: O(1)
+        Time complexity: O(n)
         """
         self._top = 0
         self._data.clear()

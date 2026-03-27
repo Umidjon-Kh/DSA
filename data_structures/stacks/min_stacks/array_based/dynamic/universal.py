@@ -29,7 +29,7 @@ class DynamicUniversalMinStack(BaseStack):
         pop:          O(1)
         peek:         O(1)
         min:          O(1)
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
         __len__:      O(1)
@@ -140,7 +140,7 @@ class DynamicUniversalMinStack(BaseStack):
         """
         Removes all elements. Does not reallocate the buffer.
 
-        Time complexity: O(1)
+        Time complexity: O(n)
         """
         self._data.clear()
         self._min_data.clear()
