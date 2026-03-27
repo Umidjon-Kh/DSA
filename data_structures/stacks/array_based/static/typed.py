@@ -53,7 +53,7 @@ class StaticTypedStack(BaseBoundedStack):
             dtype:      Element type. Supported: int, float, bool, str.
             capacity:   Maximum number of elements the stack can hold.
             *args:      Optional initial elements, pushed left to right (last = top).
-            str_length: Max characters per str element (default: 1).
+            str_length: Max characters per str element (default: 20).
 
         Raises:
             TypeError:     If dtype is not a supported type.

@@ -1,15 +1,15 @@
-from .dynamic import (
+from .array_based import (
     DynamicTypedMinStack,
     DynamicUniversalMinStack,
-)
-from .static import (
     StaticTypedMinStack,
     StaticUniversalMinStack,
 )
+from .node_based import NodeMinStack
 
 __all__ = [
     "StaticTypedMinStack",
     "StaticUniversalMinStack",
     "DynamicTypedMinStack",
     "DynamicUniversalMinStack",
+    "NodeMinStack",
 ]

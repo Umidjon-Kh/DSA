@@ -73,10 +73,10 @@ class StaticTypedMinStack(BaseBoundedStack):
         Creates a fixed-capacity typed min stack with optional initial elements.
 
         Args:
-            *args:      Optional initial elements, pushed left to right (last = top)
+            *args:      Optional initial elements, pushed left to right (last = top).
             dtype:      Element type. Suppored: int, float, bool, str.
             capacity:   Maximum number of elements the stack can hold.
-            str_length: Max characters per str element (default: 1).
+            str_length: Max characters per str element (default: 20).
             key:        Callable applied to each value before comparison.
                         Defaults to identity (lambda x: x) if None.
 
@@ -121,10 +121,11 @@ class StaticTypedMinStack(BaseBoundedStack):
 
     # -------------------------------------------------------------------------
     # Core operations
+
     def push(self, value: Any) -> None:
         """
         Pushes values onto the top of the main data.
-        Also pushes onto the min data when the min is empty
+        Also pushes onto the min data when the min data is empty
         or key(value) <= key(current minimum).
 
         Time complexity: O(1)
@@ -155,7 +156,7 @@ class StaticTypedMinStack(BaseBoundedStack):
     def pop(self) -> Any:
         """
         Removes and returns the top of main data.
-        If key(popped) == key(current minimum), the main data is also popped.
+        If key(popped) == key(current minimum), the min data is also popped.
 
         Time complexity: O(1)
 
@@ -169,7 +170,7 @@ class StaticTypedMinStack(BaseBoundedStack):
         self._data._raw_set(self._top, _DTYPE_DEFAULTS[self._dtype])
 
         # If stack is not empty, min_data never be None
-        if self._key(value) == self._key(self._min_data[self._min_top - 1]):
+        if self._key(value) == self._key(self._min_data._raw_get(self._min_top - 1)):
             self._min_top -= 1
             self._min_data._raw_set(self._min_top, _DTYPE_DEFAULTS[self._dtype])
 
@@ -310,4 +311,4 @@ class StaticTypedMinStack(BaseBoundedStack):
         """
         min_repr = repr(self._min_data[self._min_top]) if self._min_top != 0 else "None"
         elements = ", ".join(repr(v) for v in self._data)
-        return f"StaticTypedMinStack(capacity={len(self._data)}, min={min_repr})[{elements}]"
+        return f"StaticTypedMinStack({self._dtype.__name__}, capacity={len(self._data)}, min={min_repr})[{elements}]"

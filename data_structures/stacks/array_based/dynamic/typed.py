@@ -41,7 +41,7 @@ class DynamicTypedStack(BaseStack):
         Args:
             dtype:      Element type. Supported: int, float, bool, str.
             *args:      Optional initial elements, pushed left to right (last = top).
-            str_length: Max characters per str element (default: 1).
+            str_length: Max characters per str element (default: 20).
 
         Raises:
             TypeError: If dtype is not a supported type.
@@ -52,7 +52,9 @@ class DynamicTypedStack(BaseStack):
             s = DynamicTypedStack(int, 1, 2, 3)  # top=3
         """
         self._dtype: type = dtype
-        self._data: DynamicTypedArray = DynamicTypedArray(dtype, str_length=str_length)
+        self._data: DynamicTypedArray = DynamicTypedArray(
+            dtype=dtype, str_length=str_length
+        )
         self._str_length: int = self._data._str_length
 
         for item in args:
@@ -103,7 +105,7 @@ class DynamicTypedStack(BaseStack):
         """
         Removes all elements. Does not shrink the underlying buffer.
 
-        Time complexity: O(1)
+        Time complexity: O(n)
         """
         self._data.clear()
 

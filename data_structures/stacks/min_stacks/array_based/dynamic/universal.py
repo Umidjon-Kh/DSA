@@ -25,7 +25,7 @@ class DynamicUniversalMinStack(BaseStack):
     key matches the current minimum's key, the min stack is also popped.
 
     Time complexity:
-        push:         O(1)
+        push:         O(1) amortized - O(n) on resize
         pop:          O(1)
         peek:         O(1)
         min:          O(1)
@@ -77,14 +77,14 @@ class DynamicUniversalMinStack(BaseStack):
     def push(self, value: Any) -> None:
         """
         Pushes value onto the top of the main data.
-        Also pushes onto the min data when the min is empty
+        Also pushes onto the min data when the min data is empty
         or key(value) <= key(current minimum).
 
-        Time complexity: O(1)
+        Time complexity: O(1) amortized — O(n) on resize
         """
         self._data.append(value)
 
-        if len(self._min_data) == 0 or self._key(value) <= self._key(
+        if not self._min_data or self._key(value) <= self._key(
             self._min_data[len(self._min_data) - 1]
         ):
             self._min_data.append(value)
