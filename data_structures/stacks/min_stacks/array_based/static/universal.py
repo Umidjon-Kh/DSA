@@ -7,7 +7,7 @@ from .....arrays import StaticUniversalArray
 
 class StaticUniversalMinStack(BaseBoundedStack):
     """
-    A fixed-capacity stack backed by StaticUniversalArray.
+    A fixed-capacity min stack backed by StaticUniversalArray.
     Accepts any Python type - no dtype restriction and
     tracks current minimum object in O(1).
     Follows LIFO (Last In, First Out) principle.
@@ -54,7 +54,7 @@ class StaticUniversalMinStack(BaseBoundedStack):
         self,
         *args,
         capacity: Optional[int] = None,
-        key: Optional[Callable[[Any], Any]] = None,
+        key: Optional[Callable] = None,
     ) -> None:
         """
         Creates a fixed-capacity universal min stack with optional initial elements.
@@ -77,6 +77,14 @@ class StaticUniversalMinStack(BaseBoundedStack):
             s = StaticUniversalMinStack(key=lambda x: -x)       # max-as-min behaviour
             s = StaticUniversalMinStack(key=lambda x: x[1])     # keyed by second element
         """
+        # Validating key args before initializing
+        if key is not None:
+            if not callable(key):
+                raise TypeError(f"Key must be callable, got ({type(key).__name__})")
+            self._key: Callable = key
+        else:
+            self._key: Callable = lambda x: x
+
         cap = validate_capacity(capacity, len(args), "StaticUniversalMinStack")
         self._data: StaticUniversalArray = StaticUniversalArray(capacity=cap)
         self._min_data: StaticUniversalArray = StaticUniversalArray(capacity=cap)
@@ -92,7 +100,7 @@ class StaticUniversalMinStack(BaseBoundedStack):
     def push(self, value: Any) -> None:
         """
         Pushes value onto the top of the main data.
-        Also pushed onto the min data when the min data is empty
+        Also pushes onto the min data when the min data is empty
         or key(value) <= key(current minimum).
 
         Time complexity: O(1)
@@ -128,9 +136,8 @@ class StaticUniversalMinStack(BaseBoundedStack):
         value = self._data[self._top]
         self._data[self._top] = None
 
-        if self._min_top > 0 and self._key(value) == self._key(
-            self._min_data[self._min_top]
-        ):
+        # if stack is not empty, min_data never be None
+        if self._key(value) == self._key(self._min_data[self._min_top]):
             self._min_top -= 1
             self._min_data[self._min_top] = None
 
@@ -246,11 +253,11 @@ class StaticUniversalMinStack(BaseBoundedStack):
     def __repr__(self) -> str:
         """
         Returns string representation of the stack.
-        Format: NodeMinStack(size=3, min=1)[3, 2, 1]
+        Format: StaticUniversalMinStack(size=3, min=1)[3, 2, 1]
                                             top   bottom
 
         Time complexity: O(n)
         """
         min_repr = repr(self._min_data[self._min_top]) if self._min_top != 0 else "None"
-        elements = ", ".join(repr(v) for v in self)
-        return f"NodeMinStack(size={len(self._data)}, min={min_repr})[{elements}]"
+        elements = ", ".join(repr(v) for v in self._data)
+        return f"StaticUniversalMinStack(size={len(self._data)}, min={min_repr})[{elements}]"

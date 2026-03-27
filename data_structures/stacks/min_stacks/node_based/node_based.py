@@ -114,10 +114,9 @@ class NodeMinStack(BaseStack):
         self._head = self._head.next  # type: ignore[union-attr]
         self._size -= 1
 
-        if self._min_head is not None and self._key(value) == self._key(
-            self._min_head.value
-        ):
-            self._min_head = self._min_head.next
+        # If stack is not empty, min_head never be None.
+        if self._key(value) == self._key(self._min_head.value):  # type: ignore[union-attr]
+            self._min_head = self._min_head.next  # type: ignore[union-attr]
             self._min_size -= 1
 
         return value
