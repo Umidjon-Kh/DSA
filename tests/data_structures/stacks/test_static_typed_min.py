@@ -384,7 +384,5 @@ def test_repr_empty() -> None:
 
 
 def test_repr_partial() -> None:
-    # BUG: repr reads self._min_data[self._min_top] (off-by-one) and iterates
-    # all capacity slots via `for v in self._data`. Both fixed before these pass.
     s = StaticTypedMinStack(int, 3, 1, 2, capacity=5)
     assert repr(s) == "StaticTypedMinStack(int, capacity=5, min=1)[2, 1, 3]"

@@ -35,7 +35,7 @@ def test_init_too_many_args_raises() -> None:
 
 def test_init_invalid_capacity_type_raises() -> None:
     with pytest.raises(TypeError):
-        StaticUniversalStack(capacity="5")
+        StaticUniversalStack(capacity="5") # type: ignore[union-attr]
 
 
 def test_init_zero_capacity_raises() -> None:

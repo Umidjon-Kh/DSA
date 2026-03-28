@@ -43,8 +43,8 @@ def test_push_updates_head() -> None:
     s = NodeStack()
     s.push(1)
     s.push(2)
-    assert s._head.value == 2
-    assert s._head.next.value == 1
+    assert s._head.value == 2  # type: ignore[union-attr]
+    assert s._head.next.value == 1  # type: ignore[union-attr]
 
 
 def test_push_none_value() -> None:
@@ -71,7 +71,7 @@ def test_pop_decrements_size() -> None:
 def test_pop_updates_head() -> None:
     s = NodeStack(1, 2, 3)
     s.pop()
-    assert s._head.value == 2
+    assert s._head.value == 2  # type: ignore[union-attr]
 
 
 def test_pop_all_leaves_empty() -> None:

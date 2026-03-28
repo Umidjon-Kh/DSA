@@ -190,8 +190,6 @@ def test_copy_preserves_min() -> None:
 
 
 def test_copy_preserves_key() -> None:
-    # BUG: DynamicUniversalMinStack.copy() doesn't pass key= to constructor.
-    # This test will FAIL until the bug is fixed.
     s = DynamicUniversalMinStack(5, 3, 8, key=lambda x: -x)
     c = s.copy()
     assert c._key(5) == -5

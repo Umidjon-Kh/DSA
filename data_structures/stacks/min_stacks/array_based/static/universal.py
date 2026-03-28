@@ -261,6 +261,8 @@ class StaticUniversalMinStack(BaseBoundedStack):
 
         Time complexity: O(n)
         """
-        min_repr = repr(self._min_data[self._min_top]) if self._min_top != 0 else "None"
-        elements = ", ".join(self._data[i] for i in range(self._top - 1, -1, -1))
+        min_repr = (
+            repr(self._min_data[self._min_top - 1]) if self._min_top != 0 else "None"
+        )
+        elements = ", ".join(repr(self._data[i]) for i in range(self._top - 1, -1, -1))
         return f"StaticUniversalMinStack(capacity={len(self._data)}, min={min_repr})[{elements}]"

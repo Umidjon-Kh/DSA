@@ -309,6 +309,8 @@ class StaticTypedMinStack(BaseBoundedStack):
 
         Time complexity: O(n)
         """
-        min_repr = repr(self._min_data[self._min_top]) if self._min_top != 0 else "None"
-        elements = ", ".join(v for v in self)
+        min_repr = (
+            repr(self._min_data[self._min_top - 1]) if self._min_top != 0 else "None"
+        )
+        elements = ", ".join(repr(v) for v in self)
         return f"StaticTypedMinStack({self._dtype.__name__}, capacity={len(self._data)}, min={min_repr})[{elements}]"

@@ -251,5 +251,5 @@ class DynamicTypedMinStack(BaseStack):
         min_repr = (
             repr(self._min_data[len(self._min_data) - 1]) if self._min_data else None
         )
-        elements = ", ".join(v for v in self)
+        elements = ", ".join(repr(v) for v in self)
         return f"DynamicTypedMinStack({self._dtype.__name__}, size={len(self._data)}, min={min_repr})[{elements}]"

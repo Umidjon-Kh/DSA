@@ -51,7 +51,7 @@ def test_push_first_value_enters_min() -> None:
     s = NodeMinStack()
     s.push(5)
     assert s._min_size == 1
-    assert s._min_head.value == 5
+    assert s._min_head.value == 5  # type: ignore[union-attr]
 
 
 def test_push_lower_value_enters_min() -> None:
@@ -99,7 +99,7 @@ def test_pop_non_min_does_not_change_min() -> None:
     s = NodeMinStack(3, 1, 2)
     s.pop()  # pops 2
     assert s.min() == 1
-    assert s._min_size == 1
+    assert s._min_size == 2
 
 
 def test_pop_min_removes_from_min_stack() -> None:

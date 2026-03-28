@@ -151,7 +151,7 @@ class DynamicUniversalMinStack(BaseStack):
 
         Time complexity: O(n)
         """
-        new_stack = DynamicUniversalMinStack()
+        new_stack = DynamicUniversalMinStack(key=self._key)
         for i in range(len(self._data)):
             new_stack._data.append(self._data[i])
             if len(self._min_data) > i:
@@ -216,5 +216,5 @@ class DynamicUniversalMinStack(BaseStack):
         min_repr = (
             repr(self._min_data[len(self._min_data) - 1]) if self._min_data else None
         )
-        elements = ", ".join(v for v in self)
+        elements = ", ".join(repr(v) for v in self)
         return f"DynamicUniversalMinStack(size={len(self._data)}, min={min_repr})[{elements}]"
