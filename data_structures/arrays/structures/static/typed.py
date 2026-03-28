@@ -2,7 +2,7 @@ import ctypes
 from typing import Any, Iterator, Optional
 
 from ...._base import BaseArray
-from ...._tools import validate_capacity, validate_index
+from ...._tools import validate_capacity, validate_index, validate_value_type
 
 _DTYPE_MAP = {
     int: ctypes.c_long,
@@ -207,14 +207,7 @@ class StaticTypedArray(BaseArray):
             TypeError:  If value is not dtype.
         """
         index = validate_index(index, self._capacity)
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
-            raise TypeError(
-                f"Expected {self._dtype.__name__}, got {type(value).__name__!r}"
-            )
+        validate_value_type(value, self._dtype)
         self._raw_set(index, value)
 
     def __len__(self) -> int:
@@ -240,11 +233,9 @@ class StaticTypedArray(BaseArray):
         Returns True if value exists in the array. O(n)
         Returns False instantly if received value type is not match data type.
         """
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
+        try:
+            validate_value_type(value, self._dtype)
+        except TypeError:
             return False
         for index in range(self._capacity):
             if self._raw_get(index) == value:

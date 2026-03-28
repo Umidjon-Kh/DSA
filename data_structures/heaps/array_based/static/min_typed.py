@@ -1,7 +1,7 @@
 from typing import Any, Iterable, Iterator, Optional
 
 from ...._base import BaseBoundedHeap
-from ...._tools import validate_capacity
+from ...._tools import validate_capacity, validate_value_type
 from ....arrays import StaticTypedArray
 
 _DTYPE_DEFAULTS = {
@@ -83,22 +83,6 @@ class StaticTypedMinHeap(BaseBoundedHeap):
 
     # -------------------------------------------------------------------------
     # Internal helpers
-
-    def _validate_value(self, value: Any) -> None:
-        """
-        Validates that value matches the heap's dtype.
-
-        Raises:
-            TypeError: If value is not dtype.
-        """
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
-            raise TypeError(
-                f"Expected {self._dtype.__name__}, got {type(value).__name__!r}"
-            )
 
     def _swap(self, i: int, j: int) -> None:
         """
@@ -183,7 +167,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         """
         if self.is_full():
             raise OverflowError(f"Heap is full (capacity={len(self._data)})")
-        self._validate_value(value)
+        validate_value_type(value, self._dtype)
         self._data._raw_set(self._size, value)
         self._sift_up(self._size)
         self._size += 1
@@ -251,7 +235,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
             )
         self._size += len(values)
         for i, value in enumerate(values):
-            self._validate_value(value)
+            validate_value_type(value, self._dtype)
             self._data._raw_set(i, value)
 
         for i in range(self._size // 2 - 1, -1, -1):

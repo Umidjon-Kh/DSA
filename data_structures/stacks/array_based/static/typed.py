@@ -1,7 +1,7 @@
 from typing import Any, Iterator, Optional
 
 from ...._base import BaseBoundedStack
-from ...._tools import validate_capacity
+from ...._tools import validate_capacity, validate_value_type
 from ....arrays import StaticTypedArray
 
 _DTYPE_DEFAULTS = {
@@ -93,14 +93,7 @@ class StaticTypedStack(BaseBoundedStack):
         """
         if self.is_full():
             raise OverflowError(f"Stack is full (capacity={len(self._data)})")
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
-            raise TypeError(
-                f"Expected {self._dtype.__name__}, got {type(value).__name__!r}"
-            )
+        validate_value_type(value, self._dtype)
         self._data._raw_set(self._top, value)
         self._top += 1
 
@@ -214,11 +207,9 @@ class StaticTypedStack(BaseBoundedStack):
         Returns True if value exists in the stack. O(n)
         Returns False instantly for wrong type.
         """
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
+        try:
+            validate_value_type(value, self._dtype)
+        except TypeError:
             return False
         for i in range(self._top):
             if self._data._raw_get(i) == value:

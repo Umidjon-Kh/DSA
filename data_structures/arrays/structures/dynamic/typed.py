@@ -1,7 +1,7 @@
 from typing import Any, Iterator, Optional
 
 from ...._base import BaseDynamicArray
-from ...._tools import validate_index, validate_insert_index
+from ...._tools import validate_index, validate_insert_index, validate_value_type
 from ..static import StaticTypedArray
 
 _DTYPE_DEFAULTS = {
@@ -115,14 +115,7 @@ class DynamicTypedArray(BaseDynamicArray):
         Raises:
             TypeError: If value is not dtype.
         """
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
-            raise TypeError(
-                f"Expected {self._dtype.__name__}, got {type(value).__name__!r}"
-            )
+        validate_value_type(value, self._dtype)
         if self._size == self._capacity:
             self._resize()
         self._data._raw_set(self._size, value)
@@ -140,14 +133,7 @@ class DynamicTypedArray(BaseDynamicArray):
             IndexError: If index is out of range.
         """
         index = validate_insert_index(index, self._size)
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
-            raise TypeError(
-                f"Expected {self._dtype.__name__}, got {type(value).__name__!r}"
-            )
+        validate_value_type(value, self._dtype)
         if self._size == self._capacity:
             self._resize()
 
@@ -238,14 +224,7 @@ class DynamicTypedArray(BaseDynamicArray):
             IndexError: If index is out of range.
         """
         index = validate_index(index, self._size)
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
-            raise TypeError(
-                f"Expected {self._dtype.__name__}, got {type(value).__name__!r}"
-            )
+        validate_value_type(value, self._dtype)
         self._data._raw_set(index, value)
 
     def __len__(self) -> int:
@@ -271,11 +250,9 @@ class DynamicTypedArray(BaseDynamicArray):
         Returns True if value exists in the array. O(n)
         Returns False instantly if received value type is not match data type.
         """
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
+        try:
+            validate_value_type(value, self._dtype)
+        except TypeError:
             return False
         for index in range(self._size):
             if self._data._raw_get(index) == value:

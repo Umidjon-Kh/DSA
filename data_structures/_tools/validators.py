@@ -90,3 +90,16 @@ def validate_key_function(key: Optional[Callable]) -> Callable:
         return key
     else:
         return lambda x: x
+
+
+def validate_value_type(value: Any, dtype: type) -> None:
+    """
+    Validates that value matches the structure
+    storing data type, if matches returns True otherwise
+    raises TypeError.
+
+    Raises:
+        TypeError: if value not matches data type.
+    """
+    if not isinstance(value, dtype) or dtype is int and isinstance(value, bool):
+        raise TypeError(f"Expected {dtype.__name__}, got ({type(value).__name__!r})")
