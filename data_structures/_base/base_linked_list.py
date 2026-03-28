@@ -15,6 +15,8 @@ class BaseLinkedList(BaseCollection):
         append, prepend, insert, remove, index, __getitem__, __setitem__
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def append(self, value: Any) -> None:
         """

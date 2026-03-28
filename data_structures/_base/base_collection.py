@@ -20,6 +20,8 @@ class BaseCollection(ABC):
     Time complexity of each method is defined by the concrete subclass.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def clear(self) -> None:
         """Removes all elements from the collection."""
