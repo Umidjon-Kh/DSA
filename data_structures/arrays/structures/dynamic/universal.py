@@ -22,7 +22,7 @@ class DynamicUniversalArray(BaseDynamicArray):
         append:       O(1) amortized — O(n) on resize
         insert:       O(n) — shifts elements to the right
         remove:       O(n) — shifts elements to the left
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         __getitem__:  O(1)
         __setitem__:  O(1) — only for existing indices (0 to size-1)
@@ -143,9 +143,10 @@ class DynamicUniversalArray(BaseDynamicArray):
         """
         Removes all elements. Resets size to 0 without reallocating the buffer.
 
-        Time complexity: O(1)
+        Time complexity: O(n)
         """
         self._size = 0
+        self._data.clear()
 
     def copy(self) -> "DynamicUniversalArray":
         """
