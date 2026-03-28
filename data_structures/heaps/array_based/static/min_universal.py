@@ -148,7 +148,7 @@ class StaticUniversalMinHeap(BaseBoundedHeap):
         Swaps root with the last element, removes the last slot,
         then restores the heap property via sift_down from the root.
 
-        Time complexiyt: O(log n)
+        Time complexity: O(log n)
 
         Raises:
             IndexError: if heap is empty.

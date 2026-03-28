@@ -7,5 +7,5 @@ __all__ = [
     "StaticTypedMaxHeap",
     "StaticUniversalMaxHeap",
     "StaticTypedMinHeap",
-    "StaticTypedMinHeap",
+    "StaticUniversalMinHeap",
 ]
