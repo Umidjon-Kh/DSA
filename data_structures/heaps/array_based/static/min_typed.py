@@ -84,15 +84,15 @@ class StaticTypedMinHeap(BaseBoundedHeap):
     # -------------------------------------------------------------------------
     # Internal helpers
 
-    def _swap(self, i: int, j: int) -> None:
+    def _swap(self, first: int, second: int) -> None:
         """
         Swaps elements at indices i and j in the internal array.
 
         Time complexity: O(1)
         """
-        tmp = self._data._raw_get(i)
-        self._data._raw_set(i, self._data._raw_get(j))
-        self._data._raw_set(j, tmp)
+        tmp = self._data._raw_get(first)
+        self._data._raw_set(first, self._data._raw_get(second))
+        self._data._raw_set(second, tmp)
 
     # -------------------------------------------------------------------------
     # Heap operations
@@ -211,8 +211,9 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         """
         Builds the heap in-place from an iterable in O(n) time.
 
-        Replaces any existing elements. Loads all values into the internal
-        array then applies Floyd's algorithm — sift_down from the last
+        Don't replaces any existing elements, only adds to end.
+        Loads all values into the internal array
+        then applies Floyd's algorithm — sift_down from the last
         non-leaf node up to the root.
 
         Time complexity: O(n)
