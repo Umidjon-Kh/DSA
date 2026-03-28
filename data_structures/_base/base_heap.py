@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any, Iterable
+from typing import Any, Iterable, Iterator
 
 from .base_collection import BaseCollection
 
@@ -121,6 +121,14 @@ class BaseHeap(BaseCollection):
 
         Args:
             index: The index of the element to sift down.
+        """
+        ...
+
+    def ordered(self) -> Iterator[Any]:
+        """
+        Yields elements in the order of the heap itself (from root).
+
+        Time complexity: O(n)
         """
         ...
 
