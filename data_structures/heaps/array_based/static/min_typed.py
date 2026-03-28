@@ -86,7 +86,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
 
     def _swap(self, first: int, second: int) -> None:
         """
-        Swaps elements at indices i and j in the internal array.
+        Swaps elements at indices first and second in the internal array.
 
         Time complexity: O(1)
         """
@@ -211,7 +211,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         """
         Builds the heap in-place from an iterable in O(n) time.
 
-        Don't replaces any existing elements, only adds to end.
+        Don't replaces any existing elements, only adds to the end.
         Loads all values into the internal array
         then applies Floyd's algorithm — sift_down from the last
         non-leaf node up to the root.
@@ -224,20 +224,21 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         Raises:
             TypeError:     If iterable is not iterable.
             TypeError:     If any value is not dtype.
-            OverflowError: If len(iterable) > capacity.
+            OverflowError: If size + len(iterable) > capacity.
         """
         try:
             values = list(iterable)
         except TypeError:
-            raise TypeError(f"Expected an iterable, got {type(iterable).__name__!r}")
-        if len(values) > len(self._data):
+            raise TypeError(f"Expected an iterable, got ({type(iterable).__name__!r})")
+        if (self._size + len(values)) > len(self._data):
             raise OverflowError(
-                f"Too many elements: {len(values)} > capacity {len(self._data)}"
+                f"Too many elements: {(self._size + len(values))} > capacity {len(self._data)}"
             )
-        self._size += len(values)
-        for i, value in enumerate(values):
+        for i, value in enumerate(values, self._size):
             validate_value_type(value, self._dtype)
             self._data._raw_set(i, value)
+
+        self._size += len(values)
 
         for i in range(self._size // 2 - 1, -1, -1):
             self._sift_down(i)
@@ -275,7 +276,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         Time complexity: O(n log n)
         """
         tmp = self.copy()
-        while tmp._size > 0:
+        for _ in range(tmp._size):
             yield tmp.pop()
 
     # -------------------------------------------------------------------------
@@ -324,11 +325,9 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         Returns True if value exists in the heap. O(n)
         Returns False instantly for wrong type.
         """
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
+        try:
+            validate_value_type(value, self._dtype)
+        except TypeError:
             return False
         for i in range(self._size):
             if self._data._raw_get(i) == value:
