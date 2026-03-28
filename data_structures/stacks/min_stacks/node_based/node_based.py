@@ -1,6 +1,7 @@
 from typing import Any, Callable, Iterator, Optional
 
 from ...._base import BaseStack
+from ...._tools import validate_key_function
 from ....nodes import LinearNode
 
 
@@ -57,18 +58,11 @@ class NodeMinStack(BaseStack):
             s = NodeMinStack(key=lambda x: -x)    # max-as-min behaviour
             s = NodeMinStack(key=lambda x: x[1])  # keyed by second element
         """
+        self._key: Callable = validate_key_function(key)
         self._head: Optional[LinearNode] = None
         self._min_head: Optional[LinearNode] = None
         self._size: int = 0
         self._min_size: int = 0
-
-        # Validating key args before initializing
-        if key is not None:
-            if not callable(key):
-                raise TypeError(f"Key must be callable, got ({type(key).__name__})")
-            self._key: Callable = key
-        else:
-            self._key: Callable = lambda x: x
 
         for item in args:
             self.push(item)

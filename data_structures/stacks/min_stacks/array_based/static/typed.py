@@ -1,7 +1,7 @@
 from typing import Any, Callable, Iterator, Optional
 
 from ....._base import BaseBoundedStack
-from ....._tools import validate_capacity
+from ....._tools import validate_capacity, validate_key_function
 from .....arrays import StaticTypedArray
 
 _DTYPE_DEFAULTS = {
@@ -95,14 +95,7 @@ class StaticTypedMinStack(BaseBoundedStack):
                 s = StaticTypedMinStack(key=lambda x: -x)         # max-as-min behaviour
                 s = StaticTypedMinStack(key=lambda x: x[1])       # keyed by second element
         """
-        # Validating key args before initializing
-        if key is not None:
-            if not callable(key):
-                raise TypeError(f"Key must be callable, got ({type(key).__name__})")
-            self._key: Callable = key
-        else:
-            self._key: Callable = lambda x: x
-
+        self._key: Callable = validate_key_function(key)
         self._dtype: type = dtype
         self._top: int = 0
         self._min_top: int = 0

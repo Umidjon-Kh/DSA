@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 
 def validate_index(index: Any, size: int) -> int:
@@ -71,3 +71,22 @@ def validate_capacity(capacity: Optional[int], args_length: int, structure: str)
         raise TypeError(
             f"{structure} requires at least one of: capacity or initial elements"
         )
+
+
+def validate_key_function(key: Optional[Callable]) -> Callable:
+    """
+    Validates and returns computed key function for all MinStacks
+    variations. Key argsument is optional cause if user not provided
+    key function it uses default function (lambda x: x).
+
+    Returns: computed callable for key function.
+
+    Raises:
+        TypeError: If key is provided but not callable.
+    """
+    if key is not None:
+        if not callable(key):
+            raise TypeError(f"Key must be callable, got ({type(key).__name__})")
+        return key
+    else:
+        return lambda x: x

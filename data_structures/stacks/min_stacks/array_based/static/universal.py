@@ -1,7 +1,7 @@
 from typing import Any, Callable, Iterator, Optional
 
 from ....._base import BaseBoundedStack
-from ....._tools import validate_capacity
+from ....._tools import validate_capacity, validate_key_function
 from .....arrays import StaticUniversalArray
 
 
@@ -77,14 +77,7 @@ class StaticUniversalMinStack(BaseBoundedStack):
             s = StaticUniversalMinStack(key=lambda x: -x)       # max-as-min behaviour
             s = StaticUniversalMinStack(key=lambda x: x[1])     # keyed by second element
         """
-        # Validating key args before initializing
-        if key is not None:
-            if not callable(key):
-                raise TypeError(f"Key must be callable, got ({type(key).__name__})")
-            self._key: Callable = key
-        else:
-            self._key: Callable = lambda x: x
-
+        self._key: Callable = validate_key_function(key)
         cap = validate_capacity(capacity, len(args), "StaticUniversalMinStack")
         self._data: StaticUniversalArray = StaticUniversalArray(capacity=cap)
         self._min_data: StaticUniversalArray = StaticUniversalArray(capacity=cap)

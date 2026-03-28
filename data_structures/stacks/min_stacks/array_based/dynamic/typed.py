@@ -1,6 +1,7 @@
 from typing import Any, Callable, Iterator, Optional
 
 from ....._base import BaseStack
+from ....._tools import validate_key_function
 from .....arrays import DynamicTypedArray
 
 
@@ -80,14 +81,7 @@ class DynamicTypedMinStack(BaseStack):
             s = DynamicTypedMinStack(key=lambda x: -x)    # max-as-min behaviour
             s = DynamicTypedMinStack(key=lambda x: x[1])  # keyed by second element
         """
-        # Validating key args before initializing
-        if key is not None:
-            if not callable(key):
-                raise TypeError(f"Key must be callable, got ({type(key).__name__})")
-            self._key: Callable = key
-        else:
-            self._key: Callable = lambda x: x
-
+        self._key: Callable = validate_key_function(key)
         self._dtype = dtype
         self._data: DynamicTypedArray = DynamicTypedArray(
             dtype=dtype, str_length=str_length
