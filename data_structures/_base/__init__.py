@@ -1,5 +1,6 @@
 from .base_array import BaseArray, BaseDynamicArray
 from .base_collection import BaseCollection
+from .base_heap import BaseBoundedHeap, BaseHeap
 from .base_linked_list import BaseLinkedList
 from .base_node import BaseNode
 from .base_stack import BaseBoundedStack, BaseStack
@@ -17,4 +18,7 @@ __all__ = [
     # Stacks
     "BaseStack",
     "BaseBoundedStack",
+    # Heaps
+    "BaseHeap",
+    "BaseBoundedHeap",
 ]
