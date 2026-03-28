@@ -52,7 +52,7 @@ class StaticUniversalMinHeap(BaseBoundedHeap):
             h = StaticUniversalMinHeap(5, 6, 7, 8, 8,)      # root=5, capacity=5
         """
         self._size: int = 0
-        cap: int = validate_capacity(capacity, len(args), "StaticUniversalMinheap")
+        cap: int = validate_capacity(capacity, len(args), "StaticUniversalMinHeap")
         self._data: StaticUniversalArray = StaticUniversalArray(capacity=cap)
 
         if args:
@@ -301,7 +301,7 @@ class StaticUniversalMinHeap(BaseBoundedHeap):
         """
         if not isinstance(other, StaticUniversalMinHeap):
             return NotImplemented
-        if self._size != other._size:
+        if self._size != other._size or self._data[0] != other._data[0]:
             return False
         for i in range(self._size):
             if self._data[i] != other._data[i]:
@@ -312,7 +312,7 @@ class StaticUniversalMinHeap(BaseBoundedHeap):
         """
         Returns string representation of the heap.
         Format: StaticUniversalMinHeap(size=3, capacity=5)[1, 3, 2]
-                                                             root
+                                                          root
 
         Time complexity: O(n)
         """

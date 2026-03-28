@@ -341,7 +341,11 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         """
         if not isinstance(other, StaticTypedMinHeap):
             return NotImplemented
-        if self._size != other._size or self._dtype != other._dtype:
+        if (
+            self._size != other._size
+            or self._dtype != other._dtype
+            or self._data._raw_get(0) != other._data._raw_get(0)
+        ):
             return False
         for i in range(self._size):
             if self._data._raw_get(i) != other._data._raw_get(i):
@@ -352,7 +356,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         """
         Returns string representation of the heap.
         Format: StaticTypedMinHeap(int, size=3, capacity=5)[1, 3, 2]
-                                                             root
+                                                           root
 
         Time complexity: O(n)
         """
