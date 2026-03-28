@@ -64,9 +64,6 @@ def test_push_first_enters_min() -> None:
 
 
 def test_push_lower_enters_min() -> None:
-    # BUG: push() reads self._min_data[self._min_top] instead of [self._min_top - 1].
-    # For StaticUniversalArray, that uninitialized slot is None, causing a TypeError
-    # on comparison. This test will FAIL until the off-by-one bug is fixed.
     s = StaticUniversalMinStack(capacity=5)
     s.push(5)
     s.push(3)
@@ -322,7 +319,5 @@ def test_repr_empty() -> None:
 
 
 def test_repr_partial() -> None:
-    # BUG: repr reads self._min_data[self._min_top] (off-by-one) and iterates
-    # all capacity slots. Both fixed before these tests pass.
     s = StaticUniversalMinStack(3, 1, 2, capacity=5)
     assert repr(s) == "StaticUniversalMinStack(capacity=5, min=1)[2, 1, 3]"
