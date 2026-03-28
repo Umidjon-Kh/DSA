@@ -43,7 +43,7 @@ def validate_insert_index(index: Any, size: int) -> int:
 
 def validate_capacity(capacity: Optional[int], args_length: int, structure: str) -> int:
     """
-    Validates and returns computed capacity value for data strucutures with fixed-size.
+    Validates and returns computed capacity value for data structures with fixed-size.
     Allows Optional capacity or args_length,
     But if does not received at least one argument or capacity value raises TypeError.
 
@@ -76,7 +76,7 @@ def validate_capacity(capacity: Optional[int], args_length: int, structure: str)
 def validate_key_function(key: Optional[Callable]) -> Callable:
     """
     Validates and returns computed key function for all MinStacks
-    variations. Key argsument is optional cause if user not provided
+    variations. Key argument is optional cause if user not provided
     key function it uses default function (lambda x: x).
 
     Returns: computed callable for key function.

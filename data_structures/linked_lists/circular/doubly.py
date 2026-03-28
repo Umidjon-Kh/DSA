@@ -310,7 +310,7 @@ class CircularDoublyLinkedList(BaseLinkedList):
             current = current.prev  # type: ignore[union-attr]
 
     def __eq__(self, other: object) -> bool:
-        """Returns True if both sturctures data and other attrs are equal."""
+        """Returns True if sturctures data and other attrs are equal."""
         if not isinstance(other, CircularDoublyLinkedList):
             return NotImplemented
         if self._size == 0 and other._size == 0:

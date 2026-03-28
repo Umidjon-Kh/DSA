@@ -32,7 +32,7 @@ class DynamicTypedMinStack(BaseStack):
         pop:          O(1)
         peek:         O(1)
         min:          O(1)
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
         is_full:      O(1)
@@ -77,7 +77,7 @@ class DynamicTypedMinStack(BaseStack):
 
         Examples:
             s = DynamicTypedMinStack(int)                 # empty
-            s = DynamicTypedMinStack(int, 1, 2, 4)        # top=3
+            s = DynamicTypedMinStack(int, 1, 2, 4)        # top=4
             s = DynamicTypedMinStack(key=lambda x: -x)    # max-as-min behaviour
             s = DynamicTypedMinStack(key=lambda x: x[1])  # keyed by second element
         """
@@ -150,7 +150,7 @@ class DynamicTypedMinStack(BaseStack):
 
     def min(self) -> Any:
         """
-        Returns the current minimum value (by key) wihtout removing it.
+        Returns the current minimum value (by key) without removing it.
 
         Time complexity: O(1)
 

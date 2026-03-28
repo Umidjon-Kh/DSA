@@ -38,7 +38,7 @@ class StaticTypedMinStack(BaseBoundedStack):
         pop:          O(1)
         peek:         O(1)
         min:          O(1)
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
         is_full:      O(1)
@@ -74,7 +74,7 @@ class StaticTypedMinStack(BaseBoundedStack):
 
         Args:
             *args:      Optional initial elements, pushed left to right (last = top).
-            dtype:      Element type. Suppored: int, float, bool, str.
+            dtype:      Element type. Supported: int, float, bool, str.
             capacity:   Maximum number of elements the stack can hold.
             str_length: Max characters per str element (default: 20).
             key:        Callable applied to each value before comparison.
@@ -90,7 +90,7 @@ class StaticTypedMinStack(BaseBoundedStack):
                 TypeError:     if key is provided but not callable.
 
             Examples:
-                s = StaticTypedMinStack(int, capcaity=5)          # empty, capacity=5
+                s = StaticTypedMinStack(int, capacity=5)          # empty, capacity=5
                 s = StaticTypedMinStack(int, 1, 2, 4, capacity=5) # empty, capacity=5
                 s = StaticTypedMinStack(key=lambda x: -x)         # max-as-min behaviour
                 s = StaticTypedMinStack(key=lambda x: x[1])       # keyed by second element
