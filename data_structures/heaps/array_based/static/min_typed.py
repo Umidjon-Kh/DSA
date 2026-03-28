@@ -25,6 +25,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         pop:          O(log n)
         peek:         O(1)
         heapify:      O(n)
+        ordered:      O(n log n)
         clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
@@ -248,7 +249,6 @@ class StaticTypedMinHeap(BaseBoundedHeap):
             raise OverflowError(
                 f"Too many elements: {len(values)} > capacity {len(self._data)}"
             )
-
         self._size += len(values)
         for i, value in enumerate(values):
             self._validate_value(value)
@@ -282,17 +282,16 @@ class StaticTypedMinHeap(BaseBoundedHeap):
 
     def ordered(self) -> Iterator[Any]:
         """
-        Yields elements in the order of the heap itself (from root).
+        Yields all elements in sorted order from smallest to largest.
 
-        Time complexity: O(n)
+        Works on a copy of the heap — the original is not modified.
+        For unsorted internal order use __iter__ instead.
+
+        Time complexity: O(n log n)
         """
-        tmp_heap = self.copy()
-
-        for _ in range(tmp_heap._size):
-            yield tmp_heap.pop()
-
-        # while tmp_heap._size >= 0:
-        #     yield tmp_heap.pop()
+        tmp = self.copy()
+        while tmp._size > 0:
+            yield tmp.pop()
 
     # -------------------------------------------------------------------------
     # State checks
@@ -319,7 +318,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
     def __iter__(self) -> Iterator[Any]:
         """
         Yields elements in internal array order (root first).
-        The result is not sorted - it is done in a separate method (ordered).
+        The result is not sorted — use ordered() for sorted iteration.
 
         Time complexity: O(n)
         """

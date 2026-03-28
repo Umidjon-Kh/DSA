@@ -126,9 +126,12 @@ class BaseHeap(BaseCollection):
 
     def ordered(self) -> Iterator[Any]:
         """
-        Yields elements in the order of the heap itself (from root).
+        Yields all elements in sorted order from smallest to largest.
 
-        Time complexity: O(n)
+        Works on a copy of the heap — the original is not modified.
+        For unsorted internal order use __iter__ instead.
+
+        Time complexity: O(n log n)
         """
         ...
 
