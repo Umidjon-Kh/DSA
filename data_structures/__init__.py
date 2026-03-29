@@ -4,6 +4,18 @@ from .arrays import (
     StaticTypedArray,
     StaticUniversalArray,
 )
+from .heaps import (
+    DynamicTypedMaxHeap,
+    DynamicTypedMinHeap,
+    DynamicUniversalMaxHeap,
+    DynamicUniversalMinHeap,
+    NodeMaxHeap,
+    NodeMinHeap,
+    StaticTypedMaxHeap,
+    StaticTypedMinHeap,
+    StaticUniversalMaxHeap,
+    StaticUniversalMinHeap,
+)
 from .linked_lists import (
     CircularDoublyLinkedList,
     CircularSinglyLinkedList,
@@ -50,4 +62,15 @@ __all__ = [
     "StaticUniversalMinStack",
     "NodeMinStack",
     "NodeStack",
+    # Heaps
+    "DynamicTypedMaxHeap",
+    "DynamicTypedMinHeap",
+    "DynamicUniversalMaxHeap",
+    "DynamicUniversalMinHeap",
+    "NodeMaxHeap",
+    "NodeMinHeap",
+    "StaticTypedMaxHeap",
+    "StaticTypedMinHeap",
+    "StaticUniversalMaxHeap",
+    "StaticUniversalMinHeap",
 ]
