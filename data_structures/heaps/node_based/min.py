@@ -175,7 +175,7 @@ class NodeMinHeap(BaseHeap):
     # -------------------------------------------------------------------------
     # Heap operations
 
-    def _sift_up(self, node: TreeNode) -> None:
+    def _sift_up(self, target: TreeNode) -> None:
         """
         Restores the heap property by moving a node upward toward the root.
 
@@ -218,11 +218,11 @@ class NodeMinHeap(BaseHeap):
         Args:
             node: The node to sift upward (usually the newly inserted node).
         """
-        while node.parent is not None and node.value < node.parent.value:
-            self._swap_values(node, node.parent)
-            node = node.parent
+        while target.parent is not None and target.value < target.parent.value:
+            self._swap_values(target, target.parent)
+            target = target.parent
 
-    def _sift_down(self, node: TreeNode) -> None:
+    def _sift_down(self, target: TreeNode) -> None:
         """
         Restores the heap property by moving a node downward toward the leaves.
 
@@ -265,18 +265,18 @@ class NodeMinHeap(BaseHeap):
             node: The node to sift downward (usually the root after pop).
         """
         while True:
-            smallest = node
+            smallest = target
 
-            if node.left is not None and node.left.value < smallest.value:
-                smallest = node.left
-            if node.right is not None and node.right.value < smallest.value:
-                smallest = node.right
+            if target.left is not None and target.left.value < smallest.value:
+                smallest = target.left
+            if target.right is not None and target.right.value < smallest.value:
+                smallest = target.right
 
-            if smallest is node:
+            if smallest is target:
                 break
 
-            self._swap_values(node, smallest)
-            node = smallest
+            self._swap_values(target, smallest)
+            target = smallest
 
     # -------------------------------------------------------------------------
     # Core operations

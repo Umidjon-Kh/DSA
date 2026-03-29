@@ -63,7 +63,7 @@ class DynamicUniversalMinHeap(BaseHeap):
     # -------------------------------------------------------------------------
     # Heap operations
 
-    def _sift_up(self, index: int) -> None:
+    def _sift_up(self, target: int) -> None:
         """
         Restores the heap property by moving element at index upward.
 
@@ -76,15 +76,15 @@ class DynamicUniversalMinHeap(BaseHeap):
         Args:
             index: The index of the element to sift up.
         """
-        while index > 0:
-            parent = (index - 1) // 2
-            if self._data[index] < self._data[parent]:
-                self._swap(index, parent)
-                index = parent
+        while target > 0:
+            parent = (target - 1) // 2
+            if self._data[target] < self._data[parent]:
+                self._swap(target, parent)
+                target = parent
             else:
                 break
 
-    def _sift_down(self, index: int) -> None:
+    def _sift_down(self, target: int) -> None:
         """
         Restores the heap property by moving element at index downward.
 
@@ -98,9 +98,9 @@ class DynamicUniversalMinHeap(BaseHeap):
             index: The index of the element to sift down.
         """
         while True:
-            smallest = index
-            left = 2 * index + 1
-            right = 2 * index + 2
+            smallest = target
+            left = 2 * target + 1
+            right = 2 * target + 2
             size = len(self._data)
 
             if left < size and self._data[left] < self._data[smallest]:
@@ -108,11 +108,11 @@ class DynamicUniversalMinHeap(BaseHeap):
             if right < size and self._data[right] < self._data[smallest]:
                 smallest = right
 
-            if smallest == index:
+            if smallest == target:
                 break
 
-            self._swap(index, smallest)
-            index = smallest
+            self._swap(target, smallest)
+            target = smallest
 
     # -------------------------------------------------------------------------
     # Core operations

@@ -93,34 +93,34 @@ class BaseHeap(BaseCollection):
         ...
 
     @abstractmethod
-    def _sift_up(self, index: int) -> None:
+    def _sift_up(self, target: Any) -> None:
         """
-        Restores the heap property by moving element at index upward.
+        Restores the heap property by moving an element upward.
 
-        Compares element at index with its parent repeatedly,
-        swapping them while the heap property is violated.
-        Stops when the element reaches the root or finds a valid position.
+        Must be called after push() to bubble the new element
+        to its correct position.
 
         Time complexity: O(log n)
 
-        Args:
-            index: The index of the element to sift up.
+        Implementation note:
+            Array-based heaps receive an int index.
+            Node-based heaps receive a TreeNode instance.
         """
         ...
 
     @abstractmethod
-    def _sift_down(self, index: int) -> None:
+    def _sift_down(self, target: Any) -> None:
         """
-        Restores the heap property by moving element at index downward.
+        Restores the heap property by moving an element downward.
 
-        Compares element at index with its children repeatedly,
-        swapping with the more extreme child while the heap property
-        is violated. Stops at a leaf or when no swap is needed.
+        Must be called after pop() and inside heapify() to push
+        a displaced element to its correct position.
 
         Time complexity: O(log n)
 
-        Args:
-            index: The index of the element to sift down.
+        Implementation note:
+            Array-based heaps receive an int index.
+            Node-based heaps receive a TreeNode instance.
         """
         ...
 

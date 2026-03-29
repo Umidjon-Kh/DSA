@@ -97,7 +97,7 @@ class StaticTypedMinHeap(BaseBoundedHeap):
     # -------------------------------------------------------------------------
     # Heap operations
 
-    def _sift_up(self, index: int) -> None:
+    def _sift_up(self, target: int) -> None:
         """
         Restores the heap property by moving element at index upward.
 
@@ -110,15 +110,15 @@ class StaticTypedMinHeap(BaseBoundedHeap):
         Args:
             index: The index of the element to sift up.
         """
-        while index > 0:
-            parent = (index - 1) // 2
-            if self._data._raw_get(index) < self._data._raw_get(parent):
-                self._swap(index, parent)
-                index = parent
+        while target > 0:
+            parent = (target - 1) // 2
+            if self._data._raw_get(target) < self._data._raw_get(parent):
+                self._swap(target, parent)
+                target = parent
             else:
                 break
 
-    def _sift_down(self, index: int) -> None:
+    def _sift_down(self, target: int) -> None:
         """
         Restores the heap property by moving element at index downward.
 
@@ -132,9 +132,9 @@ class StaticTypedMinHeap(BaseBoundedHeap):
             index: The index of the element to sift down.
         """
         while True:
-            smallest = index
-            left = 2 * index + 1
-            right = 2 * index + 2
+            smallest = target
+            left = 2 * target + 1
+            right = 2 * target + 2
 
             if left < self._size and self._data._raw_get(left) < self._data._raw_get(
                 smallest
@@ -146,11 +146,11 @@ class StaticTypedMinHeap(BaseBoundedHeap):
             ):
                 smallest = right
 
-            if smallest == index:
+            if smallest == target:
                 break
 
-            self._swap(index, smallest)
-            index = smallest
+            self._swap(target, smallest)
+            target = smallest
 
     # -------------------------------------------------------------------------
     # Core operations
