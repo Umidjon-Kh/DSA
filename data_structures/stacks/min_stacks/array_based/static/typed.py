@@ -4,13 +4,6 @@ from ....._base import BaseBoundedStack
 from ....._tools import validate_capacity, validate_key_function, validate_value_type
 from .....arrays import StaticTypedArray
 
-_DTYPE_DEFAULTS = {
-    int: 0,
-    float: 0.0,
-    bool: False,
-    str: "",
-}
-
 
 class StaticTypedMinStack(BaseBoundedStack):
     """
@@ -153,12 +146,12 @@ class StaticTypedMinStack(BaseBoundedStack):
             raise IndexError("Pop from an empty stack")
         self._top -= 1
         value = self._data._raw_get(self._top)
-        self._data._raw_set(self._top, _DTYPE_DEFAULTS[self._dtype])
+        self._data._set_default(self._top)
 
         # If stack is not empty, min_data never be None
         if self._key(value) == self._key(self._min_data._raw_get(self._min_top - 1)):
             self._min_top -= 1
-            self._min_data._raw_set(self._min_top, _DTYPE_DEFAULTS[self._dtype])
+            self._min_data._set_default(self._min_top)
 
         return value
 

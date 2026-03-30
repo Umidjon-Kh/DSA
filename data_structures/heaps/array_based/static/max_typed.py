@@ -4,13 +4,6 @@ from ...._base import BaseBoundedHeap
 from ...._tools import validate_capacity, validate_value_type
 from ....arrays import StaticTypedArray
 
-_DTYPE_DEFAULTS = {
-    int: 0,
-    float: 0.0,
-    bool: False,
-    str: "",
-}
-
 
 class StaticTypedMaxHeap(BaseBoundedHeap):
     """
@@ -191,7 +184,7 @@ class StaticTypedMaxHeap(BaseBoundedHeap):
         if self._size > 0:
             self._data._raw_set(0, self._data._raw_get(self._size))
             self._sift_down(0)
-        self._data._raw_set(self._size, _DTYPE_DEFAULTS[self._dtype])
+        self._data._set_default(self._size)
         return root
 
     def peek(self) -> Any:

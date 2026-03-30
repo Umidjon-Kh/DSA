@@ -4,13 +4,6 @@ from ...._base import BaseDynamicArray
 from ...._tools import validate_index, validate_insert_index, validate_value_type
 from ..static import StaticTypedArray
 
-_DTYPE_DEFAULTS = {
-    int: 0,
-    float: 0.0,
-    bool: False,
-    str: "",
-}
-
 
 class DynamicTypedArray(BaseDynamicArray):
     """
@@ -165,7 +158,7 @@ class DynamicTypedArray(BaseDynamicArray):
             self._data._raw_set(idx, self._data._raw_get(idx + 1))
 
         # Reset last slot to default
-        self._data._raw_set(self._size - 1, _DTYPE_DEFAULTS[self._dtype])
+        self._data._set_default(index)
         self._size -= 1
         return value
 
@@ -178,9 +171,8 @@ class DynamicTypedArray(BaseDynamicArray):
 
         Time complexity: O(n)
         """
-        default = _DTYPE_DEFAULTS[self._dtype]
         for index in range(self._size):
-            self._data._raw_set(index, default)
+            self._data._set_default(index)
         self._size = 0
 
     def copy(self) -> "DynamicTypedArray":

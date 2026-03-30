@@ -148,6 +148,14 @@ class StaticTypedArray(BaseArray):
             return "".join(buf[j] for j in range(self._str_length) if buf[j] != "\0")
         return self._dtype(self._data[index])
 
+    def _set_default(self, index: int) -> None:
+        """
+        Sets default value in received index for any data type.
+        It needs for other structures that backed by StaticTypedArray.
+        DRY (Do not Repeat Yourself)
+        """
+        self._raw_set(index, _DTYPE_DEFAULTS[self._dtype])
+
     # -------------------------------------------------------------------------
     # Public interface
 

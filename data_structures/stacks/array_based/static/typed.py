@@ -4,13 +4,6 @@ from ...._base import BaseBoundedStack
 from ...._tools import validate_capacity, validate_value_type
 from ....arrays import StaticTypedArray
 
-_DTYPE_DEFAULTS = {
-    int: 0,
-    float: 0.0,
-    bool: False,
-    str: "",
-}
-
 
 class StaticTypedStack(BaseBoundedStack):
     """
@@ -110,7 +103,7 @@ class StaticTypedStack(BaseBoundedStack):
             raise IndexError("Pop from an empty stack")
         self._top -= 1
         value = self._data._raw_get(self._top)
-        self._data._raw_set(self._top, _DTYPE_DEFAULTS[self._dtype])
+        self._data._set_default(self._top)
         return value
 
     def peek(self) -> Any:
