@@ -158,7 +158,7 @@ class DynamicTypedArray(BaseDynamicArray):
             self._data._raw_set(idx, self._data._raw_get(idx + 1))
 
         # Reset last slot to default
-        self._data._set_default(index)
+        self._data._set_default(self._size - 1)
         self._size -= 1
         return value
 
