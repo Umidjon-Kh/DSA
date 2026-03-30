@@ -261,10 +261,7 @@ class DynamicUniversalMinHeap(BaseHeap):
 
     def __contains__(self, value: Any) -> bool:
         """Returns True if value exists in the heap. O(n)"""
-        for i in range(len(self._data)):
-            if self._data[i] == value:
-                return True
-        return False
+        return value in self._data
 
     def __eq__(self, other: object) -> bool:
         """

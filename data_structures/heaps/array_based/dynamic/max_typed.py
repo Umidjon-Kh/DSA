@@ -286,16 +286,7 @@ class DynamicTypedMaxHeap(BaseHeap):
         Returns True if value exists in the heap. O(n)
         Returns False instantly for wrong type.
         """
-        if (
-            not isinstance(value, self._dtype)
-            or self._dtype is int
-            and isinstance(value, bool)
-        ):
-            return False
-        for i in range(len(self._data)):
-            if self._data[i] == value:
-                return True
-        return False
+        return value in self._data
 
     def __eq__(self, other: object) -> bool:
         """

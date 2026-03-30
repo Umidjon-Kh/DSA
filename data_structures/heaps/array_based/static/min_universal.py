@@ -97,10 +97,10 @@ class StaticUniversalMinHeap(BaseBoundedHeap):
 
     def _sift_down(self, target: int) -> None:
         """
-        restores the heap property by moving element at index downward.
+        Restores the heap property by moving element at index downward.
 
         Compares element at index with its children repeatedly,
-        swapping with the similar child while the heap property is violated.
+        swapping with the smaller child while the heap property is violated.
         Stops at a leaf or when no swap is needed.
 
         Time complexity: O(log n)

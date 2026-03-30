@@ -95,7 +95,7 @@ def validate_key_function(key: Optional[Callable]) -> Callable:
 def validate_value_type(value: Any, dtype: type) -> None:
     """
     Validates that value matches the structure
-    storing data type, if matches returns True otherwise
+    storing data type, if matches just passes it, otherwise
     raises TypeError.
 
     Raises:

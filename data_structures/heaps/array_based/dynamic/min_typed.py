@@ -1,7 +1,6 @@
 from typing import Any, Iterable, Iterator, Optional
 
 from ...._base import BaseHeap
-from ...._tools import validate_value_type
 from ....arrays import DynamicTypedArray
 
 
@@ -287,14 +286,7 @@ class DynamicTypedMinHeap(BaseHeap):
         Returns True if value exists in the heap. O(n)
         Returns False instantly for wrong type.
         """
-        try:
-            validate_value_type(value, self._dtype)
-        except TypeError:
-            return False
-        for i in range(len(self._data)):
-            if self._data[i] == value:
-                return True
-        return False
+        return value in self._data
 
     def __eq__(self, other: object) -> bool:
         """
