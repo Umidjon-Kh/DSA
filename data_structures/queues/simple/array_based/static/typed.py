@@ -81,6 +81,7 @@ class StaticTypedQueue(BaseBoundedQueue):
 
     # -------------------------------------------------------------------------
     # Core operations
+
     def enqueue(self, value: Any) -> None:
         """
         Adds value to the rear of the queue.
@@ -99,8 +100,8 @@ class StaticTypedQueue(BaseBoundedQueue):
 
     def dequeue(self) -> Any:
         """
-        Removes and returns the value from th front of the queue.
-        After removing need to shift all elements from right to left.
+        Removes and returns the value from the front of the queue.
+        After removal, all remaining elements are shifted left.
 
         Time complexity: O(n)
 
@@ -168,8 +169,11 @@ class StaticTypedQueue(BaseBoundedQueue):
         """Returns True if the queue has reached its capacity. O(1)"""
         return self._rear == len(self._data)
 
+    # -------------------------------------------------------------------------
+    # Dunder methods
+
     def __len__(self) -> int:
-        """Returns number of elements currently in the qeueu. O(1)"""
+        """Returns number of elements currently in the queue. O(1)"""
         return self._rear
 
     def __bool__(self) -> bool:
@@ -195,7 +199,7 @@ class StaticTypedQueue(BaseBoundedQueue):
             yield self._data._raw_get(i)
 
     def __eq__(self, other: object) -> bool:
-        """Returns True if both structures data and dtype, rear and front attrs equal."""
+        """Returns True if both structures data and dtype, rear attrs are equal."""
         if not isinstance(other, StaticTypedQueue):
             return NotImplemented
         if self._rear != other._rear or self._dtype != other._dtype:
