@@ -135,7 +135,9 @@ class StaticTypedStack(BaseBoundedStack):
         Time complexity: O(n)
         """
         new_stack = StaticTypedStack(
-            self._dtype, capacity=len(self._data), str_length=self._str_length
+            dtype=self._dtype,
+            capacity=len(self._data),
+            str_length=self._str_length,
         )
         for i in range(self._top):
             new_stack._data._raw_set(i, self._data._raw_get(i))
