@@ -79,7 +79,7 @@ class StaticUniversalQueue(BaseBoundedQueue):
             IndexError: if queue is empty.
         """
         if self.is_empty():
-            raise IndexError("Pop from an emty queue")
+            raise IndexError("Pop from an empty queue")
         self._rear -= 1
         value = self._data[0]
         # Shifting all elements from right to left
@@ -194,6 +194,6 @@ class StaticUniversalQueue(BaseBoundedQueue):
         """
         elements = ", ".join(repr(self._data[i]) for i in range(self._rear))
         return (
-            f"StaticTypedQueue(size={self._rear}, capacity={len(self._data)})"
+            f"StaticUniversalQueue(size={self._rear}, capacity={len(self._data)})"
             f"[{elements}]"
         )
