@@ -216,7 +216,7 @@ class StaticTypedCircularDeque(BaseBoundedDeque):
         for i in range(self._size):
             index = (self._front + i) % len(self._data)
             new_deque._data._raw_set(i, self._data._raw_get(index))
-        new_deque._rear = self._size
+        new_deque._rear = self._size % len(self._data)
         new_deque._size = self._size
         return new_deque
 

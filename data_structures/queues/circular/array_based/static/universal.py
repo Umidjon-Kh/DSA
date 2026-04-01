@@ -140,7 +140,7 @@ class StaticUniversalCircularQueue(BaseBoundedQueue):
         for i in range(self._size):
             index = (self._front + i) % len(self._data)
             new_queue._data[i] = self._data[index]
-        new_queue._rear = self._size
+        new_queue._rear = self._size % len(self._data)
         new_queue._size = self._size
         return new_queue
 
