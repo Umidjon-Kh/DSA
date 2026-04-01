@@ -8,7 +8,7 @@ class BaseQueue(BaseCollection):
     """
     Abstract base class for all simple queue types.
 
-    Defines the FIFO (First In, Last Out) interface.
+    Defines the FIFO (First In, First Out) interface.
     Array-based (static and dynamic) and node-based queues
     inherit from this.
 

@@ -20,20 +20,19 @@ class DynamicTypedQueue(BaseQueue):
     After every dequeue, all elements need to be shifted left.
 
     Time complexity:
-        Time complexity:
-            enqueue:        O(1) amortized — O(n) on resize
-            dequeue:        O(n) needs to shift all elements from right to left
-            peek:           O(1)
-            clear:          O(n)
-            copy:           O(n)
-            is_empty:       O(1)
-            __len__:        O(1)
-            __bool__:       O(1)
-            __iter__:       O(n) - front to rear
-            __reversed__:   O(n)
-            __contains__:   O(n)
-            __repr__:       O(n)
-            __eq__:         O(n)
+        enqueue:        O(1) amortized — O(n) on resize
+        dequeue:        O(n) needs to shift all elements from right to left
+        peek:           O(1)
+        clear:          O(n)
+        copy:           O(n)
+        is_empty:       O(1)
+        __len__:        O(1)
+        __bool__:       O(1)
+        __iter__:       O(n) - front to rear
+        __reversed__:   O(n)
+        __contains__:   O(n)
+        __repr__:       O(n)
+        __eq__:         O(n)
     """
 
     __slots__ = ("_data", "_dtype", "_str_length")

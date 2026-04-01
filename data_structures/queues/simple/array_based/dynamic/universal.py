@@ -148,7 +148,7 @@ class DynamicUniversalQueue(BaseQueue):
     def __eq__(self, other: object) -> bool:
         """Returns True if both structure data attrs are equal."""
         if not isinstance(other, DynamicUniversalQueue):
-            return False
+            return NotImplemented
         return self._data == other._data
 
     def __contains__(self, value: Any) -> bool:
