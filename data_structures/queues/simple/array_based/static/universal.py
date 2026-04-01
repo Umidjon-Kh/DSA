@@ -36,13 +36,17 @@ class StaticUniversalQueue(BaseBoundedQueue):
 
         Args:
             capacity: Maximum numbers of elements the queue can hold.
-            *args:    Optional initial elements, pushed left to right (first = front).
+            *args:    Optional initial elements, added left to right (first = front).
 
         Raises:
             TypeError:     if capacity is not an int.
             TypeError:     if not provided at least one argument or capacity value.
             ValueError:    if capacity < 1.
             OverflowError: if len(args) > capacity.
+
+        Examples:
+            q = StaticUniversalQueue(capacity=5)            # empty, capacity=5
+            q = StaticUniversalQueue(1, 2, 3, capacity=5)  # front=1, capacity=5
         """
         self._rear: int = 0
         cap: int = validate_capacity(capacity, len(args), "StaticUniversalQueue")
@@ -79,7 +83,7 @@ class StaticUniversalQueue(BaseBoundedQueue):
             IndexError: if queue is empty.
         """
         if self.is_empty():
-            raise IndexError("Pop from an empty queue")
+            raise IndexError("Dequeue from an empty queue")
         self._rear -= 1
         value = self._data[0]
         # Shifting all elements from right to left

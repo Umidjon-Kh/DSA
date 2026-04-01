@@ -53,7 +53,7 @@ class StaticTypedQueue(BaseBoundedQueue):
         Args:
             dtype:      Element type. Supported: int, float, bool, str.
             capacity:   Maximum number of elements the queue can hold.
-            *args:      Optional initial elements, pushed left to right (first = front)
+            *args:      Optional initial elements, added left to right (first = front)
             str_length: Max characters per str element (default 20).
 
         Raises:
@@ -65,8 +65,8 @@ class StaticTypedQueue(BaseBoundedQueue):
             TypeError:     if not provided at least one argument or capacity value.
 
         Examples:
-            s = StaticTypedQueue(int, capacity=5)            # empty, capacity=5
-            s = StaticTypedQueue(int,  1, 2, 3, capacity=5)  # front=1, capacity=5
+            q = StaticTypedQueue(int, capacity=5)            # empty, capacity=5
+            q = StaticTypedQueue(int,  1, 2, 3, capacity=5)  # front=1, capacity=5
         """
         self._dtype: type = dtype
         cap: int = validate_capacity(capacity, len(args), "StaticTypedQueue")
@@ -109,7 +109,7 @@ class StaticTypedQueue(BaseBoundedQueue):
             IndexError: if queue is empty.
         """
         if self.is_empty():
-            raise IndexError("Pop from an empty queue")
+            raise IndexError("Dequeue from an empty queue")
         self._rear -= 1
         value = self._data._raw_get(0)
         # Shifting all elements from right to left
@@ -227,7 +227,7 @@ class StaticTypedQueue(BaseBoundedQueue):
         """
         Returns string representation of the queue.
         Format: StaticTypedQueue(int, size=3, capacity=5)[1, 2, 3]
-                                               front    rear
+                                                       front    rear
 
         Time complexity: O(n)
         """
