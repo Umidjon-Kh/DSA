@@ -9,10 +9,10 @@ class DynamicUniversalQueue(BaseQueue):
     A dynamic queue backed by DynamicUniversalArray.
     Grows automatically when capacity is exceeded.
     Accepts any Python type - no dtype restriction.
-    Follows FIFO (First In, First Out) pinciple.
+    Follows FIFO (First In, First Out) principle.
 
     Growth formula (delegated to DynamicUniversalArray - same as CPython list):
-        new_capacity = capacity + (capacity >> 3) + (3 if capacity > 9 else 6)
+        new_capacity = capacity + (capacity >> 3) + (3 if capacity < 9 else 6)
 
     Simple Queue — naive implementation, front always at index 0.
     After every dequeue, all elements need to be shifted left.
@@ -59,13 +59,13 @@ class DynamicUniversalQueue(BaseQueue):
         Adds value to the rear of the queue.
         Triggers resize if underlying array is at capacity.
 
-        Time complexitu: O(1) amortized - O(n) on resize
+        Time complexity: O(1) amortized - O(n) on resize
         """
         self._data.append(value)
 
     def dequeue(self) -> Any:
         """
-        Removes and returns the rear value form the front of the queue.
+        Removes and returns the value form the front of the queue.
         After removal, all remaining elements are shifted left.
 
         Time complexity: O(n)
@@ -102,7 +102,7 @@ class DynamicUniversalQueue(BaseQueue):
         """
         Returns a shallow copy with same elements.
 
-        Time comlexity: O(n)
+        Time complexity: O(n)
         """
         new_queue = DynamicUniversalQueue()
         for i in range(len(self._data)):
@@ -124,7 +124,7 @@ class DynamicUniversalQueue(BaseQueue):
         return len(self._data)
 
     def __bool__(self) -> bool:
-        """Retruns True if the queue is not empty. O(1)"""
+        """Returns True if the queue is not empty. O(1)"""
         return len(self._data) > 0
 
     def __iter__(self) -> Iterator[Any]:
@@ -146,20 +146,20 @@ class DynamicUniversalQueue(BaseQueue):
             yield self._data[i]
 
     def __eq__(self, other: object) -> bool:
-        """Retruns True if both structure data attrs are equal."""
+        """Returns True if both structure data attrs are equal."""
         if not isinstance(other, DynamicUniversalQueue):
             return False
         return self._data == other._data
 
     def __contains__(self, value: Any) -> bool:
         """
-        Returns True if value is exists in the queue. O(n)
+        Returns True if value exists in the queue. O(n)
         """
         return value in self._data
 
     def __repr__(self) -> str:
         """
-        Returns string representation of the stack.
+        Returns string representation of the queue.
         Format: DynamicUniversalQueue(size=3)[1, 'hi', 3.0]
                                             front       rear
 

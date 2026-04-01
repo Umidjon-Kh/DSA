@@ -105,10 +105,10 @@ class DynamicTypedQueue(BaseQueue):
         Time complexity: O(1)
 
         Raises:
-            indexError: if queue is empty.
+            IndexError: if queue is empty.
         """
         if self.is_empty():
-            raise IndexError("Peek form an empty queue")
+            raise IndexError("Peek from an empty queue")
         return self._data[0]
 
     def clear(self) -> None:
@@ -170,15 +170,15 @@ class DynamicTypedQueue(BaseQueue):
             yield self._data[i]
 
     def __eq__(self, other: object) -> bool:
-        """Returns True if both structures data and dtypes ar equal."""
+        """Returns True if both structures data and dtypes are equal."""
         if not isinstance(other, DynamicTypedQueue):
             return NotImplemented
         return self._data == other._data
 
     def __contains__(self, value: Any) -> bool:
         """
-        Returns true if value exists in queue. O(n)
-        Retruns False instantly for wrong type.
+        Returns True if value exists in queue. O(n)
+        Returns False instantly for wrong type.
         """
         return value in self._data
 
