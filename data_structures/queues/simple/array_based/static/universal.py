@@ -38,7 +38,7 @@ class StaticUniversalQueue(BaseBoundedQueue):
         Creates a fixed-capacity universal queue with optional initial elements.
 
         Args:
-            capacity: Maximum numbers of elements the queue can hold.
+            capacity: Maximum number of elements the queue can hold.
             *args:    Optional initial elements, added left to right (first = front).
 
         Raises:
@@ -49,7 +49,7 @@ class StaticUniversalQueue(BaseBoundedQueue):
 
         Examples:
             q = StaticUniversalQueue(capacity=5)            # empty, capacity=5
-            q = StaticUniversalQueue(1, 2, 3, capacity=5)  # front=1, capacity=5
+            q = StaticUniversalQueue(1, 2, 3, capacity=5)  # front=1, rear=3, capacity=5
         """
         self._rear: int = 0
         cap: int = validate_capacity(capacity, len(args), "StaticUniversalQueue")
