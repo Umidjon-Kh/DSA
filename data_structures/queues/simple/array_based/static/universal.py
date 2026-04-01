@@ -11,6 +11,9 @@ class StaticUniversalQueue(BaseBoundedQueue):
     Accepts any Python type - no dtype restriction.
     Follows FIFO (First In, First Out) principle.
 
+    Simple Queue — naive implementation, front always at index 0.
+    After every dequeue, all elements need to be shifted left.
+
     Time complexity:
         enqueue:        O(1)
         dequeue:        O(n) needs to shift all elements from right to left

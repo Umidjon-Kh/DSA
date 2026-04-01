@@ -18,7 +18,7 @@ class DynamicUniversalStack(BaseStack):
         push:         O(1) amortized — O(n) on resize
         pop:          O(1)
         peek:         O(1)
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
         __len__:      O(1)
@@ -90,7 +90,7 @@ class DynamicUniversalStack(BaseStack):
         """
         Removes all elements. Does not shrink the underlying buffer.
 
-        Time complexity: O(1)
+        Time complexity: O(n)
         """
         self._data.clear()
 
@@ -142,6 +142,7 @@ class DynamicUniversalStack(BaseStack):
             yield self._data[i]
 
     def __eq__(self, other: object) -> bool:
+        """Returns True if both struture data attrs are equal."""
         if not isinstance(other, DynamicUniversalStack):
             return NotImplemented
         # I removed other conditions

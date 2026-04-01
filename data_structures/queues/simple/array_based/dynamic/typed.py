@@ -4,7 +4,7 @@ from ....._base import BaseQueue
 from .....arrays import DynamicTypedArray
 
 
-class DynamictypedQueue(BaseQueue):
+class DynamicTypedQueue(BaseQueue):
     """
     A dynamic queue backed by DynamicTypedArray.
     Grows automatically when capacity is exceeded.
@@ -21,7 +21,7 @@ class DynamictypedQueue(BaseQueue):
 
     Time complexity:
         Time complexity:
-            enqueue:        O(1)
+            enqueue:        O(1) amortized — O(n) on resize
             dequeue:        O(n) needs to shift all elements from right to left
             peek:           O(1)
             clear:          O(n)
@@ -119,13 +119,13 @@ class DynamictypedQueue(BaseQueue):
         """
         self._data.clear()
 
-    def copy(self) -> "DynamictypedQueue":
+    def copy(self) -> "DynamicTypedQueue":
         """
         Returns a shallow copy with same dtype and elements.
 
         Time complexity: O(n)
         """
-        new_queue = DynamictypedQueue(
+        new_queue = DynamicTypedQueue(
             dtype=self._dtype,
             str_length=self._str_length,
         )
@@ -171,7 +171,7 @@ class DynamictypedQueue(BaseQueue):
 
     def __eq__(self, other: object) -> bool:
         """Returns True if both structures data and dtypes ar equal."""
-        if not isinstance(other, DynamictypedQueue):
+        if not isinstance(other, DynamicTypedQueue):
             return NotImplemented
         return self._data == other._data
 
