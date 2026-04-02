@@ -8,7 +8,7 @@ class DynamicTypedDeque(BaseDeque):
     """
     A dynamic deque backed by DynamicTypedArray.
     Grows automatically when capacity is exceeded.
-    Enfroces a single element type for all items.
+    Enforces a single element type for all items.
     Follows FIFO (First In, First Out) principle.
 
     Supported dtypes: int, float, bool, str
@@ -50,7 +50,7 @@ class DynamicTypedDeque(BaseDeque):
         Creates a dynamic typed deque with optional initial elements.
 
         Args:
-            dtype:      Elements type. Supported: int, float, bool, str.
+            dtype:      Element type. Supported: int, float, bool, str.
             *args:      Optional initial elements, added left to right (first = front).
             str_length: Max characters per str element (default 20)
 
@@ -60,7 +60,7 @@ class DynamicTypedDeque(BaseDeque):
 
         Examples:
             d = DynamicTypedDeque(int)          # empty
-            d = DynamicTypedDeque(int, 1, 2, 3) # fron=1, rear=3
+            d = DynamicTypedDeque(int, 1, 2, 3) # front=1, rear=3
         """
         self._dtype: type = dtype
         self._data: DynamicTypedArray = DynamicTypedArray(
@@ -80,7 +80,7 @@ class DynamicTypedDeque(BaseDeque):
         Shifts all existing elements one position to the right first.
         Triggers resize if underlying array is at capacity.
 
-        Time complexity: O(1) amortized - O(n) on resize
+        Time complexity: O(n) amortized - O(n) on resize
 
         Raises:
             TypeError: if value is not dtype.
@@ -89,7 +89,7 @@ class DynamicTypedDeque(BaseDeque):
 
     def enqueue_rear(self, value: Any) -> None:
         """
-        Adds value to the front of the deque.
+        Adds value to the rear of the deque.
         Also triggers resize if underlying array is at capacity.
 
         Time complexity: O(1) amortized- O(n) on resize.
@@ -115,7 +115,7 @@ class DynamicTypedDeque(BaseDeque):
 
     def dequeue_rear(self) -> Any:
         """
-        Removes and returns the value from the front of the deque.
+        Removes and returns the value from the rear of the deque.
 
         Time complexity: O(1)
 

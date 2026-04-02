@@ -1,4 +1,4 @@
-from typing import Any, Iterator, Optional
+from typing import Any, Iterator
 
 from ....._base import BaseDeque
 from .....arrays import DynamicUniversalArray
@@ -11,7 +11,7 @@ class DynamicUniversalDeque(BaseDeque):
     Accepts any Python type - no dtype restriction.
     Follows FIFO (First In, First Out) principle.
 
-    Growth formula (delegated to DynacmiUniversalArray - same as CPython list):
+    Growth formula (delegated to DynamicUniversalArray - same as CPython list):
         new_capacity = capacity + (capacity >> 3) + (3 if capacity < 9 else 6)
 
     Naive implementation - front is always at index 0.
@@ -36,14 +36,14 @@ class DynamicUniversalDeque(BaseDeque):
         __eq__:         O(n)
     """
 
-    __slots__ = "_data"
+    __slots__ = ("_data",)
 
     def __init__(self, *args) -> None:
         """
         Creates a dynamic universal deque with optional initial elements.
 
         Args:
-            *args: optional initial elements, added left to ritgh (first = front).
+            *args: optional initial elements, added left to right (first = front).
 
         Examples:
             d = DynamicUniversalDeque()             # empty
@@ -59,7 +59,7 @@ class DynamicUniversalDeque(BaseDeque):
 
     def enqueue_front(self, value: Any) -> None:
         """
-        Adds value o th rear of the deque.
+        Adds value to the front of the deque.
         Shilfts all elements one position to the right first.
         Triggers resize if underlying array is at capacity.
 
@@ -72,7 +72,7 @@ class DynamicUniversalDeque(BaseDeque):
         Adds value to the rear of the deque.
         Triggers resize if underlying array is at capacity.
 
-        Time complexity: O(1) amortized - O(n) or resize
+        Time complexity: O(1) amortized - O(n) on resize
         """
         self._data.append(value)
 
@@ -84,7 +84,7 @@ class DynamicUniversalDeque(BaseDeque):
         Time complexity: O(n)
 
         Raises:
-            IndexErrpr: if deque is empty.
+            IndexError: if deque is empty.
         """
         if self.is_empty():
             raise IndexError("Dequeue from an empty deque")
@@ -141,7 +141,7 @@ class DynamicUniversalDeque(BaseDeque):
         """
         Returns a shallow copy with same elements.
 
-        Time complexity: o(n)
+        Time complexity: O(n)
         """
         new_deque = DynamicUniversalDeque()
         for i in range(len(self._data)):
