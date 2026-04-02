@@ -225,7 +225,7 @@ class DynamicTypedDeque(BaseDeque):
 
     def __repr__(self) -> str:
         """
-        Returns string representation of the queue.
+        Returns string representation of the deque.
         Format: DynamicTypedDeque(int, size=3)[1, 2, 3]
                                             front    rear
 
