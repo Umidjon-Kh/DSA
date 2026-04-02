@@ -9,7 +9,7 @@ class StaticUniversalDeque(BaseBoundedDeque):
     """
     A fixed-capacity deque backed by StaticUniversalArray.
     Accepts any Python type - no dtype restriction.
-    Follows FIFO (first In, First Out) principle.
+    Follows FIFO (First In, First Out) principle.
 
     Naive implementation - front is always at index 0.
     enqueue_front and dequeue_front require shifting all elements.
@@ -44,7 +44,7 @@ class StaticUniversalDeque(BaseBoundedDeque):
 
         Args:
             capacity: Maximum number of elements the deque can hold.
-            *args:   Optioan initial elements, added left to right (first = front)
+            *args:   Optional initial elements, added left to right (first = front).
 
         Raises:
             TypeError:     if capacity is not an int.
@@ -100,7 +100,7 @@ class StaticUniversalDeque(BaseBoundedDeque):
     def dequeue_front(self) -> Any:
         """
         Removes and returns the value from the front of the deque.
-        Shifts all reamaining elements one position to the left.
+        Shifts all remaining elements one position to the left.
 
         Time complexity: O(n)
 
@@ -173,12 +173,12 @@ class StaticUniversalDeque(BaseBoundedDeque):
 
         Time complexity: O(n)
         """
-        new_queue = StaticUniversalDeque(capacity=len(self._data))
+        new_deque = StaticUniversalDeque(capacity=len(self._data))
 
         for i in range(self._rear):
-            new_queue._data[i] = self._data[i]
-        new_queue._rear = self._rear
-        return new_queue
+            new_deque._data[i] = self._data[i]
+        new_deque._rear = self._rear
+        return new_deque
 
     # -------------------------------------------------------------------------
     # State checks
@@ -230,7 +230,7 @@ class StaticUniversalDeque(BaseBoundedDeque):
         return False
 
     def __eq__(self, other: object) -> bool:
-        """Returns True if both strcutures data and rear attrs are equal."""
+        """Returns True if both structures data and rear attrs are equal."""
         if not isinstance(other, StaticUniversalDeque):
             return NotImplemented
         if self._rear != other._rear:

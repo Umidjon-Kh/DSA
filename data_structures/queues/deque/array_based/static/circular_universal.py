@@ -51,7 +51,7 @@ class StaticUniversalCircularDeque(BaseBoundedDeque):
         Creates a fixed-capacity circular universal deque with optional initial elements.
 
         Args:
-            *args:    Optioan initial elements, added left to right (first = front).
+            *args:    Optional initial elements, added left to right (first = front).
             capacity: Maximum number of elements the deque can hold.
 
         Raises:
@@ -80,7 +80,7 @@ class StaticUniversalCircularDeque(BaseBoundedDeque):
 
     def enqueue_front(self, value: Any) -> None:
         """
-        Adds value to the frint of the deque,
+        Adds value to the front of the deque,
         _front moves backward: (_front - 1) % capacity.
 
         Time complexity: O(1)
@@ -193,7 +193,7 @@ class StaticUniversalCircularDeque(BaseBoundedDeque):
         """
         new_deque = StaticUniversalCircularDeque(capacity=len(self._data))
         for i in range(self._size):
-            index = (self._front + 1) % len(self._data)
+            index = (self._front + i) % len(self._data)
             new_deque._data[i] = self._data[index]
         new_deque._rear = self._size % len(self._data)
         new_deque._size = self._size
@@ -261,7 +261,7 @@ class StaticUniversalCircularDeque(BaseBoundedDeque):
 
     def __repr__(self) -> str:
         """
-        Returns string representation of the queue.
+        Returns string representation of the deque.
         Format: StaticUniversalCircularDeque(size=3, capacity=5)[1, 2, 3]
                                                            front  rear
 
