@@ -36,7 +36,7 @@ class DynamicUniversalArray(BaseDynamicArray):
         _resize:      O(n)
     """
 
-    __slots__ = ("_data", "_capacity", "_size")
+    __slots__ = ("_data", "_size")
 
     def __init__(self, *args) -> None:
         """

@@ -53,7 +53,7 @@ class StaticTypedArray(BaseArray):
         __repr__:     O(n)
     """
 
-    __slots__ = ("_data", "_capacity", "_dtype", "_str_length")
+    __slots__ = ("_data", "_dtype", "_str_length")
 
     def __init__(
         self,

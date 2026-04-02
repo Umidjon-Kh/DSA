@@ -20,7 +20,7 @@ class DynamicTypedStack(BaseStack):
         push:         O(1) amortized — O(n) on resize
         pop:          O(1)
         peek:         O(1)
-        clear:        O(1)
+        clear:        O(n)
         copy:         O(n)
         is_empty:     O(1)
         __len__:      O(1)

@@ -38,7 +38,7 @@ class DynamicTypedArray(BaseDynamicArray):
         _resize:      O(n)
     """
 
-    __slots__ = ("_data", "_capacity", "_size", "_dtype", "_str_length")
+    __slots__ = ("_data", "_size", "_dtype", "_str_length")
 
     def __init__(self, dtype: type, *args, str_length: Optional[int] = None) -> None:
         """

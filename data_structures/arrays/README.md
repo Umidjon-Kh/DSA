@@ -110,7 +110,7 @@ new_capacity = capacity + (capacity >> 3) + (3 if capacity < 9 else 6)
 | Operation      | Static | Dynamic        |
 | -------------- | ------ | -------------- |
 | `copy`         | O(n)   | O(n)           |
-| `clear`        | O(n)   | O(n) / O(1)\*  |
+| `clear`        | O(n)   | O(n)           |
 | `append`       | —      | O(1) amortized |
 | `insert`       | —      | O(n)           |
 | `remove`       | —      | O(n)           |

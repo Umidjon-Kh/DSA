@@ -33,7 +33,7 @@ class StaticUniversalArray(BaseArray):
         __repr__:     O(n)
     """
 
-    __slots__ = ("_data", "_capacity")
+    __slots__ = ("_data",)
 
     def __init__(self, *args, capacity: Optional[int] = None) -> None:
         """
@@ -73,7 +73,7 @@ class StaticUniversalArray(BaseArray):
     # Public interface
     def clear(self) -> None:
         """
-        Resets all elements to their dtype default value.
+        Resets all elements to None.
         Time complexity: O(n)
         """
         for index in range(self._capacity):

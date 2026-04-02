@@ -142,7 +142,7 @@ class DynamicUniversalStack(BaseStack):
             yield self._data[i]
 
     def __eq__(self, other: object) -> bool:
-        """Returns True if both struture data attrs are equal."""
+        """Returns True if both structure data attrs are equal."""
         if not isinstance(other, DynamicUniversalStack):
             return NotImplemented
         # I removed other conditions

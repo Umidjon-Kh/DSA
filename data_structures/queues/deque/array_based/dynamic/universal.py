@@ -63,7 +63,7 @@ class DynamicUniversalDeque(BaseDeque):
         Shilfts all elements one position to the right first.
         Triggers resize if underlying array is at capacity.
 
-        Time complexity: O(1) amortized - O(n) on resize
+        Time complexity: O(n) amortized - O(n) on resize
         """
         self._data.insert(0, value)
 

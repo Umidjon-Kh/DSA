@@ -124,6 +124,7 @@ class BaseHeap(BaseCollection):
         """
         ...
 
+    @abstractmethod
     def ordered(self) -> Iterator[Any]:
         """
         Yields all elements in sorted order from smallest to largest.
