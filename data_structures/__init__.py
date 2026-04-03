@@ -23,6 +23,25 @@ from .linked_lists import (
     SinglyLinkedList,
 )
 from .nodes import BiLinearNode, LinearNode, TreeNode
+from .queues import (
+    CircularNodeDeque,
+    DynamicTypedDeque,
+    DynamicTypedQueue,
+    DynamicUniversalDeque,
+    DynamicUniversalQueue,
+    MaxPriorityQueue,
+    MinPriorityQueue,
+    NodeDeque,
+    NodeQueue,
+    StaticTypedCircularDeque,
+    StaticTypedCircularQueue,
+    StaticTypedDeque,
+    StaticTypedQueue,
+    StaticUniversalCircularDeque,
+    StaticUniversalCircularQueue,
+    StaticUniversalDeque,
+    StaticUniversalQueue,
+)
 from .stacks import (
     DynamicTypedMinStack,
     DynamicTypedStack,
@@ -73,4 +92,22 @@ __all__ = [
     "StaticTypedMinHeap",
     "StaticUniversalMaxHeap",
     "StaticUniversalMinHeap",
+    # Queues
+    "StaticTypedCircularDeque",
+    "StaticTypedCircularQueue",
+    "StaticTypedDeque",
+    "StaticTypedQueue",
+    "StaticUniversalCircularDeque",
+    "StaticUniversalCircularQueue",
+    "StaticUniversalDeque",
+    "StaticUniversalQueue",
+    "DynamicTypedDeque",
+    "DynamicTypedQueue",
+    "DynamicUniversalDeque",
+    "DynamicUniversalQueue",
+    "NodeDeque",
+    "CircularNodeDeque",
+    "MaxPriorityQueue",
+    "MinPriorityQueue",
+    "NodeQueue",
 ]
