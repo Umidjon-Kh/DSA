@@ -7,6 +7,7 @@ from .base_queue import (
     BaseBoundedDeque,
     BaseBoundedQueue,
     BaseDeque,
+    BasePriorityQueue,
     BaseQueue,
 )
 from .base_stack import BaseBoundedStack, BaseStack
@@ -32,4 +33,5 @@ __all__ = [
     "BaseBoundedQueue",
     "BaseQueue",
     "BaseDeque",
+    "BasePriorityQueue",
 ]

@@ -184,3 +184,64 @@ class BaseBoundedDeque(BaseDeque):
     def is_full(self) -> bool:
         """Returns True if size == capacity."""
         ...
+
+
+class BasePriorityQueue(BaseCollection):
+    """
+    Abstract base class for all priority queues.
+
+    Separate from BaseQueue because priority queues have a fundamentally
+    different enqueue signature — they require both a value and a numeric
+    priority. Inheriting from BaseQueue would force an incompatible
+    override of enqueue(value) → enqueue(value, priority).
+
+    Required to implement (in addition to BaseCollection):
+        enqueue, dequeue, peek, peek_priority, is_empty
+    """
+
+    __slots__ = ()
+
+    @abstractmethod
+    def enqueue(self, value: Any, priority: int | float) -> None:
+        """
+        Adds value to the queue with a given priority.
+
+        Raises:
+            TypeError: If priority is not int or float.
+        """
+        ...
+
+    @abstractmethod
+    def dequeue(self) -> Any:
+        """
+        Removes and returns the value with the highest/lowest priority.
+
+        Raises:
+            IndexError: If the queue is empty.
+        """
+        ...
+
+    @abstractmethod
+    def peek(self) -> Any:
+        """
+        Returns the front value without removing it.
+
+        Raises:
+            IndexError: If the queue is empty.
+        """
+        ...
+
+    @abstractmethod
+    def peek_priority(self) -> int | float:
+        """
+        Returns the priority number of the front element without removing it.
+
+        Raises:
+            IndexError: If the queue is empty.
+        """
+        ...
+
+    @abstractmethod
+    def is_empty(self) -> bool:
+        """Returns True if the queue contains no elements."""
+        ...
