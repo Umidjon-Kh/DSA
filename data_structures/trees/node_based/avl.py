@@ -107,8 +107,6 @@ class AVLTree(BaseTree):
         B.left = A  # type: ignore[union-attr]
         B.parent = A.parent  # type: ignore[union-attr]
         A.parent = B
-        if A.right is not None:
-            A.right.parent = A
         self._update_height(A)
         self._update_height(B)  # type: ignore[union-attr]
         return B  # type: ignore[union-attr]
@@ -135,8 +133,6 @@ class AVLTree(BaseTree):
         B.right = C  # type: ignore[union-attr]
         B.parent = C.parent  # type: ignore[union-attr]
         C.parent = B
-        if C.left is not None:
-            C.left.parent = C
         self._update_height(C)
         self._update_height(B)  # type: ignore[union-attr]
         return B  # type: ignore[union-attr]
