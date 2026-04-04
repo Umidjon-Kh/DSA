@@ -54,6 +54,7 @@ from .stacks import (
     StaticUniversalMinStack,
     StaticUniversalStack,
 )
+from .trees import BST, AVLTree
 
 __all__ = [
     # Nodes
@@ -110,4 +111,7 @@ __all__ = [
     "MaxPriorityQueue",
     "MinPriorityQueue",
     "NodeQueue",
+    # Trees
+    "AVLTree",
+    "BST",
 ]
