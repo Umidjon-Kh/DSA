@@ -6,13 +6,14 @@ from .._base import BaseNode
 class TreeNode(BaseNode):
     """
     A Tree node for use in binary tree based data structures.
-    Stores a value and references to left, right children and parent.
+    Stores a value and references to left, right children and parent and
+    height for structures that need to know about height for Balance Factor.
 
     Used by structures like:
         BinaryTree, BinarySearchTree, AVLTree, RedBlackTree and other tree based structures.
     """
 
-    __slots__ = ("left", "right", "parent")
+    __slots__ = ("left", "right", "parent", "height")
 
     def __init__(self, value: Any) -> None:
         """
@@ -29,6 +30,7 @@ class TreeNode(BaseNode):
         self.left: Optional["TreeNode"] = None
         self.right: Optional["TreeNode"] = None
         self.parent: Optional["TreeNode"] = None
+        self.height: int = 0
 
     def __repr__(self) -> str:
         """
