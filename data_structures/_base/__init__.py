@@ -11,6 +11,7 @@ from .base_queue import (
     BaseQueue,
 )
 from .base_stack import BaseBoundedStack, BaseStack
+from .base_tree import BaseTree
 
 __all__ = [
     # Nodes
@@ -34,4 +35,6 @@ __all__ = [
     "BaseQueue",
     "BaseDeque",
     "BasePriorityQueue",
+    # Tree
+    "BaseTree",
 ]
