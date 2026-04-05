@@ -1,5 +1,6 @@
 from .base_array import BaseArray, BaseDynamicArray
 from .base_collection import BaseCollection
+from .base_hash_map import BaseHashMap, BaseHashSet
 from .base_heap import BaseBoundedHeap, BaseHeap
 from .base_linked_list import BaseLinkedList
 from .base_node import BaseNode
@@ -37,4 +38,7 @@ __all__ = [
     "BasePriorityQueue",
     # Tree
     "BaseTree",
+    # Base Hash Maps
+    "BaseHashMap",
+    "BaseHashSet",
 ]
