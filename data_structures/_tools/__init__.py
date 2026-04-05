@@ -1,3 +1,4 @@
+from .hash_function import hash_key, next_prime
 from .validators import (
     validate_capacity,
     validate_index,
@@ -12,4 +13,6 @@ __all__ = [
     "validate_insert_index",
     "validate_key_function",
     "validate_value_type",
+    "hash_key",
+    "next_prime",
 ]
