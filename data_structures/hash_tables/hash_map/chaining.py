@@ -35,6 +35,9 @@ class ChainingHashMap(BaseHashMap):
         copy:         O(n)
         deepcopy:     O(n)
         is_empty:     O(1)
+        __getitem__:  O(1) avarage
+        __setitem__:  O(1) avarage
+        __delitem__:  O(1) avarage
         __len__:      O(1)
         __bool__:     O(1)
         __iter__:     O(n) — yields values
