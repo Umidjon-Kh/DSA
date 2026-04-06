@@ -133,6 +133,30 @@ class BaseHashMap(BaseCollection):
         ...
 
     @abstractmethod
+    def __getitem__(self, key: Any) -> None:
+        """
+        Returns value for key.
+        Format: map["name"]
+        """
+        ...
+
+    @abstractmethod
+    def __setitem__(self, key: Any, value: Any) -> None:
+        """
+        Inserts or updates key-value pair.
+        Format: map["name"] = "Umidjon"
+        """
+        ...
+
+    @abstractmethod
+    def __delitem__(self, key: Any) -> None:
+        """
+        Removes item by received key from map.
+        Format: del map["key"]
+        """
+        ...
+
+    @abstractmethod
     def _hash(self, key: Any) -> int:
         """
         Computes the bucket index for given key.

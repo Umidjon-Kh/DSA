@@ -339,6 +339,34 @@ class ChainingHashMap(BaseHashMap):
         """Returns True if the map is not empty. O(1)"""
         return self._size > 0
 
+    def __getitem__(self, key: Any) -> Any:
+        """
+        Returns value for key.
+        Format: map["name"]
+
+        Raises:
+            KeyError: If key not found.
+        """
+        node = self._get_node(key)
+        if node is None:
+            raise KeyError(key)
+        return node.value[1]
+
+    def __setitem__(self, key: Any, value: Any) -> None:
+        """
+        Inserts or updates key-value pair.
+        Format: map["name"] = "Umidjon"
+        """
+        self.insert(key, value)
+
+    def __delitem__(self, key: Any) -> None:
+        """
+        Removes item by received key from map.
+        Format: del map["key"]
+        If key does not exits not raises any error just ignores it.
+        """
+        self.delete(key)
+
     def __iter__(self) -> Iterator[Any]:
         """
         Yields values in bucket order.
