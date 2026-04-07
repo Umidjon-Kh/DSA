@@ -325,13 +325,6 @@ class ChainingHashMap(BaseHashMap):
         return new_map
 
     # -------------------------------------------------------------------------
-    # State checks
-
-    def is_empty(self) -> bool:
-        """Returns True if the map contains no pairs. O(1)"""
-        return self._size == 0
-
-    # -------------------------------------------------------------------------
     # Dunder methods
 
     def __len__(self) -> int:
