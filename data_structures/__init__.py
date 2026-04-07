@@ -1,15 +1,14 @@
-from hash_tables import (
-    ChainingHashMap,
-    ChainingHashSet,
-    OpenAddressingHashMap,
-    OpenAddressingHashSet,
-)
-
 from .arrays import (
     DynamicTypedArray,
     DynamicUniversalArray,
     StaticTypedArray,
     StaticUniversalArray,
+)
+from .hash_tables import (
+    ChainingHashMap,
+    ChainingHashSet,
+    OpenAddressingHashMap,
+    OpenAddressingHashSet,
 )
 from .heaps import (
     DynamicTypedMaxHeap,
