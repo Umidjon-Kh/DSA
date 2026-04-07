@@ -31,7 +31,6 @@ class ChainingHashSet(BaseHashSet):
         _resize:      O(n)
         clear:        O(1)
         copy:         O(n)
-        is_empty:     O(1)
         __delitem__:  O(1) average
         __len__:      O(1)
         __bool__:     O(1)
@@ -259,7 +258,7 @@ class ChainingHashSet(BaseHashSet):
     def __delitem__(self, key: Any) -> None:
         """
         Removes key from the set.
-        Format: del s["name"]
+        Format: del set["name"]
 
         If key does not exist — does nothing.
 

@@ -36,7 +36,6 @@ class OpenAddressingHashMap(BaseHashMap):
         clear:        O(1)
         copy:         O(n)
         deepcopy:     O(n)
-        is_empty:     O(1)
         __getitem__:  O(1) avarage
         __setitem__:  O(1) avarage
         __delitem__:  O(1) avarage
@@ -101,9 +100,9 @@ class OpenAddressingHashMap(BaseHashMap):
             found — True if key exists, False otherwise
 
         Traversal rules:
-            None     → key does not exist, this slot is free for insert
-            _DELETED → skip (tombstone), continue probing
-            (k, v)   → compare k with key, stop if match
+            None     -> key does not exist, this slot is free for insert
+            _DELETED -> skip (tombstone), continue probing
+            (k, v)   -> compare k with key, stop if match
 
         Tracks the first _DELETED slot seen — if key is not found,
         returns that slot index so insert can reuse it.
@@ -293,11 +292,11 @@ class OpenAddressingHashMap(BaseHashMap):
         """
         Recursively deep copies a value.
 
-        OpenAddressingHashMap → deepcopy()
-        list                  → new list with deep copied elements
-        dict                  → new dict with deep copied values
-        tuple                 → new tuple with deep copied elements
-        other                 → returned as-is (immutable)
+        OpenAddressingHashMap -> deepcopy()
+        list                  -> new list with deep copied elements
+        dict                  -> new dict with deep copied values
+        tuple                 -> new tuple with deep copied elements
+        other                 -> returned as-is (immutable)
 
         Time complexity: O(n) where n is total nested size
         """
