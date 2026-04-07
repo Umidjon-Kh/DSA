@@ -1,3 +1,10 @@
+from hash_tables import (
+    ChainingHashMap,
+    ChainingHashSet,
+    OpenAddressingHashMap,
+    OpenAddressingHashSet,
+)
+
 from .arrays import (
     DynamicTypedArray,
     DynamicUniversalArray,
@@ -114,4 +121,9 @@ __all__ = [
     # Trees
     "AVLTree",
     "BST",
+    # Hash Tables
+    "ChainingHashMap",
+    "ChainingHashSet",
+    "OpenAddressingHashMap",
+    "OpenAddressingHashSet",
 ]
