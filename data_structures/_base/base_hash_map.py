@@ -133,7 +133,7 @@ class BaseHashMap(BaseCollection):
         ...
 
     @abstractmethod
-    def __getitem__(self, key: Any) -> None:
+    def __getitem__(self, key: Any) -> Any:
         """
         Returns value for key.
         Format: map["name"]

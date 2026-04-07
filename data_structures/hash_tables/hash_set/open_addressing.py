@@ -113,8 +113,9 @@ class OpenAddressingHashSet(BaseHashSet):
             slot = self._buckets[index]
 
             if slot is None:
-                if first_deleted is None:
-                    first_deleted = index
+                if first_deleted is not None:
+                    return first_deleted, False
+                return index, False
 
             if slot is self._DELETED:
                 if first_deleted is None:

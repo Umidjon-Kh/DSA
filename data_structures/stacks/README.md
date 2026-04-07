@@ -274,7 +274,7 @@ s.is_full() # → False
 | `push`         | O(1) | O(1) amortized | O(1) amortized | O(1)     | O(1)      |
 | `pop`          | O(1) | O(1)           | O(1)           | O(1)     | O(1)      |
 | `peek`         | O(1) | O(1)           | O(1)           | O(1)     | O(1)      |
-| `clear`        | O(1) | O(1)           | O(n)\*         | O(n)\*   | O(n)\*    |
+| `clear`        | O(n) | O(n)           | O(n)\*         | O(n)\*   | O(n)\*    |
 | `copy`         | O(n) | O(n)           | O(n)           | O(n)     | O(n)      |
 | `is_empty`     | O(1) | O(1)           | O(1)           | O(1)     | O(1)      |
 | `is_full`      | —    | —              | —              | O(1)     | O(1)      |
@@ -294,7 +294,7 @@ s.is_full() # → False
 
 \* Typed and static `clear()` reset every slot to the dtype default to keep the
 underlying `ctypes` buffer in a consistent state — hence O(n).
-`DynamicUniversalStack.clear()` is O(1): only the size counter is reset.
+`DynamicUniversalStack.clear()` is O(n): only the size counter is reset.
 
 > All stacks yield elements **top to bottom** in `__iter__` and **bottom to top** in `__reversed__`.
 

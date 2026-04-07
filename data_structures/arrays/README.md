@@ -125,7 +125,7 @@ new_capacity = capacity + (capacity >> 3) + (3 if capacity < 9 else 6)
 | `__eq__`       | O(n)   | O(n)           |
 | `__repr__`     | O(n)   | O(n)           |
 
-\* `DynamicUniversalArray.clear()` is O(1) — only resets the size counter.
+\* `DynamicUniversalArray.clear()` is O(n) — only resets the size counter.
 `DynamicTypedArray.clear()` and `StaticTypedArray.clear()` are O(n) — they also
 reset each slot to the dtype default so the buffer stays consistent.
 
