@@ -89,7 +89,7 @@ class OpenAddressingHashSet(BaseHashSet):
 
         Returns (index, found) where:
             index - the slot where key was found or should be inserted.
-            found - True if key is exists, False otherwise
+            found - True if key exists, False otherwise
 
         Traversal rules:
             None    -> key does not exist, this slot is free for insert
@@ -103,7 +103,7 @@ class OpenAddressingHashSet(BaseHashSet):
         the table contains no None slots (only possible without resize,
         kept as a safety guard).
 
-        Time complexity: O(1) avarage
+        Time complexity: O(1) average
         """
         index = self._hash(key)
         first_deleted: Optional[int] = None
@@ -121,7 +121,7 @@ class OpenAddressingHashSet(BaseHashSet):
                 if first_deleted is None:
                     first_deleted = index
 
-            elif slot[0] == key:
+            elif slot == key:
                 return index, True
 
             step += 1
@@ -166,9 +166,9 @@ class OpenAddressingHashSet(BaseHashSet):
         """
         Adds key to the set.
 
-        If key is exists - does nothing.
+        If key exists - does nothing.
         if key does not exist - places key at the probed slot.
-        Triggers _resize if load favtor is exceeds 0.7 before insert.
+        Triggers _resize if load factor is exceeds 0.7 before insert.
 
         Time complexity: O(1) amortized
 
@@ -196,7 +196,7 @@ class OpenAddressingHashSet(BaseHashSet):
 
         Tombstones are cleaned up automatically on the next _resize.
 
-        Time complexity: O(1) avarage
+        Time complexity: O(1) average
         """
         index, found = self._probe(key)
         if not found:
@@ -208,7 +208,7 @@ class OpenAddressingHashSet(BaseHashSet):
         """
         Returns True if key exists in the set.
 
-        Time complexity: O(1) avarage
+        Time complexity: O(1) average
         """
         _, found = self._probe(key)
         return found
@@ -275,7 +275,7 @@ class OpenAddressingHashSet(BaseHashSet):
             yield slot
 
     def __contains__(self, key: Any) -> bool:
-        """Returns True if key is exists in the set. O(1) avarage"""
+        """Returns True if key exists in the set. O(1) avarage"""
         return self.contains(key)
 
     def __delitem__(self, key: Any) -> None:
@@ -285,7 +285,7 @@ class OpenAddressingHashSet(BaseHashSet):
 
         If key does not exist - does nothing.
 
-        Time complexity: O(1) avarage
+        Time complexity: O(1) average
         """
         self.remove(key)
 
@@ -309,9 +309,9 @@ class OpenAddressingHashSet(BaseHashSet):
     def __repr__(self) -> str:
         """
         Returns string representation of the set.
-        Format: OpenAddressingHashMap(size=2){"name", "age", 25}
+        Format: OpenAddressingHashSet(size=2){"name", "age", 25}
 
         Time complexity: O(n)
         """
         keys = ", ".join(repr(key) for key in self)
-        return f"OpenAddressingHashMap(size={self._size}" + "{" + keys + "}"
+        return f"OpenAddressingHashSet(size={self._size})" + "{" + keys + "}"
