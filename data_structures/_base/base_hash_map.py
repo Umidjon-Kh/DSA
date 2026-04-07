@@ -238,7 +238,7 @@ class BaseHashSet(BaseCollection):
         ...
 
     @abstractmethod
-    def resize(self) -> None:
+    def _resize(self) -> None:
         """
         Grows the internal bucket array and rehashes all existing keys.
 
@@ -267,5 +267,13 @@ class BaseHashSet(BaseCollection):
         load_factor = number of elements / number of buckets
 
         Time complexity: O(1)
+        """
+        ...
+
+    @abstractmethod
+    def __delitem__(self, key: Any) -> None:
+        """
+        Removes item by received key from map.
+        Format: del map["key"]
         """
         ...
