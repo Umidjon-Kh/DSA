@@ -19,7 +19,7 @@ Functions:
 
 from os import name, system
 from random import choice, randint
-from time import sleep
+from time import perf_counter, sleep
 from typing import Callable, Dict, List, Optional
 
 # ─────────────────────────────────────────────
@@ -183,8 +183,10 @@ if __name__ == "__main__":
     original = copy.deepcopy(maze)
 
     callback = make_visual_callback(delay=0.01)
-    counts = dfs_components_counter(maze, visual_callback=callback)
 
+    start = perf_counter()
+    counts = dfs_components_counter(maze, visual_callback=callback)
+    total_time = perf_counter() - start
     # Final results
     draw_matrix(maze)
     print("=" * 36)
@@ -199,5 +201,6 @@ if __name__ == "__main__":
             f"  {emoji}  color {color_id}  →  {n:>3} component{'s' if n != 1 else ''}"
         )
     print("─" * 36)
-    print(f"  Total components : {total}")
+    print(f"  Total components : {total}.")
+    print(f"Time: {total_time:.6f} seconds.")
     print("=" * 36)

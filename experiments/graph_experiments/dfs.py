@@ -15,7 +15,7 @@ Functions:
 
 from os import name, system
 from random import randint, sample
-from time import sleep
+from time import perf_counter, sleep
 from typing import Callable, List, Optional, Tuple
 
 # ---------------------------------------------
@@ -195,11 +195,14 @@ if __name__ == "__main__":
         start_pos, target_pos = sample(free_cells, 2)
         callback = make_visual_callback(maze, delay=0.08)
 
+        start = perf_counter()
         found, path_list, path_str = dfs_path_finder(
             maze, start_pos, target_pos, callback
         )
+        total = perf_counter() - start
 
-        print(f"Path found: {found}")
+        print(f"Path found: {found}.")
+        print(f"Time: {total:.6f} seconds.")
         # if found:
         #     print(f"Length    : {len(path_list)} steps")
         #     print(f"Path      : {path_str}")
