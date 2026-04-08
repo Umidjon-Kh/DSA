@@ -1,234 +1,205 @@
 """
-DFS Path Finder with Live Console Visualization
-================================================
-
-This module implements a recursive Depth-First Search algorithm to determine
-if a path exists from start cell to and end cell in grid-based maze.
-
-Walls (blocked cells) are represented by 1, free cells by 0.
-The algorithm marks visited cells and shows the exploration step by step.
+DFS Path Finder (Depth-Finder Search)
+=====================================
+Iterative DFS that finds a path from start to target in a grid-based maze.
+Walls are represented by 1, free cells by 0.
 
 Functions:
     in_bound(x, y, matrix) -> bool
-    dfs_visual(x, y, end, used, matrix, visual_callback) -> bool
-    has_path_visual(matrix, used, cur_x, cur_y) -> None
-    make_visual_callback(matrix, delay) -> callable
+    reconstruct_path(parent, end) -> tuple[list, str]
+    dfs_path_finder(matrix, start, target, callback) -> tuple[bool, list, str]
+    draw_matrix(matrix, visited, current, target) -> None
+    make_visual_callback(matrix, delay) -> Callable
+    add_random_walls(maze, min_walls, max_walls) -> None
 """
 
-import os
-import random
-import time
-from typing import Callable, List, Tuple
+from os import name, system
+from random import randint, sample
+from time import sleep
+from typing import Callable, List, Optional, Tuple
+
+# ---------------------------------------------
+#  Helpers
+# ---------------------------------------------
 
 
 def in_bound(x: int, y: int, matrix: List[List[int]]) -> bool:
-    """
-    Checks if coordinates (x, y) are inside the matrix bounds.
-    Returns:
-        True if inside bounds, False otherwise.
-    """
+    """Returns True if (x, y) is inside the matrix bounds."""
     return 0 <= x < len(matrix) and 0 <= y < len(matrix[x])
 
 
-def dfs_visual(
-    x: int,
-    y: int,
-    target: Tuple[int, int],
-    used: List[List[bool]],
-    matrix: List[List[int]],
-    visual_callback: Callable[[int, int, List[List[bool]]], None],
-) -> bool:
+def reconstruct_path(
+    parent: dict,
+    end: Tuple[int, int],
+) -> Tuple[List[Tuple[int, int]], str]:
     """
-    Recursive DFS that marks visited cells and calls a visualization
-    function after each step.
-
-    Args:
-        x: current row index
-        y: current column index
-        end: target coordinates (row, col)
-        used: 2D boolean matrix marking already visited cells
-        matrix: the maze (0 = free, 1 = wall)
-        visual_callback: function called after each cell is visited.
-                         It receives (x, y, used).
+    Walks the parent dict from end back to start.
 
     Returns:
-        True if a path from (x, y) to end is found, False otherwise.
+        path_list: [(r0, c0), (r1, c1), ... (rN, cN)]
+        path_str: "(r0, c0) -> (r1, c1) -> ... -> (rN, cN)"
     """
-    # ---------------------------------------------------
-    # Stop if out of bound, on a wall, or already visited
-    if not in_bound(x, y, matrix):
-        return False
-
-    elif matrix[x][y] == 1:
-        return False
-
-    # Visualising
-    visual_callback((x, y), target, used)
-
-    if used[x][y] is True:
-        return False
-    # ---------------------------------------------------
-
-    # Mark current cell as visited
-    used[x][y] = True
-
-    # Reached the target?
-    if (x, y) == target:
-        return True
-
-    # Explore neighbors in order: up, right, down, left
-    return (
-        dfs_visual(x - 1, y, target, used, matrix, visual_callback)  # up
-        or dfs_visual(x, y + 1, target, used, matrix, visual_callback)  # right
-        or dfs_visual(x + 1, y, target, used, matrix, visual_callback)  # down
-        or dfs_visual(x, y - 1, target, used, matrix, visual_callback)  # left
-    )
+    path, node = [], end
+    while node is not None:
+        path.append(node)
+        node = parent[node]
+    path.reverse()
+    path_str = " -> ".join(f"{r},{c}" for r, c in path)
+    return path, path_str
 
 
-def has_path_visual(
+# ----------------------------------------------------
+#  Core Algorithms
+# ----------------------------------------------------
+
+
+def dfs_path_finder(
     matrix: List[List[int]],
     start: Tuple[int, int],
     target: Tuple[int, int],
-    visual_callback: Callable[[int, int, List[List[bool]]], None],
-) -> bool:
+    visual_callback: Optional[Callable] = None,
+) -> Tuple[bool, List[Tuple[int, int]], str]:
     """
-    Initialise the used matrix and start the recursive DFS.
+    Iterative DFS with parent-dict path reconstruction.
 
     Args:
-        matrix: the maze (0 = free, 1 == wall)
-        start: (row, col) of the starting cell
-        end: (row, col) of the target cell
-        visaul_callback: function called after each visited cell.
+        matrix: 2D maze (0 = free, 1 = wall)
+        start: (row, col) starting cell
+        target: (row, col) target cell
+        visual_callback: Optional fn(current, target, visited) for live display
 
     Returns:
-        True if a path exists, False otherwise.
+        found: True if path exists
+        path_list: list of (row, col) from start to target (empty if not found)
+        path_str: human-readable string, e.g. "(0, 0) -> (0, 1) -> ..."
     """
-    # Create a matrix of the same size, filled with False (not visited)
-    used = [[False for _ in range(len(row))] for row in matrix]
-    return dfs_visual(start[0], start[1], target, used, matrix, visual_callback)
+
+    def _cb(current):
+        if visual_callback:
+            visual_callback(current, target, visited)
+
+    visited = [[False] * len(row) for row in matrix]
+    parent: dict[Tuple[int, int], Optional[Tuple[int, int]]] = {start: None}
+
+    stack = [start]
+
+    while stack:
+        x, y = stack.pop()
+        visited[x][y] = True
+        _cb((x, y))
+
+        if (x, y) == target:
+            path_list, path_str = reconstruct_path(parent, target)
+            return True, path_list, path_str
+
+        for dx, dy in [(-1, 0), (1, 0), (0, 1), (0, -1)]:  # up down right left
+            nx, ny = x + dx, y + dy
+            if in_bound(nx, ny, matrix) and matrix[nx][ny] == 0 and not visited[nx][ny]:
+                parent[(nx, ny)] = (x, y)
+                stack.append((nx, ny))
+
+    return False, [], ""
+
+
+# ─────────────────────────────────────────────
+#  Visualization
+# ─────────────────────────────────────────────
 
 
 def draw_matrix(
     matrix: List[List[int]],
-    used: List[List[bool]],
+    visited: List[List[bool]],
     current: Tuple[int, int],
     target: Tuple[int, int],
 ) -> None:
     """
-    Clears the console and draw the current state of the maze.
-
-    Emojis to render it more beatiful and user friendly:
+    Clears the console and redraws tha maze state.
+    Emojis to use:
         🔴, 🟠, 🟡, 🟢, 🔵, 🟣, 🟤, ⚫, ⚪
         🟥, 🟧, 🟨, 🟩, 🟦, 🟪, 🟫, ⬛, ⬜.
-    You can use it to set icon for:
-        walls, free cell, current position and already visited cells
-
-    Args:
-        matrix: the original maze ( 0 = free, 1 = wall)
-        used: boolean matrix marking visited cells
-        current: current position of step
-        end: target posiotion
     """
-    # Clear screen after each traverse step
-    os.system("cls" if os.name == "nt" else "clear")
-
-    for x in range(len(matrix)):
-        row_parts = []
-        for y in range(len(matrix[x])):
-            if (x, y) == current:  # current position
-                if used[x][y]:
-                    row_parts.append("🟡")  # if current position in used
-                else:
-                    row_parts.append("🟢")  # otherwise
-            elif (x, y) == target:  # target posiotion
-                row_parts.append("🔴")
-            elif used[x][y]:  # already visited
-                row_parts.append("🔵")
-            elif matrix[x][y] == 1:  # walls
-                row_parts.append("⬛")
-            else:  # free, not visited
-                row_parts.append("⬜")
-        print(" ".join(row_parts))
+    system("cls" if name == "nt" else "clear")
+    for x, row in enumerate(matrix):
+        parts = []
+        for y in range(len(row)):
+            if (x, y) == current:
+                parts.append("🟢")
+            elif (x, y) == target:
+                parts.append("🔴")
+            elif visited[x][y]:
+                parts.append("🔵")
+            elif matrix[x][y] == 1:
+                parts.append("⬛")
+            else:
+                parts.append("⬜")
+        print(" ".join(parts))
     print()
 
 
 def make_visual_callback(
     matrix: List[List[int]],
-    delay: float = 0.3,
-) -> Callable[[int, int, List[List[bool]]], None]:
-    """
-    Create a callback function that draws the maze after each step.
+    delay: float = 0.05,
+) -> Callable:
+    """Returns a callback closure that draws the maze after each step."""
 
-    Args:
-        matrix: the original maze (used to know wall positions)
-        delay: time in seconds to puase after each redrew
-
-    Returns:
-        A callback function that accepts (x, y, used) and draws the maze.
-    """
-
-    def callback(current, target, used_state: List[List[bool]]) -> None:
-        draw_matrix(matrix, used_state, current, target)
-        time.sleep(delay)
+    def callback(
+        current: Tuple[int, int],
+        target: Tuple[int, int],
+        visited: List[List[bool]],
+    ) -> None:
+        draw_matrix(matrix, visited, current, target)
+        sleep(delay)
 
     return callback
 
 
-# Function that adds random walls in maze
-def add_random_walls(maze, min_walls=1, max_walls=None):
-    """
-    Adds random number of walls in to the maze.
+# ─────────────────────────────────────────────
+#  Maze generation
+# ─────────────────────────────────────────────
 
-    Args:
-        maze: nested list (0 = free, 1 = wall)
-        min_walls: minimal number of walls that need to be in maze (optional)
-        max_walls: max number of walls that need to be in maze (optional)
-                    If None, 20% summary of all cells
-    """
-    rows = len(maze)
-    cols = len(maze[0]) if rows > 0 else 0
-    total_cells = rows * cols
 
-    # Determining max number of walls
+def add_random_walls(
+    maze: List[List[int]],
+    min_walls: int = 1,
+    max_walls: Optional[int] = None,
+) -> None:
+    """Randomly converts free cells to walls (in-place)."""
+    rows, cols = len(maze), len(maze[0]) if maze else 0
     if max_walls is None:
-        max_walls = max(min_walls, int(total_cells * 0.2))
+        max_walls = max(min_walls, int(rows * cols * 0.2))
 
-    free_cells = [(r, c) for r in range(rows) for c in range(cols) if maze[r][c] == 0]
-
-    # Checking for free cells to put walls
-    # if max possible is 0 that means we dont have free slots
-    max_possible = len(free_cells)
-    if max_possible == 0:
+    free = [(r, c) for r in range(rows) for c in range(cols) if maze[r][c] == 0]
+    if not free:
         return
 
-    num_walls = random.randint(min_walls, min(max_walls, max_possible))
-
-    # Putting walls in randomly cells (without retrying)
-    walls_postions = random.sample(free_cells, num_walls)
-    for r, c in walls_postions:
+    count = randint(min_walls, min(max_walls, len(free)))
+    for r, c in sample(free, count):
         maze[r][c] = 1
 
 
-# ---------------- FINAL EXAMPLE USAGE ---------------------
+# ─────────────────────────────────────────────
+#  Entry point
+# ─────────────────────────────────────────────
+
 if __name__ == "__main__":
-    # Define a maze: o = free, 1 = wall
     maze = [[0] * 68 for _ in range(30)]
-    # Adding walls
     add_random_walls(maze, min_walls=330, max_walls=800)
-    # Collecting all free cells to get random start and end positions
+
     free_cells = [
         (x, y) for x, row in enumerate(maze) for y, cell in enumerate(row) if cell == 0
     ]
 
     if len(free_cells) < 2:
-        print("Need more free space to start and an end positions")
+        print("Not enough free cells for start and target.")
     else:
-        start_pos, target_pos = random.sample(free_cells, 2)
-        # Creating a visualization callback with gived delay seconds
-        visual = make_visual_callback(maze, delay=0.05)
+        start_pos, target_pos = sample(free_cells, 2)
+        callback = make_visual_callback(maze, delay=0.08)
 
-        # Run the dfs search with live display
-        path_exists = has_path_visual(maze, start_pos, target_pos, visual)
+        found, path_list, path_str = dfs_path_finder(
+            maze, start_pos, target_pos, callback
+        )
 
-        # After search finishes, print the result
-        print(f"Path found: {path_exists}")
+        print(f"Path found: {found}")
+        # if found:
+        #     print(f"Length    : {len(path_list)} steps")
+        #     print(f"Path      : {path_str}")
