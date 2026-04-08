@@ -82,10 +82,10 @@ def dfs_path_finder(
     parent: dict[Tuple[int, int], Optional[Tuple[int, int]]] = {start: None}
 
     stack = [start]
+    visited[start[0]][start[1]] = True
 
     while stack:
         x, y = stack.pop()
-        visited[x][y] = True
         _cb((x, y))
 
         if (x, y) == target:
@@ -95,6 +95,7 @@ def dfs_path_finder(
         for dx, dy in [(-1, 0), (1, 0), (0, 1), (0, -1)]:  # up down right left
             nx, ny = x + dx, y + dy
             if in_bound(nx, ny, matrix) and matrix[nx][ny] == 0 and not visited[nx][ny]:
+                visited[nx][ny] = True
                 parent[(nx, ny)] = (x, y)
                 stack.append((nx, ny))
 
@@ -193,7 +194,7 @@ if __name__ == "__main__":
         print("Not enough free cells for start and target.")
     else:
         start_pos, target_pos = sample(free_cells, 2)
-        callback = make_visual_callback(maze, delay=0.08)
+        callback = make_visual_callback(maze, delay=0.05)
 
         start = perf_counter()
         found, path_list, path_str = dfs_path_finder(

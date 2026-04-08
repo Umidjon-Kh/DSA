@@ -89,14 +89,10 @@ def dfs_components_counter(
             counts[color] = counts.get(color, 0) + 1
 
             # Flood-fill this component with iterative DFS
+            matrix[start_x][start_y] = VISITED_MARK
             stack = [(start_x, start_y)]
             while stack:
                 x, y = stack.pop()
-                if matrix[x][y] != color:
-                    # Already visited by this fill or different color
-                    continue
-
-                matrix[x][y] = VISITED_MARK  # mark as visited
 
                 if visual_callback:
                     visual_callback(matrix)
@@ -104,6 +100,7 @@ def dfs_components_counter(
                 for dx, dy in [(-1, 0), (1, 0), (0, 1), (0, -1)]:
                     nx, ny = x + dx, y + dy
                     if in_bound(nx, ny, matrix) and matrix[nx][ny] == color:
+                        matrix[nx][ny] = VISITED_MARK
                         stack.append((nx, ny))
 
     return counts
