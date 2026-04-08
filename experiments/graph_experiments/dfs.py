@@ -212,9 +212,9 @@ def add_random_walls(maze, min_walls=1, max_walls=None):
 # ---------------- FINAL EXAMPLE USAGE ---------------------
 if __name__ == "__main__":
     # Define a maze: o = free, 1 = wall
-    maze = [[0] * 40 for _ in range(30)]
+    maze = [[0] * 68 for _ in range(30)]
     # Adding walls
-    add_random_walls(maze, min_walls=230, max_walls=500)
+    add_random_walls(maze, min_walls=330, max_walls=800)
     # Collecting all free cells to get random start and end positions
     free_cells = [
         (x, y) for x, row in enumerate(maze) for y, cell in enumerate(row) if cell == 0
@@ -225,7 +225,7 @@ if __name__ == "__main__":
     else:
         start_pos, target_pos = random.sample(free_cells, 2)
         # Creating a visualization callback with gived delay seconds
-        visual = make_visual_callback(maze, delay=0.01)
+        visual = make_visual_callback(maze, delay=0.05)
 
         # Run the dfs search with live display
         path_exists = has_path_visual(maze, start_pos, target_pos, visual)
