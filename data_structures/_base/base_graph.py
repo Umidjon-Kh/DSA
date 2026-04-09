@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any, List, Tuple
+from typing import Any, List, Optional, Tuple, Union
 
 from .base_collection import BaseCollection
 
@@ -17,15 +17,13 @@ class BaseGraph(BaseCollection):
     controlled by constructor flags — no separate subclasses needed.
 
     Subclasses:
-        AdjacencyListGraph  — dict-based, O(1) add vertex/edge, O(deg) neighbor lookup
+        AdjacencyListGraph   — dict-based, O(1) add vertex/edge, O(deg) neighbor lookup
         AdjacencyMatrixGraph — 2D matrix, O(1) edge lookup, O(V²) space
         EdgeListGraph        — flat list of edges, minimal memory, O(E) lookups
 
     Required to implement (in addition to BaseCollection):
-        add_vertex, remove_vertex,
-        add_edge, remove_edge,
-        get_neighbors, has_edge,
-        get_vertices, is_empty
+        add_vertex, remove_vertex, get_vertices,
+        add_edge, remove_edge, has_edge, get_neighbors
     """
 
     __slots__ = ()
@@ -53,19 +51,36 @@ class BaseGraph(BaseCollection):
         ...
 
     @abstractmethod
-    def add_edge(self, v1: Any, v2: Any, weight: int | float = 1) -> None:
+    def get_vertices(self) -> List[Any]:
+        """
+        Returns a list of all vertices in the graph.
+
+        Time complexity: defined by subclass.
+        """
+        ...
+
+    @abstractmethod
+    def add_edge(
+        self,
+        v1: Any,
+        v2: Any,
+        weight: Optional[Union[int, float]] = None,
+    ) -> None:
         """
         Adds an edge between v1 and v2.
 
         If either vertex does not exist, it is created automatically.
         For undirected graphs, both directions are added.
-        Weight is stored only if the graph was created with weighted=True,
-        otherwise it is ignored.
+
+        Weight is stored only if the graph was created with weighted=True.
+        If weighted=True and weight is not provided, raises ValueError.
+        If weighted=False, weight is ignored entirely.
 
         Time complexity: defined by subclass.
 
         Raises:
             ValueError: If v1 == v2 (self-loops are not supported).
+            ValueError: If graph is weighted and weight is not provided.
         """
         ...
 
@@ -82,41 +97,30 @@ class BaseGraph(BaseCollection):
         ...
 
     @abstractmethod
-    def get_neighbors(self, vertex: Any) -> List[Tuple[Any, int | float]]:
+    def has_edge(self, v1: Any, v2: Any) -> bool:
+        """
+        Returns True if an edge exists between v1 and v2.
+
+        For undirected graphs, has_edge(v1, v2) == has_edge(v2, v1).
+        For directed graphs, has_edge(v1, v2) may differ from has_edge(v2, v1).
+
+        Time complexity: defined by subclass.
+        """
+        ...
+
+    @abstractmethod
+    def get_neighbors(
+        self, vertex: Any
+    ) -> List[Tuple[Any, Optional[Union[int, float]]]]:
         """
         Returns a list of (neighbor, weight) pairs for the given vertex.
 
-        For unweighted graphs, weight is always 1.
+        For unweighted graphs, weight is always None.
+        For weighted graphs, weight is the value assigned to that edge.
 
         Time complexity: defined by subclass.
 
         Raises:
             KeyError: If vertex does not exist in the graph.
         """
-        ...
-
-    @abstractmethod
-    def has_edge(self, v1: Any, v2: Any) -> bool:
-        """
-        Returns True if an edge exists between v1 and v2.
-
-        For undirected graphs, has_edge(A, B) == has_edge(B, A).
-        For directed graphs, has_edge(A, B) may differ from has_edge(B, A).
-
-        Time complexity: defined by subclass.
-        """
-        ...
-
-    @abstractmethod
-    def get_vertices(self) -> List[Any]:
-        """
-        Returns a list of all vertices in the graph.
-
-        Time complexity: defined by subclass.
-        """
-        ...
-
-    @abstractmethod
-    def is_empty(self) -> bool:
-        """Returns True if the graph contains no vertices. O(1)"""
         ...
