@@ -1,0 +1,122 @@
+from abc import abstractmethod
+from typing import Any, List, Tuple
+
+from .base_collection import BaseCollection
+
+
+class BaseGraph(BaseCollection):
+    """
+    Abstract base class for all graph types.
+
+    Defines the shared interface for adjacency list, adjacency matrix,
+    and edge list graph implementations. Extends BaseCollection with
+    graph-specific operations: vertex and edge management, neighbor
+    queries, and structural checks.
+
+    All graph implementations support directed and weighted modes
+    controlled by constructor flags — no separate subclasses needed.
+
+    Subclasses:
+        AdjacencyListGraph  — dict-based, O(1) add vertex/edge, O(deg) neighbor lookup
+        AdjacencyMatrixGraph — 2D matrix, O(1) edge lookup, O(V²) space
+        EdgeListGraph        — flat list of edges, minimal memory, O(E) lookups
+
+    Required to implement (in addition to BaseCollection):
+        add_vertex, remove_vertex,
+        add_edge, remove_edge,
+        get_neighbors, has_edge,
+        get_vertices, is_empty
+    """
+
+    __slots__ = ()
+
+    @abstractmethod
+    def add_vertex(self, vertex: Any) -> None:
+        """
+        Adds vertex to the graph.
+
+        If vertex already exists, does nothing.
+
+        Time complexity: defined by subclass.
+        """
+        ...
+
+    @abstractmethod
+    def remove_vertex(self, vertex: Any) -> None:
+        """
+        Removes vertex and all its associated edges from the graph.
+
+        If vertex does not exist, does nothing.
+
+        Time complexity: defined by subclass.
+        """
+        ...
+
+    @abstractmethod
+    def add_edge(self, v1: Any, v2: Any, weight: int | float = 1) -> None:
+        """
+        Adds an edge between v1 and v2.
+
+        If either vertex does not exist, it is created automatically.
+        For undirected graphs, both directions are added.
+        Weight is stored only if the graph was created with weighted=True,
+        otherwise it is ignored.
+
+        Time complexity: defined by subclass.
+
+        Raises:
+            ValueError: If v1 == v2 (self-loops are not supported).
+        """
+        ...
+
+    @abstractmethod
+    def remove_edge(self, v1: Any, v2: Any) -> None:
+        """
+        Removes the edge between v1 and v2.
+
+        If the edge does not exist, does nothing.
+        For undirected graphs, both directions are removed.
+
+        Time complexity: defined by subclass.
+        """
+        ...
+
+    @abstractmethod
+    def get_neighbors(self, vertex: Any) -> List[Tuple[Any, int | float]]:
+        """
+        Returns a list of (neighbor, weight) pairs for the given vertex.
+
+        For unweighted graphs, weight is always 1.
+
+        Time complexity: defined by subclass.
+
+        Raises:
+            KeyError: If vertex does not exist in the graph.
+        """
+        ...
+
+    @abstractmethod
+    def has_edge(self, v1: Any, v2: Any) -> bool:
+        """
+        Returns True if an edge exists between v1 and v2.
+
+        For undirected graphs, has_edge(A, B) == has_edge(B, A).
+        For directed graphs, has_edge(A, B) may differ from has_edge(B, A).
+
+        Time complexity: defined by subclass.
+        """
+        ...
+
+    @abstractmethod
+    def get_vertices(self) -> List[Any]:
+        """
+        Returns a list of all vertices in the graph.
+
+        Time complexity: defined by subclass.
+        """
+        ...
+
+    @abstractmethod
+    def is_empty(self) -> bool:
+        """Returns True if the graph contains no vertices. O(1)"""
+        ...
