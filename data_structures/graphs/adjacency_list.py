@@ -241,7 +241,7 @@ class AdjacencyListGraph(BaseGraph):
         if not self._adjacency.contains(vertex):
             raise KeyError(f"Vertex {vertex!r} does not exist in the graph.")
         neighbors: DynamicUniversalArray = self._adjacency.get(vertex)
-        return [neighbors[i] for i in range(len(neighbors))]
+        return list(neighbors)
 
     # -------------------------------------------------------------------------
     # Collection methods
@@ -305,14 +305,7 @@ class AdjacencyListGraph(BaseGraph):
             return False
         if self._size != other._size:
             return False
-        for vertex in self._adjacency.keys():
-            if not other._adjacency.contains(vertex):
-                return False
-            self_neighbors = set(self.get_neighbors(vertex))
-            other_neighbors = set(other.get_neighbors(vertex))
-            if self_neighbors != other_neighbors:
-                return False
-        return True
+        return self._adjacency == other._adjacency
 
     def __repr__(self) -> str:
         """
