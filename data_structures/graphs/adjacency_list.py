@@ -144,7 +144,7 @@ class AdjacencyListGraph(BaseGraph):
         Adds an edge between v1 and v2.
 
         If either vertex does not exist, it is created automatically.
-        If either vertex has is connected - does nothing.
+        If either vertex is connected - does nothing.
         For undirected graphs, both directions are added.
 
         Weight is stored only if the graph was created with weighted=True.
@@ -304,7 +304,14 @@ class AdjacencyListGraph(BaseGraph):
             return False
         if self._size != other._size:
             return False
-        return self._adjacency == other._adjacency
+        for vertex in self._adjacency.keys():
+            if not other._adjacency.contains(vertex):
+                return False
+            self_neighbors = set(self.get_neighbors(vertex))
+            other_neighbors = set(other.get_neighbors(vertex))
+            if self_neighbors != other_neighbors:
+                return False
+        return True
 
     def __repr__(self) -> str:
         """
