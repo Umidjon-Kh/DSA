@@ -240,8 +240,7 @@ class AdjacencyListGraph(BaseGraph):
         """
         if not self._adjacency.contains(vertex):
             raise KeyError(f"Vertex {vertex!r} does not exist in the graph.")
-        neighbors: DynamicUniversalArray = self._adjacency.get(vertex)
-        return list(neighbors)
+        return list(self._adjacency.get(vertex))
 
     # -------------------------------------------------------------------------
     # Collection methods
