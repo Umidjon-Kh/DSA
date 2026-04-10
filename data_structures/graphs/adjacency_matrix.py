@@ -362,10 +362,20 @@ class AdjacencyMatrixGraph(BaseGraph):
             return False
         if self._size != other._size:
             return False
+
         for i in range(self._size):
+            v1 = self._index_to_vertex[i]
+            j_other = other._get_index(v1)
+            if j_other is None:
+                return False  # вершина есть в self, но нет в other
             for j in range(self._size):
-                if self._matrix[i][j] != other._matrix[i][j]:
+                v2 = self._index_to_vertex[j]
+                k_other = other._get_index(v2)
+                if k_other is None:
                     return False
+                if self._matrix[i][j] != other._matrix[j_other][k_other]:
+                    return False
+
         return True
 
     def __repr__(self) -> str:
