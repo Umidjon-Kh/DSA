@@ -26,7 +26,7 @@ class AdjacencyListGraph(BaseGraph):
         add_edge:       O(1) amortized
         remove_edge:    O(deg(v)) — scans neighbor array
         has_edge:       O(deg(v))
-        get_neighbors:  O(1)
+        get_neighbors:  O(deg(v))
         clear:          O(1)
         copy:           O(V + E)
         __len__:        O(1)
@@ -144,6 +144,7 @@ class AdjacencyListGraph(BaseGraph):
         Adds an edge between v1 and v2.
 
         If either vertex does not exist, it is created automatically.
+        If either vertex has is connected - does nothing.
         For undirected graphs, both directions are added.
 
         Weight is stored only if the graph was created with weighted=True.
@@ -165,6 +166,9 @@ class AdjacencyListGraph(BaseGraph):
 
         self.add_vertex(v1)
         self.add_vertex(v2)
+
+        if self.has_edge(v1, v2):
+            return
 
         self._adjacency.get(v1).append((v2, stored_weight))
         if not self._directed:
