@@ -244,7 +244,7 @@ class AdjacencyListGraph(BaseGraph):
         return [neighbors[i] for i in range(len(neighbors))]
 
     # -------------------------------------------------------------------------
-    # Dunder methods
+    # Collection methods
 
     def clear(self) -> None:
         """
@@ -266,6 +266,9 @@ class AdjacencyListGraph(BaseGraph):
         new_graph._adjacency = self._adjacency.copy()
         new_graph._size = self._size
         return new_graph
+
+    # -------------------------------------------------------------------------
+    # Dunder methods
 
     def __len__(self) -> int:
         """Returns the number of vertices in the graph. O(1)"""
