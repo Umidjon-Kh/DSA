@@ -232,8 +232,10 @@ class EdgeListGraph(BaseEdgeListGraph):
 
     def copy(self) -> "EdgeListGraph":
         """
-        Returns a shallow copy of the graph preserving all edges
+        Returns a deep copy of the graph preserving all edges
         and constructor flags.
+
+        The copy is fully independent — modifying it does not affect the original.
 
         Time complexity: O(E)
         """

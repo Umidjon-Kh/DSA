@@ -256,13 +256,18 @@ class AdjacencyListGraph(BaseGraph):
 
     def copy(self) -> "AdjacencyListGraph":
         """
-        Returns a shallow copy of the graph preserving all vertices,
+        Returns a deep copy of the graph preserving all vertices,
         edges, and constructor flags.
+
+        The copy is fully independent — modifying it does not affect the original.
 
         Time complexity: O(V + E)
         """
         new_graph = AdjacencyListGraph(directed=self._directed, weighted=self._weighted)
-        new_graph._adjacency = self._adjacency.copy()
+        # Deep copy: create new hash map with copied neighbor arrays
+        for vertex in self._adjacency.keys():
+            neighbors_copy = self._adjacency.get(vertex).copy()
+            new_graph._adjacency.insert(vertex, neighbors_copy)
         new_graph._size = self._size
         return new_graph
 

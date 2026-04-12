@@ -309,8 +309,10 @@ class AdjacencyMatrixGraph(BaseGraph):
 
     def copy(self) -> "AdjacencyMatrixGraph":
         """
-        Returns a shallow copy of the graph preserving all vertices,
+        Returns a deep copy of the graph preserving all vertices,
         edges, and constructor flags.
+
+        The copy is fully independent — modifying it does not affect the original.
 
         Time complexity: O(V²)
         """
@@ -319,7 +321,12 @@ class AdjacencyMatrixGraph(BaseGraph):
         )
         new_graph._vertex_to_index = self._vertex_to_index.copy()
         new_graph._index_to_vertex = self._index_to_vertex.copy()
-        new_graph._matrix = self._matrix.copy()
+
+        # Deep copy: copy each row of the matrix
+        new_matrix = DynamicUniversalArray()
+        for i in range(len(self._matrix)):
+            new_matrix.append(self._matrix[i].copy())
+        new_graph._matrix = new_matrix
         new_graph._size = self._size
 
         return new_graph
