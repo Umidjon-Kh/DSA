@@ -4,6 +4,11 @@ from .arrays import (
     StaticTypedArray,
     StaticUniversalArray,
 )
+from .graphs import (
+    AdjacencyListGraph,
+    AdjacencyMatrixGraph,
+    EdgeListGraph,
+)
 from .hash_tables import (
     ChainingHashMap,
     ChainingHashSet,
@@ -125,4 +130,8 @@ __all__ = [
     "ChainingHashSet",
     "OpenAddressingHashMap",
     "OpenAddressingHashSet",
+    # Graphs
+    "AdjacencyListGraph",
+    "AdjacencyMatrixGraph",
+    "EdgeListGraph",
 ]
