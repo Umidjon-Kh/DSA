@@ -70,6 +70,8 @@ from collections.abc import Sequence
 from enum import Enum
 from typing import Any, Optional
 
+from .._tools import is_comparable
+
 # ─────────────────────────────────────────────────────────────────────────────
 #  Search mode
 # ─────────────────────────────────────────────────────────────────────────────
@@ -86,34 +88,6 @@ class SearchMode(Enum):
 
     FIRST = "first"
     LAST = "last"
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-#  Helper
-# ─────────────────────────────────────────────────────────────────────────────
-
-
-def is_comparable(item: Any) -> bool:
-    """
-    Returns True if *item* supports the minimum comparison protocol
-    required by binary search (``__eq__`` and ``__lt__``).
-
-    Args:
-        item: Any Python object.
-
-    Returns:
-        True  — item can be compared with == and <.
-        False — at least one operator is missing.
-
-    Examples:
-        >>> is_comparable(42)
-        True
-        >>> is_comparable("hello")
-        True
-        >>> is_comparable(object())
-        False
-    """
-    return hasattr(item, "__eq__") and hasattr(item, "__lt__")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
