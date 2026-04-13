@@ -76,8 +76,6 @@ Space complexity
 from collections.abc import Sequence
 from typing import Any
 
-from .._tools import is_addable, is_comparable
-
 # ─────────────────────────────────────────────────────────────────────────────
 #  Fixed sliding window
 # ─────────────────────────────────────────────────────────────────────────────
@@ -107,7 +105,7 @@ def max_sum_subarray(sequence: Sequence[Any], k: int) -> Any:
 
     Raises:
         ValueError: If *k* is less than 1 or greater than len(sequence).
-        TypeError: if item in provided sequnce is not addable.
+        TypeError: unsupported operand type(s) for +: 'int' and 'str'
 
     Examples:
         >>> max_sum_subarray([1, 3, 5, 2, 8, 4, 6], 3)
@@ -135,12 +133,6 @@ def max_sum_subarray(sequence: Sequence[Any], k: int) -> Any:
     # Avoids creating a temporary slice (which would cost O(k) extra memory).
     window_sum = sequence[0]
 
-    # Validate it for support operands(+,-) and comparsion protocol
-    if not is_addable(window_sum) or not is_comparable(window_sum):
-        raise TypeError(
-            "Sequence must contain only items that support operands('+','-') "
-            "and comparison protocol."
-        )
     for idx in range(1, k):
         window_sum += sequence[idx]
 
